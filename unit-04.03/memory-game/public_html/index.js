@@ -6,28 +6,30 @@
 window.addEventListener('DOMContentLoaded', function ()
 {
     let mainDiv = document.querySelector('#main');
-    addCards(10, mainDiv);
-    let elem;
+    addCards(8, mainDiv);
     mainDiv.addEventListener('click', function (e)
     {
-        flipCard(e);
+        let card = e.target.parentElement;
+        flipCard(card);
     });
 });
+
+
+
 
 /**
  * Flips a card back to front, and vice-versa.
  * 
- * @param {type} e
+ * @param {type} card
  * @returns {undefined}
  */
-function flipCard(e)
+function flipCard(card)
 {
-    let card = e.target.parentElement;
     let front = card.querySelector('.card-front');
     let back = card.querySelector('.card-back');
     console.log(card, front, back);
-    toggleView( front );
-    toggleView( back );
+    toggleView(front);
+    toggleView(back);
 }
 
 /**
@@ -35,7 +37,6 @@ function flipCard(e)
  * - It can be optimized to use the ClassList 'toggle()' method
  * 
  * @param {type} elem
- * @returns {undefined}
  */
 function toggleView(elem)
 {
@@ -83,8 +84,11 @@ function createCardArray(n)
     let card;
     for (let i = 0; i < n; i++)
     {
+        // Creates the first card
         card = createCard();
         cardArray.push(card);
+        // Creates the pair of the first car.
+        // Both will have the same value for the 'data-pair' attribute
         card = createCard(card.dataset.pair);
         cardArray.push(card);
     }
@@ -110,7 +114,7 @@ function createCard(pairId)
     back.classList.add('show');
 
     let card = document.createElement('div');
-    card.setAttribute('data-pair', pairId === null || pairId === undefined ? randomString(6) : pairId);
+    card.setAttribute('data-pair', pairId === null || pairId === undefined ? randomString(6) : pairId); //**
     card.append(front);
     back.innerText = card.dataset.pair;
     front.innerText = card.dataset.pair;
