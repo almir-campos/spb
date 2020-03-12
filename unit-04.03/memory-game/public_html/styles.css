@@ -1,0 +1,31 @@
+.card {
+    width: 100px;
+    height: 100px;
+    margin: 10px;
+    float: left;
+}
+.card-front {
+    background-color: red;
+    display: none;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+.card-back {
+    background-color: darkgoldenrod;
+    display: block;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+.show {
+    width: 100px;
+    visibility: visible;
+    display: block;
+}
+
+.hide {
+    visibility: hidden;
+    display: none;
+}
