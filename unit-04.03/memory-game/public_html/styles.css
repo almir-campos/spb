@@ -1,19 +1,34 @@
+#container {
+    /*resize: both;*/
+    margin: 5px;
+}
+
 #main {
-    min-width: 300px;
-    min-height: 300px;
-    resize: both;
-    overflow: auto;
+    width: 85%;
     background-color: lightblue;
-    
+    overflow: auto;
+    display: grid;
+    float: left;
+
+}
+
+#side {
+    width: 14%;
+    background-color: transparent;
+    padding: 5px;
+    float: left;
 }
 
 
 .card {
-    width: 100px;
-    height: 100px;
-    margin: 10px;
+    min-width: 200px;
+    max-width: 200px;
+    min-height: 200px;
+    max-height: 200px;
+    margin: 5px;
     float: left;
-    box-shadow: gray 6px 6px 6px;
+    box-shadow: gray 10px 10px 10px;
+    /*display: inline-block;*/
 }
 .card-front {
     background-color: red;

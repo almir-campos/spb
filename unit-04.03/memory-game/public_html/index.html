@@ -11,9 +11,16 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/x-icon" href="/memory-game/favicon.ico">
         <link href="styles.css" rel="stylesheet" type="text/css"/>
-        <script src="index.js" type="text/javascript"></script>
+        <script type="module" src="cfg.js"></script>
+        <script type="module" src="index.js"></script>
+        <script type="module" src="card.js"></script>
     </head>
     <body>
-        <div id="main"></div>
+        <div id="container">
+            <div id="main"></div>
+            <div id="side">
+                <button id="newBt">New Game</button>
+            </div>
+        </div>
     </body>
 </html>
