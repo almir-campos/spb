@@ -1,22 +1,21 @@
 #container {
-    /*resize: both;*/
     margin: 5px;
+    text-align: center;
 }
 
 #main {
-    width: 85%;
+    width: fit-content;
     background-color: lightblue;
     overflow: auto;
     display: grid;
-    float: left;
+    margin: 0 auto;
 
 }
 
 #side {
-    width: 14%;
     background-color: transparent;
     padding: 5px;
-    float: left;
+    margin: 0 auto;
 }
 
 
@@ -28,7 +27,6 @@
     margin: 5px;
     float: left;
     box-shadow: gray 10px 10px 10px;
-    /*display: inline-block;*/
 }
 .card-front {
     background-color: red;
@@ -36,6 +34,14 @@
     position: relative;
     top: 0;
     left: 0;
+}
+
+.face-content{
+    font-size: 180px;
+    text-align: center;
+    vertical-align: middle;
+    font-family: monospace;
+
 }
 .card-back {
     background-color: darkgoldenrod;
@@ -46,7 +52,7 @@
 }
 
 .show {
-    width: 100px;
+    width: 200px;
     visibility: visible;
     display: block;
 }
@@ -57,5 +63,16 @@
 }
 
 .matched {
-    background-color: gray;
+    background-color: transparent;
+    border-radius: 100px;
+
+}
+
+.check{
+    display: none;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    font-size: 100px;
+    color: green;
 }

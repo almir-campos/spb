@@ -1,8 +1,8 @@
 'use strict';
 
 import { addCards, flipClosure } from './card.js';
-//let config  = require ('./config.json');
 import { config, rc } from './cfg.js';
+
 /**
  * All the logic starts here. Just when the page is fully loaded.
  * 

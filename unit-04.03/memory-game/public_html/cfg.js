@@ -2,7 +2,7 @@
 import { optimizedRectangle } from './utils.js';
 
 let config = {
-    "number_of_pairs": 8,
+    "number_of_pairs": 20,
     "show_timeout": 2000
 };
 

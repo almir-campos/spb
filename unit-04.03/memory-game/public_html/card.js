@@ -17,7 +17,7 @@ function isFaceUp(card)
     return card.dataset.faceup === 'true';
 }
 
-function getFace( card, n )
+function getFace(card, n)
 {
     return card.children[n];
 }
@@ -43,35 +43,35 @@ export function flipClosure()
     return function (e)
     {
         // If it's not a card, do nothing.
-        if ( e.target.parentElement.dataset.pairid === undefined )
+        if (e.target.parentElement.dataset.pairid === undefined)
         {
-            
+
             return;
         }
-        
+
         let card = e.target.parentElement;
-        
+
         // If the card is face up, do nothing.
         if (isFaceUp(card))
         {
             return;
         }
-        
+
         // Cancels the timeout and flip the cards with face up
         if (viewing_cards)
         {
-           clearTimeout( timeoutId );
-           flipCard(pairArray[ 0 ]);
-           flipCard(pairArray[ 1 ]);
-           viewing_cards = false;
+            clearTimeout(timeoutId);
+            flipCard(pairArray[ 0 ]);
+            flipCard(pairArray[ 1 ]);
+            viewing_cards = false;
         }
-        
+
         // Updates the pair array
         pairArray[ pairIndex ] = e.target.parentElement;
-        
+
         // Flips the current card
         flipCard(card);
-        
+
         // Checks if the visible card matches
         if (pairIndex++ === 1)
         {
@@ -79,10 +79,14 @@ export function flipClosure()
             // Yes. Changes their front color and keeps them open.
             if (pairArray[ 0 ].dataset.pairid === pairArray[ 1 ].dataset.pairid)
             {
-//                console.log("You got it!");
-                getFace(pairArray[0], FRONT).classList.add('matched');
-                getFace(pairArray[1], FRONT).classList.add('matched');
-            } 
+                let face = getFace(pairArray[0], FRONT);
+                face.classList.add('matched');
+                face.children[1].style.display = 'block';
+                //
+                face = getFace(pairArray[1], FRONT);
+                face.classList.add('matched');
+                face.children[1].style.display = 'block';
+            }
             // No. Sets timeout for flipping the cards and
             // set the status to "viewing cards" (which can be interrupted)
             else
@@ -140,23 +144,13 @@ export function addCards(n, elem)
     let cardArray = createCardArray(n);
     let l = cardArray.length;
     let i;
-//    let col = 0;
-    let ghost = document.createElement( 'div');
-    ghost.style.display='inline-block';
-    ghost.style.clear='both';
-    ghost.innerText='g';
     while (l > 0)
     {
         i = randomInt(0, l - 1);
-//        if ( col % rc.c === 0 )
-//        {
-//            cardArray[i].style.clear='both';
-//        }
         elem.appendChild(cardArray[i]);
         cardArray.splice(i, 1);
         l = cardArray.length;
-        
-//        col++;
+
     }
 
 }
@@ -174,11 +168,13 @@ function createCardArray(n)
     for (let i = 0; i < n; i++)
     {
         // Creates the first card
-        card = createCard();
+        card = createCard(i);
+//        card.innerText = i;
         cardArray.push(card);
         // Creates the pair of the first car.
         // Both will have the same value for the 'data-pair' attribute
-        card = createCard(card.dataset.pairid);
+        card = createCard(i, card.dataset.pairid);
+//        card.innerText = i;
         cardArray.push(card);
     }
     return cardArray;
@@ -191,12 +187,16 @@ function createCardArray(n)
  * @param {String} pairid
  * @returns {Element|createCard.card}
  */
-function createCard(pairid)
+function createCard(content, pairid)
 {
     let front = document.createElement('div');
     front.classList.add('card');
     front.classList.add('card-front');
     front.classList.add('hide');
+
+    let check = document.createElement('div');
+    check.classList.add('check');
+    check.innerText = '\u2713';
 
     let back = document.createElement('div');
     back.classList.add('card');
@@ -207,10 +207,10 @@ function createCard(pairid)
     card.setAttribute('data-pairid', pairid === null || pairid === undefined ? randomString(6) : pairid); //**
     card.setAttribute('data-faceup', "false");
     //
-    front.innerText = card.dataset.pairid;
+    front.innerHTML = '<div class="face-content">' + content + '</div>';
+    front.append(check);
     card.append(front);
     //
-    back.innerText = card.dataset.pairid;
     card.append(back);
     return card;
 }
