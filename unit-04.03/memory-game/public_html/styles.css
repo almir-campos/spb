@@ -1,78 +1,89 @@
+body {
+  background-image: url("images/background_wood.jpg");
+}
+
 #container {
-    margin: 5px;
-    text-align: center;
+  margin: 5px;
+  text-align: center;
 }
 
 #main {
-    width: fit-content;
-    background-color: lightblue;
-    overflow: auto;
-    display: grid;
-    margin: 0 auto;
+  width: fit-content;
+  background-color: transparent;
+  overflow: auto;
+  display: grid;
+  margin: 0 auto;
+  /*box-shadow: gray 5px 5px 5px;*/
 
 }
 
 #side {
-    background-color: transparent;
-    padding: 5px;
-    margin: 0 auto;
+  background-color: transparent;
+  padding: 5px;
+  margin: 0 auto;
 }
 
 
 .card {
-    min-width: 200px;
-    max-width: 200px;
-    min-height: 200px;
-    max-height: 200px;
-    margin: 5px;
-    float: left;
-    box-shadow: gray 10px 10px 10px;
+  min-width: 200px;
+  max-width: 200px;
+  min-height: 200px;
+  background-size: cover;
+  /*background-color: red;*/
+  display: none;
+  position: relative;
+  max-height: 200px;
+  margin: 5px;
+  float: left;
+  box-shadow: black 10px 10px 10px;
 }
 .card-front {
-    background-color: red;
-    display: none;
-    position: relative;
-    top: 0;
-    left: 0;
+  background-image: url("images/front.jpg");
+  top: 0;
+  left: 0;
 }
 
 .face-content{
-    font-size: 180px;
-    text-align: center;
-    vertical-align: middle;
-    font-family: monospace;
-
+  font-size: 170px;
+  text-align: center;
+  vertical-align: middle;
+  font-family: monospace;
+  color: maroon;
+  text-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
 .card-back {
-    background-color: darkgoldenrod;
-    display: block;
-    position: relative;
-    top: 0;
-    left: 0;
+  /*background-color: darkgoldenrod;*/
+  background-image: url("images/back.jpg");
+  background-size: cover;
+  display: block;
+  position: relative;
+  top: 0;
+  left: 0;
 }
 
 .show {
-    width: 200px;
-    visibility: visible;
-    display: block;
+  width: 200px;
+  visibility: visible;
+  display: block;
 }
 
 .hide {
-    visibility: hidden;
-    display: none;
+  visibility: hidden;
+  display: none;
 }
 
 .matched {
-    background-color: transparent;
-    border-radius: 100px;
+  /*background-color: transparent;*/
+  border-radius: 90px;
+  box-shadow: black 3px 4px 4px
 
 }
 
 .check{
-    display: none;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    font-size: 100px;
-    color: green;
+  display: none;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  font-size: 90px;
+  color: darkgreen;
 }
