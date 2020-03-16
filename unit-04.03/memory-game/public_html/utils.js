@@ -2,7 +2,7 @@
 
 /**
  * Utility function - returns a random string with length 'l'
- * 
+ *
  * @param {type} l
  * @returns {String}
  */
@@ -27,7 +27,7 @@ export function randomString(l)
 }
 
 /**
- * 
+ *
  * @param {Number} min
  * @param {Number} max
  * @returns {Number}
@@ -38,23 +38,94 @@ export function randomInt(min, max)
 }
 
 
-export function optimizedRectangle(p)
+//export function optimizedRectangle(p)
+//{
+//    const totalP = p * 2;
+//
+//    let l = Math.sqrt(p);
+//
+//    function findL()
+//    {
+//        if (Number.isInteger(totalP / l))
+//        {
+//            return l;
+//        }
+//        l = Math.floor(l) + 1;
+//        findL();
+//    }
+//    findL();
+//    let c = Math.max( totalP / l, l );
+//    let r = totalP / c;
+//    return { "r": r, "c": c };
+//}
+
+//export function optimizedRectangle(num_elem)
+//{
+//  let l = Math.sqrt(num_elem);
+//  l = Math.floor(l);
+//
+//  console.log( "**", num_elem, l );
+//
+//  function findL()
+//  {
+//    if (Number.isInteger(num_elem / l))
+//    {
+//      return l;
+//    }
+//    l++;
+//    findL();
+//  }
+//  findL();
+//  let c = Math.max(num_elem / l, l);
+//  let r = num_elem / c;
+//  console.log('r', r );
+//  let or;
+//  if (r === 1)
+//  {
+//    num_elem++;
+//    or = optimizedRectangle(num_elem);
+//    console.log( or );
+//    return or;
+//  }
+//  console.log( {"r": r, "c": c} );
+//  return {"r": r, "c": c};
+//}
+
+export function optimizedRectangle(num_elem, layout)
 {
-    const totalP = p * 2;
+  let l = Math.sqrt(num_elem);
+  l = Math.floor(l);
 
-    let l = Math.sqrt(p);
+  console.log("**", num_elem, l);
 
-    function findL()
+  function findL()
+  {
+    if (Number.isInteger(num_elem / l))
     {
-        if (Number.isInteger(totalP / l))
-        {
-            return l;
-        }
-        l = Math.floor(l) + 1;
-        findL();
+      return l;
+    }
+    if (layout !== 1)
+    {
+      l++;
+    } else
+    {
+      num_elem++;
+      l = Math.sqrt(num_elem);
     }
     findL();
-    let c = Math.max( totalP / l, l );
-    let r = totalP / c;
-    return { "r": r, "c": c };
+  }
+  findL();
+  let c = Math.max(num_elem / l, l);
+  let r = num_elem / c;
+  console.log('r', r);
+  let or;
+  if (r === 1)
+  {
+    num_elem++;
+    or = optimizedRectangle(num_elem);
+    console.log(or);
+    return or;
+  }
+  return {"r": r, "c": c};
 }
+
