@@ -4,7 +4,7 @@ const FRONT = 0;
 const BACK = 1;
 
 import { optimizedRectangle, randomString, randomInt } from './utils.js';
-import { rc } from './cfg.js';
+import {config, rc } from './cfg.js';
 
 
 /**
@@ -25,9 +25,17 @@ function getFace(card, n)
 
 export function flipClosure()
 {
+//  let self = this;
   let pairIndex = 0;
   let pairArray = [];
   let viewing_cards = false;
+  let found_pairs = 0;
+  let found_pairs_div = document.getElementById('found_pairs');
+  let clicks_div = document.getElementById('clicks');
+  let score_div = document.getElementById('score');
+  let total_clicks = 0;
+  let partial_clicks = 0;
+  let score = 0;
 
   let timeout = function ()
   {
@@ -40,8 +48,27 @@ export function flipClosure()
   };
   let timeoutId;
 
+
   return function (e)
   {
+    let reset = localStorage.getItem('reset');
+    console.log('reset', reset);
+    console.log('partial_clicks', partial_clicks );
+
+
+    if ( reset === 'true')
+    {
+      console.log( 'setting total_clicks to zero');
+      pairIndex = 0;
+      pairArray = [];
+      viewing_cards = false;
+      found_pairs = 0;
+      total_clicks = 0;
+      partial_clicks = 0;
+      score = 0;
+      localStorage.setItem('reset', 'false');
+    }
+
     // If it's not a card, do nothing.
     if (e.target.parentElement.dataset.pairid === undefined)
     {
@@ -57,7 +84,17 @@ export function flipClosure()
       return;
     }
 
-    // Cancels the timeout and flip the cards with face up
+//     if (rst)
+//    {
+//      rst = false;
+//    }
+
+    //
+    partial_clicks++;
+    total_clicks++;
+    clicks_div.innerText = total_clicks + " click" + (total_clicks === 1 ? '' : 's');
+
+    // Cancels the timeout and flips the cards with face up
     if (viewing_cards)
     {
       clearTimeout(timeoutId);
@@ -87,8 +124,20 @@ export function flipClosure()
         face.classList.add('matched');
         face.children[1].style.display = 'block';
         //
-        pairArray[0].style.boxShadow='none';
-        pairArray[1].style.boxShadow='none';
+        pairArray[0].style.boxShadow = 'none';
+        pairArray[1].style.boxShadow = 'none';
+        //
+        found_pairs++;
+        let woohoo = '';
+        if (found_pairs === config.number_of_pairs)
+        {
+          woohoo = '! Woohoo!';
+        }
+        found_pairs_div.innerText = "Found " + found_pairs + " of " + config.number_of_pairs + woohoo;
+        //
+        score += Math.floor(2 * 100 / partial_clicks);
+        score_div.innerText = score + ' points';
+        partial_clicks = 0;
       }
       // No. Sets timeout for flipping the cards and
       // set the status to "viewing cards" (which can be interrupted)
@@ -115,6 +164,14 @@ function flipCard(card)
   toggleView(front);
   toggleView(back);
   card.dataset.faceup = front.classList.contains('show');
+  if (card.dataset.faceup)
+  {
+    card.classList.remove('pointer');
+  } else
+  {
+    card.classList.add('pointer');
+  }
+
 }
 
 /**
@@ -156,7 +213,7 @@ function createCardArray(n)
 //        card.innerText = i;
     cardArray.push(card);
   }
-  console.log('createCardArray', cardArray);
+//  console.log('createCardArray', cardArray);
   return cardArray;
 }
 
@@ -185,7 +242,8 @@ function createOneCard(content, pairid)
 
   let card = document.createElement('div');
   card.classList.add('card');
-  card.setAttribute('data-pairid', pairid === null || pairid === undefined ? randomString(6) : pairid); //**
+  card.classList.add('pointer');
+  card.setAttribute('data-pairid', pairid === null || pairid === undefined ? randomString(6) : pairid);
   card.setAttribute('data-faceup', "false");
   //
   front.innerHTML = '<div class="face-content">' + content + '</div>';
@@ -243,34 +301,8 @@ export function addCards(n, elem)
       row = document.createElement('div');
       row.classList.add('row');
       elem.appendChild(row);
-      console.log(row, i, rc.c);
+//      console.log(row, i, rc.c);
     }
     row.appendChild(cardArray[i]);
   }
-
-
-
-
-
-//          = document.createElement('div');
-//  row.classList.add('row');
-//  elem.appendChild(row);
-
-//  let count = 0;
-//  while (l > 0)
-//  {
-//    if (count % 2 === 0)
-//    {
-//      row = document.createElement('div');
-//      row.classList.add('row');
-//      elem.appendChild(row);
-//    }
-//    i = randomInt(0, l - 1);
-//    row.appendChild(cardArray[i]);
-//    cardArray.splice(i, 1);
-//    l = cardArray.length;
-//    count++;
-//  }
-
 }
-

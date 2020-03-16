@@ -8,33 +8,58 @@ body {
 }
 
 #main {
-  /*width: fit-content;*/
-/*width: 450px;*/
   background-color: transparent;
-  /*overflow: auto;*/
-  /*flex-direction: columns;*/
-  /*display: flex;*/
-  /*grid-template-columns: 220px 220px;*/
   margin: 0 auto;
-  border: 1px solid red;
   padding: 10px;
   width: -webkit-max-content;
   width: -moz-max-content;
   width: max-content;
-
 }
 
 #top {
   background-color: transparent;
   padding: 5px;
   margin: 0 auto;
+  background-color: rgba( 128, 0, 0, 0.5 );
+  height: 5em;
+  text-align: center;
+}
+
+.info {
+  font-size: 3em;
+  background-color: rgba( 255,255,255,0.5 );
+  min-width: 200px;
+  text-align: center;
+  display: inline-block;
+  border-radius: 8px;
+  margin: 10px;
+  box-shadow: black 3px 4px 4px;
+  color: maroon;
+  font-weight: bold;
+}
+
+.bt {
+  font-size: 3em;
+  background-color: rgba( 255,255,255,0.5 );
+  min-width: 200px;
+  max-width: 200px;
+  width: 200px;
+  text-align: center;
+  display: inline-block;
+  border-radius: 8px;
+  margin: 10px;
+  box-shadow: black 3px 4px 4px;
+  color: maroon;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.pointer{
+  cursor: pointer;
 }
 
 .row {
   display: block;
-  margin: 5px;
-  /*width: 100%;*/
-  border: 1px solid blue;
   width: -webkit-max-content;
   width: -moz-max-content;
   width: max-content;
@@ -43,23 +68,18 @@ body {
 .card {
   float: left;
   min-width: 220px;
-  max-width: 220px;
   min-height: 220px;
   max-height: 220px;
   background-size: cover;
-  /*display: inline-block;*/
   position: relative;
   top: 0;
-  /*display: inline-block;*/
-  /*margin: 0px auto;*/
-  /*float: left;*/
-  margin: 5px;
-  box-shadow: black 10px 10px 10px;
+  margin: 15px 5px 5px 5px;
 }
 .card-front {
   background-image: url("../images/front.jpg");
   top: 0;
   left: 0;
+  box-shadow: black 10px 10px 10px;
 }
 
 .face-content{
@@ -69,6 +89,7 @@ body {
   font-family: monospace;
   color: maroon;
   text-shadow: 0 5px 5px rgba(0,0,0,0.5);
+  user-select: none;
 }
 .card-back {
   background-image: url("../images/back.jpg");
@@ -77,10 +98,10 @@ body {
   position: relative;
   top: 0;
   left: 0;
+  box-shadow: black 10px 10px 10px;
 }
 
 .show {
-  /*width: 200px;*/
   visibility: visible;
   display: inline-block;
 }
@@ -104,4 +125,10 @@ body {
   right: 0px;
   font-size: 90px;
   color: darkgreen;
+}
+
+.gif{
+  position: fixed;
+width: 100%;
+z-index: 10000;
 }
