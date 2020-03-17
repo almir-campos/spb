@@ -36,6 +36,7 @@ export function flipClosure()
   let total_clicks = 0;
   let partial_clicks = 0;
   let score = 0;
+  let fireworks = document.getElementById('fireworks');
 
   let timeout = function ()
   {
@@ -53,12 +54,12 @@ export function flipClosure()
   {
     let reset = localStorage.getItem('reset');
     console.log('reset', reset);
-    console.log('partial_clicks', partial_clicks );
+    console.log('partial_clicks', partial_clicks);
 
 
-    if ( reset === 'true')
+    if (reset === 'true')
     {
-      console.log( 'setting total_clicks to zero');
+      console.log('setting total_clicks to zero');
       pairIndex = 0;
       pairArray = [];
       viewing_cards = false;
@@ -131,6 +132,9 @@ export function flipClosure()
         let woohoo = '';
         if (found_pairs === config.number_of_pairs)
         {
+          console.log('showing fireworks...');
+          fireworks.style.display = 'block';
+          fireworks.style.visibility = 'visible';
           woohoo = '! Woohoo!';
         }
         found_pairs_div.innerText = "Found " + found_pairs + " of " + config.number_of_pairs + woohoo;

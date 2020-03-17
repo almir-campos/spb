@@ -33,9 +33,8 @@ window.addEventListener('DOMContentLoaded', function ()
 function init(mainDiv)
 {
   resetInfo();
-  mainDiv.innerHTML = '';
-  // Generates and adds the card to the view
-  addCards(config.number_of_pairs, mainDiv);
+  hideFireworks();
+  cleanDeckAddNewCards( mainDiv );
 
 }
 
@@ -47,5 +46,21 @@ function resetInfo()
   found_pairs_div.innerText = 0;
   clicks_div.innerText = 0;
   score_div.innerText = 0;
+}
+
+function hideFireworks()
+{
+  let fireworks = document.querySelector('#fireworks');
+  console.log('hiding fireworks...');
+  fireworks.style.display = 'none';
+  fireworks.style.visibility = 'hidden';
+}
+
+function cleanDeckAddNewCards( mainDiv )
+{
+  // Cleans the Deck
+  mainDiv.innerHTML = '';
+  // Generates and adds the card to the view
+  addCards(config.number_of_pairs, mainDiv);
 
 }
