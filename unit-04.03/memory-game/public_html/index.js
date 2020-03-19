@@ -1,6 +1,6 @@
 'use strict';
 
-import { addCards, flipClosure, xyz } from './card.js';
+import { addCards, flipClosure } from './card.js';
 import { config, rc, getStored, setStored } from './cfg.js';
 
 /**

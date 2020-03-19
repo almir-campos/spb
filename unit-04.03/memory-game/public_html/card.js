@@ -4,7 +4,7 @@ const FRONT = 0;
 const BACK = 1;
 
 import { optimizedRectangle, randomString, randomInt } from './utils.js';
-import {config, rc } from './cfg.js';
+import {config, rc, getStored, setStored } from './cfg.js';
 
 
 /**
@@ -22,10 +22,6 @@ function getFace(card, n)
   return card.children[n];
 }
 
-function getStored()
-{
-    
-}
 
 export function flipClosure()
 {
@@ -56,14 +52,14 @@ export function flipClosure()
 
   return function (e)
   {
-    let stored = localStorage.getItem('spb_mg');
+    let stored = getStored();
 //    let reset = localStorage.getItemItem('reset');
-    let reset = stored.reset;
-    console.log('reset', reset);
+//    let reset = stored.reset;
+    console.log('stored', stored, 'reset', stored.reset);
     console.log('partial_clicks', partial_clicks);
 
 
-    if (reset === 'true')
+    if (stored.reset === 'true')
     {
       console.log('setting total_clicks to zero');
       pairIndex = 0;
@@ -73,7 +69,8 @@ export function flipClosure()
       total_clicks = 0;
       partial_clicks = 0;
       score = 0;
-//      stored.reset = 'false';
+      stored.reset = 'false';
+      setStored( stored );
 //      localStorage.setItem('spb_mg', stored);
     }
 
