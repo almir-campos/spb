@@ -11,10 +11,16 @@
         <script type="module" src="card.js"></script>
     </head>
     <body>
-      <img id='fireworks' src="images/fireworks.gif" class="gif"/>
+        <img id='fireworks' src="images/fireworks.gif" class="gif"/>
         <div id="container">
             <div id="top">
-                <button id="newBt" class="bt">New</button>
+                <div id="newBtDiv">
+                    <button id="newBt" class="bt">New</button>
+                    <div style="display: inline-block; vertical-align: top;">
+                        <label for="num_pairs" style="display: block; font-size: 0.8em;">Number of Pairs<br />for the Next Round:</label>
+                        <input id="num_pairs" type="number" min="1" max="999"/>
+                    </div>
+                </div>
                 <div id="found_pairs" class="info">0</div>
                 <div id="clicks" class="info">0</div>
                 <div id="score" class="info">0</div>

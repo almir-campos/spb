@@ -4,7 +4,7 @@ const FRONT = 0;
 const BACK = 1;
 
 import { optimizedRectangle, randomString, randomInt } from './utils.js';
-import {config, rc } from './cfg.js';
+import {config, rc, getStored, setStored } from './cfg.js';
 
 
 /**
@@ -52,12 +52,14 @@ export function flipClosure()
 
   return function (e)
   {
-    let reset = localStorage.getItem('reset');
-    console.log('reset', reset);
+    let stored = getStored();
+//    let reset = localStorage.getItemItem('reset');
+//    let reset = stored.reset;
+    console.log('stored', stored, 'reset', stored.reset);
     console.log('partial_clicks', partial_clicks);
 
 
-    if (reset === 'true')
+    if (stored.reset === 'true')
     {
       console.log('setting total_clicks to zero');
       pairIndex = 0;
@@ -67,7 +69,9 @@ export function flipClosure()
       total_clicks = 0;
       partial_clicks = 0;
       score = 0;
-      localStorage.setItem('reset', 'false');
+      stored.reset = 'false';
+      setStored( stored );
+//      localStorage.setItem('spb_mg', stored);
     }
 
     // If it's not a card, do nothing.
@@ -84,11 +88,6 @@ export function flipClosure()
     {
       return;
     }
-
-//     if (rst)
-//    {
-//      rst = false;
-//    }
 
     //
     partial_clicks++;
@@ -159,7 +158,6 @@ export function flipClosure()
  * Flips a card back to front, and vice-versa.
  *
  * @param {type} card
- * @returns {undefined}
  */
 function flipCard(card)
 {
@@ -195,6 +193,7 @@ function toggleView(face)
     cl.replace('hide', 'show');
   }
 }
+
 /**
  * Turns an array with 'n' card pairs (total of '2 * n' cards)
  *
@@ -209,15 +208,12 @@ function createCardArray(n)
   {
     // Creates the first card
     card = createOneCard(i);
-//        card.innerText = i;
     cardArray.push(card);
     // Creates the pair of the first car.
     // Both will have the same value for the 'data-pair' attribute
     card = createOneCard(i, card.dataset.pairid);
-//        card.innerText = i;
     cardArray.push(card);
   }
-//  console.log('createCardArray', cardArray);
   return cardArray;
 }
 
@@ -225,7 +221,7 @@ function createCardArray(n)
  * Returns a card or it's pair (if 'pairid' is provided)
  * - In the future create the classes Card and Face
  *
- * @param {String} pairid
+ * @param {String} content
  * @returns {Element|createOneCard.card}
  */
 function createOneCard(content, pairid)
@@ -274,15 +270,15 @@ function shuffleArray(arr)
   return shuffled;
 }
 
-export function xyz()
-{
-  let carr = createCardArray(4);
-  let sarr = shuffleArray(carr);
-  for (let i = 0; i < sarr.length; i++)
-  {
-    console.log(sarr[i]);
-  }
-}
+//export function xyz()
+//{
+//  let carr = createCardArray(4);
+//  let sarr = shuffleArray(carr);
+//  for (let i = 0; i < sarr.length; i++)
+//  {
+//    console.log(sarr[i]);
+//  }
+//}
 
 /**
  * Appends 'n' pairs of cards to the element 'elem' in a random order
