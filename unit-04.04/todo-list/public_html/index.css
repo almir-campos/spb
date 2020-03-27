@@ -12,18 +12,24 @@ body {
     bottom: 0;
     width: 100%;
     height: 100%;
-    
+
     border: 1px solid magenta;
 }
 #top-div{
     /*border: 1px solid blue;*/
     height: 61px;
     /*padding: 3px;*/
-    
+
 /*    display: flex;*/
     /*height: 60px;*/
     text-align: right;
     background-color: #ff000080; /*Chrome and Firefox only*/
+}
+
+#title-div{
+  float: left;
+  text-align: left;
+  color: white;
 }
 
 #new-div {
@@ -53,4 +59,14 @@ body {
     -khtml-user-select: none; /* KHTML browsers (e.g. Konqueror) */
     -webkit-user-select: none; /* Chrome, Safari, and Opera */
     -webkit-touch-callout: none; /* Disable Android and iOS callouts*/
+}
+
+.completed{
+  color: gray;
+  background-color: lightgray;
+  text-decoration: line-through;
+}
+
+.option-completed{
+  background-color: lightgray !important;
 }

@@ -8,119 +8,80 @@ let listDiv = document.querySelector('#list-div');
 addItem(listDiv);
 
 window.addEventListener('DOMContentLoaded', function ()
+{
+  if (!hasSavedData())
   {
-    if (!hasSavedData())
-      {
-        saveDefaultTodo();
-      }
-  });
-
-//let newDiv = document.querySelector('#new-div');
-//newDiv.addEventListener('click', function ()
-//  {
-//    disableTextareas();
-//     bulkToggleClass('clicked', 'not-clicked');
-//    addItem(listDiv);
-//  });
+    saveDefaultTodo();
+  }
+});
 
 mainDiv.addEventListener('click', function (e)
+{
+  e.preventDefault();
+
+  let clicked = e.target;
+  bulkToggleClass('clicked', 'not-clicked');
+
+  if (clicked.id === 'new-div')
   {
-//    e.preventDefault();
-     
-    let clicked = e.target;
-    console.log('cricked', clicked, 'clickedParent', clicked.parentElement);
-     bulkToggleClass('clicked', 'not-clicked');
-     
-     if ( clicked.id === 'new-div')
-     {
-       addItem(listDiv);
-     }
-    
-    
-     if ( ['main-div','top-div', 'new-div'].includes( clicked.id))
-     {
-       disableTextareas();
-       return;
-     }
+    addItem(listDiv);
+  }
 
 
-    if (clicked.classList.isEmpty())
-      {
-        disableTextareas();
-//     bulkToggleClass('clicked', 'not-clicked');
+  if (['main-div', 'top-div', 'new-div'].includes(clicked.id))
+  {
+    disableTextareas();
+    return;
+  }
 
-        console.log('classList is empty');
-        return;
-      }
+  if (clicked.classList.isEmpty())
+  {
+    disableTextareas();
+    return;
+  }
 
-    let isItem = clicked.classList.contains('item');
-    let isTextArea = clicked.classList.contains('text');
+  let isItem = clicked.classList.contains('item');
+  let isTextArea = clicked.classList.contains('text');
 
-    let clickedParent = clicked.parentElement;
-    let isDoneBt = clickedParent.classList.contains('done');
-    let isRemoveBt = clickedParent.classList.contains('remove');
+  let clickedParent = clicked.parentElement;
+  let isDoneBt = clickedParent.classList.contains('done');
+  let isRemoveBt = clickedParent.classList.contains('remove');
 
-    let item = clicked.closest('.item');
-//    let isActive = item.classList.contains('clicked');
-//    let isEditing = item.querySelector('textarea').disabled;
+  let item = clicked.closest('.item');
 
-//    console.log('isEditing:', isEditing);
+  if (isTextArea)
+  {
+    let isEditing = item.querySelector('textarea').disabled;
+    disableTextareas();
+    if (isEditing)
+    {
+      clicked.toggleAttribute('disabled');
+      clicked.classList.add('is-editing');
+      clicked.focus();
+    } else
+    {
+      clicked.classList.remove('is-editing');
+    }
+  } else if (isDoneBt)
+  {
+//    item.toggleAttribute('completed');
+//    console.log( item.firstChild;
+    item.classList.toggle('item-completed');
+    item.firstChild.classList.toggle('completed');
+    item.querySelector('.options').classList.toggle('option-completed');
+//    console.log( 'done item:', item );
+    disableTextareas();
+//    saveList();
 
-//    bulkToggleClass('clicked', 'not-clicked');
-    
-    
-    console.log('Clicked on ', clickedParent, 'which parent of', clicked);
-
-//    let elem;
-//    if ( isItem || isTextArea )
-//    {
-//      elem = clicked;
-//    } else if ( isDoneBt || isRemoveBt )
-//    {
-//      
-//    }
-//    
-
-    if (isTextArea)
-      {
-        console.log('isTextArea');
-//        console.log( 'yyy', clicked, document.activeElement);
-        let isEditing = item.querySelector('textarea').disabled;
-        console.log("isEditing", isEditing );
-        disableTextareas();
-        if (isEditing)
-          {
-        clicked.toggleAttribute('disabled');
-        clicked.classList.add('is-editing');
-            clicked.focus();
-          }
-        else
-          {
-        clicked.classList.remove('is-editing');
-            console.log('is not Editing');
-          }
-      }
-    else if (isDoneBt)
-      {
-        disableTextareas();
-        console.log('isDoneBt');
-        console.log('Item Done!');
-      }
-    else if (isRemoveBt)
-      {
-        console.log('isRemoveBt');
-        removeItem(item);
-        console.log('Item has been removed.');
-      }
-    else if (isItem)
-      {
-        item.classList.replace('not-clicked', 'clicked');
-        console.log('isItemBt');
-        console.log('Edit item');
-      }
-    else
-      {
-        console.log('No action');
-      }
-  });
+  } else if (isRemoveBt)
+  {
+    removeItem(item);
+  } else if (isItem)
+  {
+    item.classList.replace('not-clicked', 'clicked');
+  } else
+  {
+    console.log('No action');
+  }
+});
 
