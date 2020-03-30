@@ -11,13 +11,8 @@
   margin: 5px;
 }
 
-/* Why this didn't work with '.item' before it? */
-.not-clicked{
-  box-shadow: 5px 5px 5px black;
-}
-
 .clicked{
-    box-shadow: 5px 5px 5px red;
+    box-shadow: 5px 5px 5px orange;
 }
 
 /*.item .bar {

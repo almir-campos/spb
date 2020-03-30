@@ -1,6 +1,6 @@
 'use strict';
 
-import { saveDefaultTodo, hasSavedData, addItem, removeItem, bulkToggleClass, disableTextareas } from './commons.js';
+import { saveDefaultTodo, hasSavedData, addItem, removeItem, saveList, isEmpty, updateLastEnabled, isEnabled } from './commons.js';
 
 let mainDiv = document.querySelector('#main-div');
 let listDiv = document.querySelector('#list-div');
@@ -15,12 +15,25 @@ window.addEventListener('DOMContentLoaded', function ()
   }
 });
 
+listDiv.addEventListener('change', function (e)
+{
+  let changed = e.target;
+  console.log( 'what changed:', changed );
+  if (changed.classList.contains('text'))
+  {
+    changed.toggleAttribute('disabled');
+    changed.classList.toggle('is-editing');
+    saveList();
+    console.log('changed:', changed);
+  }
+});
+
 mainDiv.addEventListener('click', function (e)
 {
   e.preventDefault();
 
   let clicked = e.target;
-  bulkToggleClass('clicked', 'not-clicked');
+//  bulkToggleClass('clicked', 'not-clicked');
 
   if (clicked.id === 'new-div')
   {
@@ -28,57 +41,70 @@ mainDiv.addEventListener('click', function (e)
   }
 
 
-  if (['main-div', 'top-div', 'new-div'].includes(clicked.id))
+//  if (['main-div', 'top-div', 'new-div'].includes(clicked.id))
+//  {
+////    disableTextareas();
+//    return;
+//  }
+
+//  if (clicked.classList.isEmpty())
+//  {
+//    disableTextareas();
+//    return;
+//  }
+
+  let item = clicked.closest('.item');
+
+  if (!item)
   {
-    disableTextareas();
+    console.log('not an item');
+    updateLastEnabled();
     return;
   }
 
-  if (clicked.classList.isEmpty())
-  {
-    disableTextareas();
-    return;
-  }
+  item.classList.toggle('clicked');
 
   let isItem = clicked.classList.contains('item');
+
   let isTextArea = clicked.classList.contains('text');
 
   let clickedParent = clicked.parentElement;
   let isDoneBt = clickedParent.classList.contains('done');
   let isRemoveBt = clickedParent.classList.contains('remove');
 
-  let item = clicked.closest('.item');
-
   if (isTextArea)
   {
-    let isEditing = item.querySelector('textarea').disabled;
-    disableTextareas();
-    if (isEditing)
+
+    // The state is toggled
+    clicked.toggleAttribute('disabled');
+
+    // And the class 'is-editing' is removed from the Textarea
+    clicked.classList.toggle('is-editing');
+
+    // If the stated was changed to 'enabled'
+    if (isEnabled(item))
     {
-      clicked.toggleAttribute('disabled');
-      clicked.classList.add('is-editing');
+      // The previous enabled text area is updated
+      updateLastEnabled();
+
+      // The focus is given to this text area
       clicked.focus();
-    } else
-    {
-      clicked.classList.remove('is-editing');
+      clicked.setAttribute('id', 'last_enabled');
     }
   } else if (isDoneBt)
   {
-//    item.toggleAttribute('completed');
-//    console.log( item.firstChild;
     item.classList.toggle('item-completed');
     item.firstChild.classList.toggle('completed');
     item.querySelector('.options').classList.toggle('option-completed');
-//    console.log( 'done item:', item );
-    disableTextareas();
-//    saveList();
+    clicked.toggleAttribute('disabled');
+    saveList();
 
   } else if (isRemoveBt)
   {
     removeItem(item);
   } else if (isItem)
   {
-    item.classList.replace('not-clicked', 'clicked');
+    item.classList.toggle('clicked');
   } else
   {
     console.log('No action');
