@@ -2,6 +2,8 @@
 
 import { saveDefaultTodo, hasSavedData, addItem, removeItem, saveList, isEmpty, updateLastEnabled, isEnabled } from './commons.js';
 
+import { config } from './config.js';
+
 let mainDiv = document.querySelector('#main-div');
 let listDiv = document.querySelector('#list-div');
 
@@ -33,25 +35,12 @@ mainDiv.addEventListener('click', function (e)
   e.preventDefault();
 
   let clicked = e.target;
-//  bulkToggleClass('clicked', 'not-clicked');
 
   if (clicked.id === 'new-div')
   {
     addItem(listDiv);
   }
 
-
-//  if (['main-div', 'top-div', 'new-div'].includes(clicked.id))
-//  {
-////    disableTextareas();
-//    return;
-//  }
-
-//  if (clicked.classList.isEmpty())
-//  {
-//    disableTextareas();
-//    return;
-//  }
 
   let item = clicked.closest('.item');
 

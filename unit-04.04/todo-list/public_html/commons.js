@@ -1,6 +1,6 @@
-const defaults = [
-  {done: false, mode: 'edit', content: ''}
-];
+'use strict';
+
+//import { config } from './config.js';
 
 let todo;
 
@@ -13,7 +13,7 @@ let saveTodo = function (json)
 let saveDefaultTodo = function ()
 {
   console.log('Saving default todo...');
-  saveTodo(defaults);
+  saveTodo(config.defaults);
 };
 
 let hasSavedData = function ()
@@ -50,11 +50,11 @@ let addItem = function (elem)
 
   let doneOptionContent = document.createElement('span');
   doneOptionContent.classList.add('option-content', 'disable-selection');
-  doneOptionContent.innerHTML = '&#10004;';
+  doneOptionContent.innerHTML = config.symbols.done;
 
   let removeOptionContent = document.createElement('span');
   removeOptionContent.classList.add('option-content', 'disable-selection');
-  removeOptionContent.innerHTML = '&#x274C;';
+  removeOptionContent.innerHTML = config.symbols.remove;
 
   //
 
@@ -87,41 +87,6 @@ let allTextareas = function ()
 {
   return document.querySelectorAll('textarea');
 };
-
-//let bulkToggleClass = function (toRemove, toAdd)
-//{
-//  let elems = document.querySelectorAll('.' + toRemove);
-//
-//  if (isEmpty(elems))
-//  {
-//    return;
-//  }
-//  elems.forEach((elem) =>
-//  {
-//    if (elem.classList.contains(toRemove))
-//    {
-//      elem.classList.replace(toRemove, toAdd);
-//    } else if (!elem.classList.contains(toAdd))
-//    {
-//      elem.classList.add(toAdd);
-//    }
-//  });
-//};
-
-//let disableTextareas = function ()
-//{
-//  console.log( 'disableTextareas');
-//  let textareas = allTextareas();
-//  textareas.forEach(textarea =>
-//  {
-//    textarea.classList.remove('is-editing');
-//    if (!textarea.hasAttribute('disabled'))
-//    {
-//      textarea.toggleAttribute('disabled');
-//    }
-//  });
-////  saveList();
-//};
 
 let saveList = function ()
 {
