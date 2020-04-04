@@ -31,10 +31,11 @@
     display: inline-block;
     border: none;
     resize: none;
+    background-color: white;
 }
 
 .is-editing{
-    background-color: yellowgreen;
+    background-color: yellowgreen !important;
 }
 
 .item .options{
@@ -67,6 +68,12 @@
 .item .options .done{
   /*display: block;*/
   color: lightseagreen;
+  /*font-size: 22px;*/
+  /*border: 1px solid cyan;*/
+}
+.item .options .done .reopen{
+  /*display: block;*/
+  font-size: 28px;
   /*border: 1px solid cyan;*/
 }
 .item .options .remove{

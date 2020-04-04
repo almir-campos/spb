@@ -63,7 +63,7 @@ body {
 
 .completed{
   color: gray;
-  background-color: lightgray;
+  background-color: lightgray !important;
   text-decoration: line-through;
 }
 

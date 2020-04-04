@@ -1,0 +1,25 @@
+'use strict';
+//
+//let conf = {
+//  defaults: {
+//    done: "false",
+//    content: ""
+//  },
+//  symbols: {
+//    done: "&#10004;",
+//    remove: "&#x274C;",
+//    reopen: "&#21BA;"
+//  }
+//};
+
+let conf = null;
+
+let config = function()
+{
+  return conf;
+}
+
+export { config }
+
+
+==========================
