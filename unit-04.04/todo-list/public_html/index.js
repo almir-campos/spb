@@ -8,7 +8,7 @@
 
 
   //console.clear();
-  localStorage.clear();
+  //localStorage.clear();
 
   window.addEventListener('DOMContentLoaded', function ()
     {
@@ -27,7 +27,7 @@
         }
       else
         {
-          fn.appendLoadedItems(todo);
+          IndexUtils.appendLoadedItems(todo.data, listDiv);
         }
 
     });
