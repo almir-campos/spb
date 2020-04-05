@@ -15,14 +15,6 @@
     box-shadow: 5px 5px 5px orange;
 }
 
-/*.item .bar {
-  width: 10px;
-  height: 82px;
-  background-color: orange;
-  float: right;
-}*/
-
-
 .item .text {
     width: 113px;
     height: 76px;
@@ -43,43 +35,31 @@
   height: 82px;
   background-color: rgba( 255, 165, 0, 0.2 );
   float: right;
-  /*visibility: hidden;*/
-  /*width: 0;*/
   text-align: center;
 }
 
 .item .options .option {
-  /*background: cyan;*/
   height: 41px;
   display: block;
 }
 
 .item .options .option .option-content{
-  /*clear: both;*/
   margin: 0;
   position: relative;
   display: block;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  /*border: 1px solid red;*/
 }
 
 .item .options .done{
-  /*display: block;*/
   color: lightseagreen;
-  /*font-size: 22px;*/
-  /*border: 1px solid cyan;*/
 }
 .item .options .done .reopen{
-  /*display: block;*/
   font-size: 28px;
-  /*border: 1px solid cyan;*/
 }
 .item .options .remove{
-  /*display: block;*/
   color: coral;
-  /*border: 1px solid cyan;*/
 }
 
 .item .options .option:hover {

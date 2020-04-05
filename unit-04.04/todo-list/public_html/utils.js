@@ -1,52 +1,64 @@
   'use strict';
-  
-  
-  
+  /**
+   * 
+   * @type type
+   */
   export class Utils
     {
-      constructor()
-        {
-        }
-
+      /**
+       * 
+       */
       static consolo = {
-        debug: function (...args)
+        /**
+         * 
+         * @param {type} args
+         * @returns {undefined}
+         */
+        debug: function (save, ...args)
           {
-            console.debug('%c', "color: red;", args);
+            if (save)
+              {
+                let saveLog = function ()
+                  {
+                    let todoLog = localStorage.getItem('todo-log');
+                    if (Utils.isEmpty(todoLog))
+                      {
+                        todoLog = '';
+                      }
+
+                    todoLog = todoLog.concat(args.join()).concat('\n');
+                    localStorage.setItem('todo-log', todoLog );
+                  };
+                saveLog();
+              }
+            else
+              {
+                console.debug('%c', "color: red;", args);
+              }
           },
-          json: function( json )
+
+        /**
+         * 
+         * @param {type} json
+         * @param {type} beautify
+         * @returns {undefined}
+         */
+        json: function (json, beautify)
           {
-            Utils.consolo.debug( 'JSON beautified');
-            console.log( JSON.stringify(json, null, 2 ));
-          }
+            Utils.consolo.debug(true, (beautify ? 'Beautified' : 'Raw') + ' String JSON');
+            let strJson = beautify ?
+                JSON.stringify(json, null, 2) :
+                JSON.stringify(json);
+            return strJson
+          },
+
       };
 
-      static randomString(l)
-        {
-          let str = '';
-          let rand;
-          for (let i = 0; i < l; i++)
-            {
-              rand = Math.random();
-              if (rand < 0.33)
-                {
-                  str += String.fromCharCode(Utils.randomInt(48, 57));
-                }
-              else if (rand < 0.66)
-                {
-                  str += String.fromCharCode(Utils.randomInt(65, 90));
-                }
-              else
-                {
-                  str += String.fromCharCode(Utils.randomInt(97, 122));
-                }
-            }
-          return str;
-        }
-      static randomInt(min, max)
-        {
-          return min + Math.floor(Math.random() * (max - min + 1));
-        }
-
+      /**
+       * 
+       * @param {type} obj
+       * @returns {Utils.isEmpty.itIs}
+       */
       static isEmpty(obj)
         {
           let itIs = (obj === null)
@@ -55,10 +67,16 @@
               || (typeof obj.size === 'undefine' && obj.size() === 0);
           return itIs;
         }
-        static swap( value, s1, s2 )
+
+      /**
+       * 
+       * @param {type} value
+       * @param {type} s1
+       * @param {type} s2
+       * @returns {unresolved}
+       */
+      static swap(value, s1, s2)
         {
           return (value === s1 ? s2 : s1);
         }
     }
-
-

@@ -11,12 +11,9 @@
       static appendLoadedItems(data, listDiv)
         {
           let itemsToAppend = [];
-          console.log( 'data', data);
           data.forEach(loadedItem =>
           {
-            console.log('loadedItem', loadedItem);
             let newItem = ListUtils.createItem(true);
-            // push({"text": item.firstChild.value, "completed": item.classList.contains('item-completed')});
 
             newItem.textarea.value = loadedItem.text;
             if (loadedItem.completed)
@@ -26,9 +23,7 @@
                 newItem.textarea.classList.add('completed');
               }
             itemsToAppend.push(newItem);
-            console.log('newItem', newItem);
           });
-          console.log('itemsToAppend', itemsToAppend);
           ListUtils.addItems(itemsToAppend, listDiv);
         }
       static addListDivEventListener(listDiv)
@@ -36,15 +31,11 @@
           listDiv.addEventListener('change', function (e)
             {
               let changed = e.target;
-              console.log('what changed:', changed);
               if (changed.classList.contains('text'))
                 {
                   changed.toggleAttribute('disabled');
                   changed.classList.toggle('is-editing');
-//          commons.saveList();
-                  console.log('changed:', changed);
                 }
-//        ListUtils.saveList();
             });
         }
 
@@ -52,8 +43,7 @@
         {
           let saveOnMutation = function (mutationRecords)
             {
-//          console.log(mutationRecords);
-              Utils.consolo.debug('saveOnMutation', mutationRecords);
+              Utils.consolo.debug(true, 'saveOnMutation', mutationRecords);
               ListUtils.saveList();
             };
           let observer = new MutationObserver(saveOnMutation);
@@ -72,34 +62,42 @@
         {
           mainDiv.addEventListener('click', function (e)
             {
-//      e.preventDefault();
-//      e.stopPropagation();
-              console.clear();
+              /**
+               * These two statements won't make any difference
+               * in this context.
+               *  e.preventDefault();
+               *  e.stopPropagation();
+               */
+
               let clicked = e.target;
               let clickedParent = clicked.parentElement;
-              console.log('addEventListener/click/clicked', clicked);
+
+              /**
+               * 
+               */
               if (clicked.id === 'add-div')
                 {
                   ListUtils.addItem(listDiv);
                 }
 
+              /**
+               * 
+               * @type type
+               */
               let item = clicked.closest('.item');
               if (!item)
                 {
-                  Utils.consolo.debug('mainDiv/click/Not an item');
+                  Utils.consolo.debug(true, 'mainDiv/click/Not an todo item');
                   ListUtils.updateLastEnabled();
                   return;
                 }
 
+              /**
+               * The class <b>Item.js<b> provides useful functions for a todo-item
+               * 
+               * @type Item
+               */
               let itemObj = new Item(item);
-//      let itemObj = ListUtils.items.get(item.dataset.id);
-              console.log('clicked item', item);
-//      let jItem = commons.jsonItem(item);
-//      console.log('jsonItem', jItem);
-//      console.log('');
-////      item.classList.toggle('clicked');
-//      jItem.classes.toggle('clicked');
-//      console.log('jItem.classes', jItem.classes);
 
               /*
                *  Detect clicked element type
@@ -116,7 +114,7 @@
                */
               if (isTextArea)
                 {
-                  Utils.consolo.debug('mainDiv/click/isTextArea', isTextArea);
+                  Utils.consolo.debug(true, 'mainDiv/click/isTextArea', isTextArea);
                   /*
                    * Toggle the current state
                    */
@@ -128,9 +126,8 @@
                   /*
                    * If the state changes to 'enabled'
                    */
-//          if (item.isEnabled())
 
-                  if (itemObj.isEnabled())
+                  if (itemObj.isEditMode())
                     {
                       /*
                        * Update the previous enabled textarea
@@ -142,39 +139,27 @@
                       clicked.focus();
                       clicked.setAttribute('id', 'last_enabled');
                     }
-                  console.log('index.js/click/textarea/clicked', clicked);
                 }
               else if (isDoneBt)
                 {
-//          Utils.consolo.debug('mainDiv/click/isDoneBt', isDoneBt);
-////          console.clear();
-//          console.log('clicked', clicked);
-//          item.classList.toggle('item-completed');
-//          item.firstChild.classList.toggle('completed');
-//          item.querySelector('.options').classList.toggle('option-completed');
-//          item.firstChild.toggleAttribute('disabled');
-////          commons.toggleDoneBt( clicked );
-//          // This line is needed in the case of the textarea is in editing mode
-//          item.querySelector('.text').classList.remove('is-editing');
                   itemObj.toggleCompleted();
-//          ListUtils.saveList();
-
                 }
               else if (isRemoveBt)
                 {
-                  Utils.consolo.debug('mainDiv/click/isRemoveBt', isRemoveBt);
+                  Utils.consolo.debug(true, 'mainDiv/click/isRemoveBt', isRemoveBt);
                   ListUtils.removeItem(item);
                 }
               else if (isItem)
                 {
-                  Utils.consolo.debug('mainDiv/click/isItem', isItem);
+                  Utils.consolo.debug(true, 'mainDiv/click/isItem', isItem);
                   item.classList.toggle('clicked');
                 }
               else
                 {
-                  Utils.consolo.debug('mainDiv/click/No action');
+                  Utils.consolo.debug(true, 'mainDiv/click/No action');
                 }
-            });
+            }
+          );
         }
 
     }

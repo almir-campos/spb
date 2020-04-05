@@ -1,15 +1,15 @@
-'use strict';
+  'use strict';
 
-let config = {
-  defaults: {
-    done: "false",
-    content: ""
-  },
-  symbols: {
-    done: "✔",
-    remove: "&#x274C;",
-    reopen: "↺"
-  }
-};
+  let config = {
+    defaults: {
+      done: "false",
+      content: ""
+    },
+    symbols: {
+      done: "✔",
+      remove: "&#x274C;",
+      reopen: "↺"
+    }
+  };
 
-export {config}
+  export {config}
