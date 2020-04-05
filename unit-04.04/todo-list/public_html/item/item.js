@@ -17,7 +17,7 @@
           this.doneBtIcon = this.doneBt.childNodes[0];
           this.removeBt = this.options.childNodes[1];
           this.removeBtSpan = this.removeBt.childNodes[0];
-          Utils.consolo.debug(true, 'New item created', this.item);
+          // Utils.consolo.debug(true, 'New item created', this.item);
         }
 
       /**
@@ -116,14 +116,14 @@
        */
       toggleCompleted()
         {
-          Utils.consolo.debug(true, 'item.js/toggleCompleted()/beginning/item', this.item);
+          // Utils.consolo.debug(true, 'item.js/toggleCompleted()/beginning/item', this.item);
           this.toggleClass('completed');
 //          this.options.classList.toggle('option-completed');
           this.textarea.classList.toggle('completed');
           this.textarea.classList.remove('is-editing');
           this.doneBtIcon.innerHTML = Utils.swap(this.doneBtIcon.innerHTML, config.symbols.done, config.symbols.reopen);
           this.doneBtIcon.classList.toggle('reopen');
-          Utils.consolo.debug(true, 'item.js/toggleCompleted()/ending/item', this.item);
+          // Utils.consolo.debug(true, 'item.js/toggleCompleted()/ending/item', this.item);
           return this;
         }
 
@@ -138,6 +138,7 @@
 
           if (clicked.classList.contains('text'))
             {
+              Utils.consolo.debug(true, '--\nClicked on textarea.\nContent:\n' + this.getText());
               this.textareaOnClick();
             }
 
@@ -145,21 +146,27 @@
               || clickedParent.classList.contains('reopen')
               || clicked.classList.contains('done'))
             {
+              Utils.consolo.debug(true, '--\nClicked on doneBt.\nContent:\n' + this.getText());
               this.doneBtOnClick();
             }
 
           if (clickedParent.classList.contains('remove')
               || clicked.classList.contains('remove'))
             {
-              this.removeBtClick();
+              Utils.consolo.debug(true, '--\nClicked on removeBt.\nContent:\n' +  this.getText());
+              this.removeBtOnClick();
             }
 
           this.classes.add('clicked');
         }
 
+      /**
+       * 
+       * @returns {undefined}
+       */
       textareaOnClick()
         {
-          Utils.consolo.debug(true, 'mainDiv/click/textArea');
+          // Utils.consolo.debug(true, 'mainDiv/click/textArea');
 
           /*
            * Toggle the current state
@@ -195,13 +202,13 @@
        */
       doneBtOnClick(clicked)
         {
-          Utils.consolo.debug(true, 'mainDiv/click/doneBt');
+          // Utils.consolo.debug(true, 'mainDiv/click/doneBt');
           this.toggleCompleted();
         }
 
       removeBtOnClick()
         {
-          Utils.consolo.debug(true, 'mainDiv/click/removeBt');
+          // Utils.consolo.debug(true, 'mainDiv/click/removeBt');
           this.getItem()
               .remove();
         }

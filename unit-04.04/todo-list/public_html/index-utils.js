@@ -60,7 +60,7 @@
         {
           let saveOnMutation = function (mutationRecords)
             {
-              Utils.consolo.debug(true, 'saveOnMutation', mutationRecords);
+              // Utils.consolo.debug(true, 'saveOnMutation', mutationRecords);
               ListUtils.saveList();
             };
           let observer = new MutationObserver(saveOnMutation);
@@ -107,6 +107,7 @@
                */
               if (clicked.id === 'add-div')
                 {
+                  Utils.consolo.debug(true, '--\nClicked on add-div');
                   ListUtils.addItem(listDiv);
                   return;
                 }
@@ -118,7 +119,7 @@
               let item = clicked.closest('.item');
               if (!item)
                 {
-                  Utils.consolo.debug(true, 'mainDiv/click/Not an todo item');
+                  // Utils.consolo.debug(true, 'mainDiv/click/Not an todo item');
 //                  ListUtils.updateLastEnabled();
                   return;
                 }
@@ -141,7 +142,7 @@
 //               */
 //              if (isTextArea)
 //                {
-////                  Utils.consolo.debug(true, 'mainDiv/click/isTextArea', isTextArea);
+////                  // Utils.consolo.debug(true, 'mainDiv/click/isTextArea', isTextArea);
 ////                  /*
 ////                   * Toggle the current state
 ////                   */
@@ -174,17 +175,17 @@
 //                }
 //              else if (isRemoveBt)
 //                {
-////                  Utils.consolo.debug(true, 'mainDiv/click/isRemoveBt', isRemoveBt);
+////                  // Utils.consolo.debug(true, 'mainDiv/click/isRemoveBt', isRemoveBt);
 ////                  ListUtils.removeItem(item);
 //                }
 ////              else if (isItem)
 ////                {
-////                  Utils.consolo.debug(true, 'mainDiv/click/isItem', isItem);
+////                  // Utils.consolo.debug(true, 'mainDiv/click/isItem', isItem);
 ////                  item.classList.toggle('clicked');
 ////                }
 //              else
 //                {
-////                  Utils.consolo.debug(true, 'mainDiv/click/No action');
+////                  // Utils.consolo.debug(true, 'mainDiv/click/No action');
 //                }
 //              item.classList.add('clicked');
             }

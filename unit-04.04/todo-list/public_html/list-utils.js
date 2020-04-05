@@ -11,7 +11,7 @@
        */
       static saveDefaultTodo()
         {
-          Utils.consolo.debug ( true, 'Saving default todo...');
+          // Utils.consolo.debug ( true, 'Saving default todo...');
           let listDiv = document.querySelector('#list-div');
           let newItem = ListUtils.addItem(listDiv);
         }
@@ -31,7 +31,7 @@
        */
       static saveList()
         {
-          Utils.consolo.debug ( true, 'Utils.js/saveList/beginning');
+          // Utils.consolo.debug ( true, 'Utils.js/saveList/beginning');
           let todo = {data: []};
           let items = ListUtils.allItems();
           items.forEach((item) =>
@@ -39,7 +39,7 @@
             todo.data.push({"text": item.firstChild.value, "completed": item.classList.contains('completed')});
           });
           localStorage.setItem("todo", Utils.consolo.json(todo, true ));
-          Utils.consolo.debug ( true, 'Utils.js/saveList/ending/saved');
+          // Utils.consolo.debug ( true, 'Utils.js/saveList/ending/saved');
           Utils.consolo.json(ListUtils.loadList());
         }
 
@@ -49,7 +49,7 @@
        */
       static loadList()
         {
-          Utils.consolo.debug( true, 'list-utils.js/loadList' );
+          // Utils.consolo.debug( true, 'list-utils.js/loadList' );
           let todo = JSON.parse(localStorage.getItem('todo'));
           return todo;
         }
@@ -62,7 +62,7 @@
       static hasSavedData(todo)
         {
           let result = !Utils.isEmpty(todo);
-          Utils.consolo.debug( true, 'list-utils/hasSavedData', result);
+          // Utils.consolo.debug( true, 'list-utils/hasSavedData', result);
           Utils.consolo.json(todo);
           return result;
         }
@@ -152,7 +152,7 @@
        */
       static addItems(arrItems, container)
         {
-          Utils.consolo.debug ( true, 'addItems/arrItems', arrItems);
+          // Utils.consolo.debug ( true, 'addItems/arrItems', arrItems);
           if (Array.isArray(arrItems))
             {
               arrItems.forEach(item =>
@@ -169,7 +169,7 @@
        */
       static updateLastEnabled(clicked)
         {
-          Utils.consolo.debug ( true, 'list-utils.js/updateLastEnabled/begining/clicked', clicked);
+          // Utils.consolo.debug ( true, 'list-utils.js/updateLastEnabled/begining/clicked', clicked);
 
           /*
            * 

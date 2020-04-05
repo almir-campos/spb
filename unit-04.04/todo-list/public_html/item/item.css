@@ -64,7 +64,9 @@
 }
 
 .item .options .option:hover {
-  border: 1px solid gray;
+  /*border: 1px solid gray;*/
+  box-shadow: inset 0px 0px 15px rgba(255,165,0,0.9);
+  text-shadow: 1px 1px 1px #000;
 }
 
 

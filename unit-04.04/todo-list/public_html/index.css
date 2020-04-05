@@ -41,6 +41,11 @@ body {
   margin: 5px 15px;
 }
 
+#add-div:hover {
+ box-shadow: inset 0px 0px 15px yellow;
+ text-shadow: 2px 2px 2px #000;
+}
+
 #list-div {
   /*Used for debug purposes*/
   /*margin-top: 50px;*/
