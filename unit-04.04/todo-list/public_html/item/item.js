@@ -1,7 +1,8 @@
   'use strict';
 
-  import { Utils } from '../utils.js';
   import { config } from '../cfg.js';
+  import { Utils } from '../utils.js';
+//  import { ListUtils } from '../list-utils.js';
 
   export class Item
     {
@@ -72,12 +73,12 @@
           return this.getClassList()
               .contains('completed');
         }
-        
-        /**
-         * 
-         * @returns {undefined}
-         */
-        setCompleted()
+
+      /**
+       * 
+       * @returns {undefined}
+       */
+      setCompleted()
         {
           this.classes.add('completed');
           this.textarea.classList.add('completed');
@@ -125,4 +126,84 @@
           Utils.consolo.debug(true, 'item.js/toggleCompleted()/ending/item', this.item);
           return this;
         }
+
+      /**
+       * 
+       * @param {type} clicked
+       * @returns {String}
+       */
+      onClick(clicked)
+        {
+          let clickedParent = clicked.parentElement;
+
+          if (clicked.classList.contains('text'))
+            {
+              this.textareaOnClick();
+            }
+
+          if (clickedParent.classList.contains('done')
+              || clickedParent.classList.contains('reopen')
+              || clicked.classList.contains('done'))
+            {
+              this.doneBtOnClick();
+            }
+
+          if (clickedParent.classList.contains('remove')
+              || clicked.classList.contains('remove'))
+            {
+              this.removeBtClick();
+            }
+
+          this.classes.add('clicked');
+        }
+
+      textareaOnClick()
+        {
+          Utils.consolo.debug(true, 'mainDiv/click/textArea');
+
+          /*
+           * Toggle the current state
+           */
+          this.textarea.toggleAttribute('disabled');
+
+          /*
+           * Remove the class 'is-editing' from the textarea
+           */
+          this.textarea.classList.toggle('is-editing');
+
+          /*
+           * If the state changes to 'enabled'
+           */
+          if (this.isEditMode())
+            {
+              /*
+               * Update the previous enabled textarea
+               */
+//              ListUtils.updateLastEnabled(clicked);
+              /*
+               * Focus on the current textarea
+               */
+              this.textarea.focus();
+              this.textarea.setAttribute('id', 'last_enabled');
+            }
+        }
+
+      /**
+       * 
+       * @param {type} clicked
+       * @returns {undefined}
+       */
+      doneBtOnClick(clicked)
+        {
+          Utils.consolo.debug(true, 'mainDiv/click/doneBt');
+          this.toggleCompleted();
+        }
+
+      removeBtOnClick()
+        {
+          Utils.consolo.debug(true, 'mainDiv/click/removeBt');
+          this.getItem()
+              .remove();
+        }
+
     }
