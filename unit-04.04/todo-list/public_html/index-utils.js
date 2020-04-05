@@ -142,6 +142,7 @@
                 }
               else if (isDoneBt)
                 {
+                  ListUtils.updateLastEnabled();
                   itemObj.toggleCompleted();
                 }
               else if (isRemoveBt)

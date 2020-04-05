@@ -2,7 +2,6 @@
 
   import { Utils } from '../utils.js';
   import { config } from '../cfg.js';
-  import { ListUtils } from '../list-utils.js';
 
   export class Item
     {
@@ -103,7 +102,6 @@
       toggleCompleted()
         {
           Utils.consolo.debug(true, 'item.js/toggleCompleted()/beginning/item', this.item);
-          ListUtils.updateLastEnabled();
           this.toggleClass('item-completed');
           this.options.classList.toggle('option-completed');
           this.textarea.classList.toggle('completed');
