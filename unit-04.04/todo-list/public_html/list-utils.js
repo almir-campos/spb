@@ -36,7 +36,7 @@
           let items = ListUtils.allItems();
           items.forEach((item) =>
           {
-            todo.data.push({"text": item.firstChild.value, "completed": item.classList.contains('item-completed')});
+            todo.data.push({"text": item.firstChild.value, "completed": item.classList.contains('completed')});
           });
           localStorage.setItem("todo", Utils.consolo.json(todo, true ));
           Utils.consolo.debug ( true, 'Utils.js/saveList/ending/saved');
@@ -186,8 +186,25 @@
               lastEnabled.removeAttribute('id');
               lastEnabled.setAttribute('disabled', true);
               lastEnabled.classList.remove('is-editing');
-              lastEnabled.closest('.item').classList.remove('clicked');
+//              lastEnabled.closest('.item').classList.remove('clicked');
+//              lastEnabled.classList.remove('clicked');
             }
           return !Utils.isEmpty(lastEnabled);
+        }
+        
+        /**
+         * 
+         * @param {type} listDiv
+         * @returns {undefined}
+         */
+        static removeClickedHighlight(listDiv)
+        {
+          let clicked = listDiv.querySelector('.clicked');
+          if ( Utils.isEmpty(clicked))
+          {
+            return;
+          }
+          
+          clicked.classList.remove('clicked');
         }
     }

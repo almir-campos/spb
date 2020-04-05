@@ -8,11 +8,12 @@
       constructor(item)
         {
           this.item = item;
-          this.children = item.childNodes;
+          this.classes = this.item.classList;
+          this.children = this.item.childNodes;
           this.textarea = this.children[0];
           this.options = this.children[1];
           this.doneBt = this.options.childNodes[0];
-          this.doneBtSpan = this.doneBt.childNodes[0];
+          this.doneBtIcon = this.doneBt.childNodes[0];
           this.removeBt = this.options.childNodes[1];
           this.removeBtSpan = this.removeBt.childNodes[0];
           Utils.consolo.debug(true, 'New item created', this.item);
@@ -33,7 +34,7 @@
        */
       getClassList()
         {
-          return this.item.classList;
+          return this.classes;
         }
 
       /**
@@ -69,7 +70,20 @@
       isCompleted()
         {
           return this.getClassList()
-              .contains('item-completed');
+              .contains('completed');
+        }
+        
+        /**
+         * 
+         * @returns {undefined}
+         */
+        setCompleted()
+        {
+          this.classes.add('completed');
+          this.textarea.classList.add('completed');
+          this.textarea.classList.remove('is-editing');
+          this.doneBtIcon.innerHTML = config.symbols.reopen;
+          this.doneBtIcon.classList.add('reopen');
         }
 
       /**
@@ -102,12 +116,12 @@
       toggleCompleted()
         {
           Utils.consolo.debug(true, 'item.js/toggleCompleted()/beginning/item', this.item);
-          this.toggleClass('item-completed');
-          this.options.classList.toggle('option-completed');
+          this.toggleClass('completed');
+//          this.options.classList.toggle('option-completed');
           this.textarea.classList.toggle('completed');
           this.textarea.classList.remove('is-editing');
-          this.doneBtSpan.innerHTML = Utils.swap(this.doneBtSpan.innerHTML, config.symbols.done, config.symbols.reopen);
-          this.doneBtSpan.classList.toggle('reopen');
+          this.doneBtIcon.innerHTML = Utils.swap(this.doneBtIcon.innerHTML, config.symbols.done, config.symbols.reopen);
+          this.doneBtIcon.classList.toggle('reopen');
           Utils.consolo.debug(true, 'item.js/toggleCompleted()/ending/item', this.item);
           return this;
         }

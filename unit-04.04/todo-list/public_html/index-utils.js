@@ -2,7 +2,6 @@
 
   import { Utils } from './utils.js';
   import { ListUtils } from './list-utils.js';
-//  import { config } from './cfg.js';
   import { Item } from './item/item.js'
 
 
@@ -13,14 +12,12 @@
           let itemsToAppend = [];
           data.forEach(loadedItem =>
           {
-            let newItem = ListUtils.createItem(true);
+            let newItem = ListUtils.createItem();
 
             newItem.textarea.value = loadedItem.text;
             if (loadedItem.completed)
               {
-                newItem.getClassList()
-                    .add('item-completed');
-                newItem.textarea.classList.add('completed');
+                newItem.setCompleted();
               }
             itemsToAppend.push(newItem);
           });
@@ -99,6 +96,8 @@
                */
               let itemObj = new Item(item);
 
+              ListUtils.removeClickedHighlight(listDiv);
+
               /*
                *  Detect clicked element type
                */
@@ -159,6 +158,7 @@
                 {
                   Utils.consolo.debug(true, 'mainDiv/click/No action');
                 }
+              item.classList.add('clicked');
             }
           );
         }
