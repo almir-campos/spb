@@ -85,6 +85,8 @@
           let text = document.createElement('textarea');
           text.classList.add('text');
           text.toggleAttribute('disabled');
+          text.value = config.defaults.content;
+          text.setAttribute('title', 'Click to turn edit on/off');
 
           /**
            * 
@@ -97,6 +99,7 @@
            */
           let done = document.createElement('div');
           done.classList.add('option', 'done');
+          done.setAttribute('title', 'Click to complete/reopen this item' );
           let doneOptionContent = document.createElement('span');
           doneOptionContent.classList.add('option-content', 'disable-selection');
           doneOptionContent.innerHTML = config.symbols.done;
@@ -106,6 +109,7 @@
            */
           let remove = document.createElement('div');
           remove.classList.add('option', 'remove');
+          remove.setAttribute('title', 'Clicke to remove this item');
           let removeOptionContent = document.createElement('span');
           removeOptionContent.classList.add('option-content', 'disable-selection');
           removeOptionContent.innerHTML = config.symbols.remove;
