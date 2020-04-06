@@ -46,7 +46,6 @@
          */
         json: function (json, beautify)
           {
-            // Utils.consolo.debug(true, (beautify ? 'Beautified' : 'Raw') + ' String JSON');
             let strJson = beautify ?
                 JSON.stringify(json, null, 2) :
                 JSON.stringify(json);

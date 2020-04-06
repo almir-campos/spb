@@ -1,8 +1,8 @@
   'use strict';
 
-  import { Utils } from './utils.js';
-  import { ListUtils } from './list-utils.js';
-  import { Item } from './item/item.js'
+  import { Utils } from '../utils/utils.js';
+  import { ListUtils } from '../item/list-utils.js';
+  import { Item } from '../item/item.js'
   
   /**
    * 
@@ -60,7 +60,6 @@
         {
           let saveOnMutation = function (mutationRecords)
             {
-              // Utils.consolo.debug(true, 'saveOnMutation', mutationRecords);
               ListUtils.saveList();
             };
           let observer = new MutationObserver(saveOnMutation);
@@ -119,8 +118,6 @@
               let item = clicked.closest('.item');
               if (!item)
                 {
-                  // Utils.consolo.debug(true, 'mainDiv/click/Not an todo item');
-//                  ListUtils.updateLastEnabled();
                   return;
                 }
                 
@@ -135,59 +132,6 @@
                */
               let itemObj = new Item(item);
               itemObj.onClick( clicked );
-
-//
-//              /*
-//               * Take actions dependending on the clicked element
-//               */
-//              if (isTextArea)
-//                {
-////                  // Utils.consolo.debug(true, 'mainDiv/click/isTextArea', isTextArea);
-////                  /*
-////                   * Toggle the current state
-////                   */
-////                  clicked.toggleAttribute('disabled');
-////                  /*
-////                   * Remove the class 'is-editing' from the textarea
-////                   */
-////                  clicked.classList.toggle('is-editing');
-////                  /*
-////                   * If the state changes to 'enabled'
-////                   */
-////
-////                  if (itemObj.isEditMode())
-////                    {
-////                      /*
-////                       * Update the previous enabled textarea
-////                       */
-////                      ListUtils.updateLastEnabled(clicked);
-////                      /*
-////                       * Focus on the current textarea
-////                       */
-////                      clicked.focus();
-////                      clicked.setAttribute('id', 'last_enabled');
-////                    }
-//                }
-//              else if (isDoneBt)
-//                {
-////                  ListUtils.updateLastEnabled();
-////                  itemObj.toggleCompleted();
-//                }
-//              else if (isRemoveBt)
-//                {
-////                  // Utils.consolo.debug(true, 'mainDiv/click/isRemoveBt', isRemoveBt);
-////                  ListUtils.removeItem(item);
-//                }
-////              else if (isItem)
-////                {
-////                  // Utils.consolo.debug(true, 'mainDiv/click/isItem', isItem);
-////                  item.classList.toggle('clicked');
-////                }
-//              else
-//                {
-////                  // Utils.consolo.debug(true, 'mainDiv/click/No action');
-//                }
-//              item.classList.add('clicked');
             }
           );
         }

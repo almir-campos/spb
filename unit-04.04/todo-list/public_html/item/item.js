@@ -1,9 +1,13 @@
   'use strict';
 
   import { config } from '../cfg.js';
-  import { Utils } from '../utils.js';
-//  import { ListUtils } from '../list-utils.js';
+  import { Utils } from '../utils/utils.js';
 
+  /**
+   * Provides useful functions to manipulate or update an item.
+   * Just create a new instance of the Class providing the item (DOM element)
+   * to the constructor.
+   */
   export class Item
     {
       constructor(item)
@@ -17,12 +21,11 @@
           this.doneBtIcon = this.doneBt.childNodes[0];
           this.removeBt = this.options.childNodes[1];
           this.removeBtSpan = this.removeBt.childNodes[0];
-          // Utils.consolo.debug(true, 'New item created', this.item);
         }
 
       /**
        * 
-       * @returns DOM element item
+       * @returns This DOM element item
        */
       getItem()
         {
@@ -31,7 +34,7 @@
 
       /**
        * 
-       * @returns {Item.item.classList}
+       * @returns The classList object
        */
       getClassList()
         {
@@ -40,13 +43,17 @@
 
       /**
        * 
-       * @returns {unresolved}
+       * @returns All children of this item as a NodeList
        */
       getChildren()
         {
           return this.children;
         }
 
+      /**
+       * 
+       * @returns The current text (content) of this item
+       */
       getText()
         {
           return this.textarea.value;
@@ -54,7 +61,8 @@
 
       /**
        * 
-       * @returns {Item.isEnabled.result}
+       * @returns true if the this textarea is being edited
+       * and false otherwise.
        */
       isEditMode()
         {
@@ -66,7 +74,8 @@
 
       /**
        * 
-       * @returns {Item@call;getClassList@call;contains}
+       * @returns true is this item is marked as completed
+       * and false other wise.
        */
       isCompleted()
         {
@@ -75,8 +84,8 @@
         }
 
       /**
-       * 
-       * @returns {undefined}
+       * Set the current item as completed.
+       * It's particularly useful when the items are loaded from localStorage
        */
       setCompleted()
         {
@@ -89,8 +98,8 @@
 
       /**
        * 
-       * @param {type} content
-       * @returns {Item}
+       * @param content the content to fil the text area
+       * @returns This class
        */
       setContent(content)
         {
@@ -99,9 +108,9 @@
         }
 
       /**
-       * 
-       * @param {type} klass
-       * @returns {Item}
+       * Toggles a class in this item
+       * @param  klass The class to be toggled
+       * @returns This class
        */
       toggleClass(klass)
         {
@@ -111,23 +120,24 @@
         }
 
       /**
+       * Toggles the current item and some specific children from or to the 
+       * completed state
        * 
        * @returns {Item}
        */
       toggleCompleted()
         {
-          // Utils.consolo.debug(true, 'item.js/toggleCompleted()/beginning/item', this.item);
           this.toggleClass('completed');
-//          this.options.classList.toggle('option-completed');
           this.textarea.classList.toggle('completed');
           this.textarea.classList.remove('is-editing');
           this.doneBtIcon.innerHTML = Utils.swap(this.doneBtIcon.innerHTML, config.symbols.done, config.symbols.reopen);
           this.doneBtIcon.classList.toggle('reopen');
-          // Utils.consolo.debug(true, 'item.js/toggleCompleted()/ending/item', this.item);
           return this;
         }
 
       /**
+       * When the item is clicked, this function decides what to do 
+       * based on the child that was clicked.
        * 
        * @param {type} clicked
        * @returns {String}
@@ -153,7 +163,7 @@
           if (clickedParent.classList.contains('remove')
               || clicked.classList.contains('remove'))
             {
-              Utils.consolo.debug(true, '--\nClicked on removeBt.\nContent:\n' +  this.getText());
+              Utils.consolo.debug(true, '--\nClicked on removeBt.\nContent:\n' + this.getText());
               this.removeBtOnClick();
             }
 
@@ -161,12 +171,10 @@
         }
 
       /**
-       * 
-       * @returns {undefined}
+       * Action for a click on the textarea\
        */
       textareaOnClick()
         {
-          // Utils.consolo.debug(true, 'mainDiv/click/textArea');
 
           /*
            * Toggle the current state
@@ -186,7 +194,6 @@
               /*
                * Update the previous enabled textarea
                */
-//              ListUtils.updateLastEnabled(clicked);
               /*
                * Focus on the current textarea
                */
@@ -196,21 +203,19 @@
         }
 
       /**
-       * 
-       * @param {type} clicked
-       * @returns {undefined}
+       * Action for a click on the doneBt
        */
-      doneBtOnClick(clicked)
+      doneBtOnClick()
         {
-          // Utils.consolo.debug(true, 'mainDiv/click/doneBt');
           this.toggleCompleted();
         }
 
+      /**
+       * Action for a click on the removeBt
+       */
       removeBtOnClick()
         {
-          // Utils.consolo.debug(true, 'mainDiv/click/removeBt');
           this.getItem()
               .remove();
         }
-
     }
