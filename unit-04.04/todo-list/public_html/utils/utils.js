@@ -1,81 +1,141 @@
-  'use strict';
+'use strict';
+
+// import {Clicked} from '../index/ClickedEntity.js';
+
+/**
+ *
+ * @type type
+ */
+export class Utils {
   /**
-   * 
-   * @type type
+   *
    */
-  export class Utils
-    {
-      /**
-       * 
-       */
-      static consolo = {
-        /**
-         * 
-         * @param {type} save
-         * @param {type} args
-         * @returns {undefined}
-         */
-        debug: function (save, ...args)
-          {
-            if (save)
-              {
-                let saveLog = function ()
-                  {
-                    let todoLog = localStorage.getItem('todo-log');
-                    if (Utils.isEmpty(todoLog))
-                      {
-                        todoLog = '';
-                      }
-
-                    todoLog = todoLog.concat(args.join()).concat('\n');
-                    localStorage.setItem('todo-log', todoLog );
-                  };
-                saveLog();
-              }
-            else
-              {
-                console.debug('%c', "color: red;", args);
-              }
-          },
-
-        /**
-         * 
-         * @param {type} json
-         * @param {type} beautify
-         * @returns {undefined}
-         */
-        json: function (json, beautify)
-          {
-            let strJson = beautify ?
-                JSON.stringify(json, null, 2) :
-                JSON.stringify(json);
-            return strJson;
+  static consolo = {
+    debug: function (save, ...args) {
+      if (save) {
+        let saveLog = function () {
+          let todoLog = localStorage.getItem('todo-log');
+          if (Utils.isEmpty(todoLog)) {
+            todoLog = '';
           }
-      };
 
-      /**
-       * 
-       * @param {type} obj
-       * @returns {Utils.isEmpty.itIs}
-       */
-      static isEmpty(obj)
-        {
-          let itIs = (obj === null)
-              || (typeof obj === 'undefined')
-              || (typeof obj.length !== 'undefined' && obj.length === 0)
-              || (typeof obj.size === 'undefine' && obj.size() === 0);
-          return itIs;
-        }
+          todoLog = todoLog.concat(args.join())
+              .concat('\n');
+          localStorage.setItem('todo-log', todoLog);
+        };
+        saveLog();
+      }
+      else {
+        console.debug('%c', "color: red;", args);
+      }
+    },
 
-      /**
-       * 
-       * @param {type} value
-       * @param {type} s1
-       * @param {type} s2
-       * @returns {unresolved}
-       */
-      static swap(value, s1, s2)
-        {
-          return (value === s1 ? s2 : s1);
-        }
+    /**
+     *d
+     * @param {type} json
+     * @param {type} beautify
+     * @returns {String}
+     */
+    json: function (json, beautify) {
+      let strJson = beautify ?
+          JSON.stringify(json, null, 2) :
+          JSON.stringify(json);
+      return strJson;
     }
+  };
+
+  /**
+   * Detects if an object is null, or undefined, or has no length.
+   */
+  static isEmpty(obj) {
+////        let objc = getObject
+//        let itIs = new Clicked(getObject).name() !== 'item' || !getObject || !getObject.length;
+//
+//        // let itIs = ( getObject === null )
+//        //            || ( typeof getObject === 'undefined' )
+//        //            || ( typeof getObject.length !== 'undefined' && getObject.length === 0 )
+//        console.log('-----');
+//          console.log('getObject', getObject);
+//          console.log('getObject.length', !getObject ? "n/a" : getObject.length);
+//          console.log('itIs', itIs );
+//          return itIs;
+//      
+//      //            || ( typeof getObject.size === 'undefined' || getObject.size === 0 );
+
+    let theType = Utils.getType(obj);
+
+    let result =
+        (theType === 'null' || theType === 'undefined') ||
+        (theType === 'string' && obj.length === 0) ||
+        (theType === 'array' && obj.length === 0) ||
+        (theType === 'node-list' && obj.length === 0) ||
+        (theType === 'collection' && obj.length === 0) ||
+        (theType === 'number' && (obj === Number(0 / 0))) ||
+        (theType === 'cliked' && )
+        (theType !== 'element');
+
+    return result;
+  }
+
+  /**
+   *
+   * Sources:
+   * https://webbjocke.com/javascript-check-data-types/
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof
+   * https://stackoverflow.com/a/36857902
+   *
+   * This function can be optmized by using object.constructor and other techniques
+   *
+   */
+  //
+  // TODO: Optimize and uniform (?) this function.
+  //
+  static getType(obj) {
+    let isJson = function (obj) {
+      try {
+        JSON.parse(obj.toString);
+      } catch (e) {
+        return false;
+      }
+    };
+    // @formatter:off
+    let theType =
+      obj === null ? 'null' :
+      typeof obj === 'undefined' ? 'undefined' :
+      typeof obj === 'function' ? 'function' :
+      typeof obj === 'string' || obj instanceof String ? 'string' :
+      typeof obj === 'number' && isFinite(obj) ? 'number' :
+      typeof obj === 'boolean' ? 'boolean' :
+      typeof obj === 'symbol' ? 'symbol' :
+      obj instanceof Error && typeof obj.message !== 'undefined' ? 'error' :
+      obj instanceof Clicked ? 'clicked' :
+      obj instanceof Item ? 'item':
+      obj instanceof Date ? 'date' :
+      obj && typeof obj === 'object' && obj.constructor === Array ? 'array' :
+      Array.isArray( obj ) ? 'array' :
+      NodeList.prototype.isPrototypeOf( obj ) ? 'node-list' :
+      HTMLCollection.prototype.isPrototypeOf( obj ) ? 'collection' :
+      HTMLElement.prototype.isPrototypeOf( obj ) ? 'element' :
+      Set.prototype.isPrototypeOf( obj ) ? 'set' :
+      isJson() ? 'json' :
+      obj && typeof obj === 'object' && obj.constructor === RegExp ? 'regexp':
+      obj && typeof obj === 'object' && obj.constructor === Object ? 'object':
+      'unknown';
+    // @formatter:on
+    return theType;
+  }
+
+  /**
+   * Swaps the objects s1 by s2, or vice-versa, depending on the the input value.
+   * If the input value isn't equals to s1 or s2 the function returns null.
+   *
+   * @param {Object} value
+   * @param {Object} s1
+   * @param {Object} s2
+   * @returns {Boolean}
+   */
+  static swap(value, s1, s2) {
+    return value === s1 ? s2 :
+        value === s2 ? s1 : null;
+  }
+}

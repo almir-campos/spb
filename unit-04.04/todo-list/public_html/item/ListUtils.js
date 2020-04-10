@@ -11,104 +11,61 @@ import {Utils}   from '../utils/utils.js';
  */
 export class ListUtils {
 
+  static listDiv = document.querySelector('#list-div');
+  static listDivContextNames = ['list-div'].concat( Item.itemContextNames);
 
-  static init(listDiv) {
-    ListUtils.loadsOrCreatesList(listDiv );
+  static init() {
+    ListUtils.addEventListener();
+    ListUtils.addMutationObserver();
+    ListUtils.loadsOrCreatesList();
+  }
+
+  static addEventListener() {
+    ListUtils.listDiv
+        .addEventListener(
+            'change',
+            function (e) {
+              let changed = e.target;
+              if (changed.classList.contains('text')) {
+                changed.toggleAttribute('disabled');
+                changed.classList.toggle('is-editing', true);
+              }
+            });
+  }
+
+  static addMutationObserver() {
+    let saveOnMutation = function (mutationRecords) {
+      console.log('mutation records:', mutationRecords[0].addedNodes);
+      ListUtils.saveList();
+      console.log('localStorage', localStorage);
+    };
+
+    let observer = new MutationObserver(saveOnMutation);
+    observer
+        .observe(
+            listDiv,
+            {
+              childList: true
+//                    subtree: true,
+//                    attribute: true,
+//                    characterData: true,
+//                    attributeOldValue: true,
+//                    characterDataOldValue: true
+            });
   }
 
   /**
    * Loads the saved list or creates a new list
    */
-  static loadsOrCreatesList(listDiv)
-  {
+  static loadsOrCreatesList() {
     let todo = ListUtils.loadList();
 
     if (ListUtils.hasSavedData(todo)) {
-      ListUtils.appendLoadedItems(todo.data, listDiv);
+      ListUtils.appendLoadedItems(todo.data);
     }
     else {
-      ListUtils.saveDefaultTodo();
+      ListUtils.addItem();
     }
-  }
-
-  /**
-   *
-   * @param {type} data
-   * @param {type} listDiv
-   * @returns {undefined}
-   */
-  static appendLoadedItems(data, listDiv) {
-    let itemsToAppend = [];
-    data
-        .forEach(
-            loadedItem => {
-              let newItem = ListUtils.createItem();
-              let newItemObj = new Item(newItem);
-
-              newItemObj.textarea.value = loadedItem.text;
-              if (loadedItem.completed) {
-                newItem.setCompleted();
-              }
-              itemsToAppend.push(newItem);
-            });
-    ListUtils.addItems(itemsToAppend, listDiv);
-  }
-
-  /**
-   * Generates and save an item based on the default configurations
-   */
-  static saveDefaultTodo() {
-    let listDiv = document.querySelector('#list-div');
-    let newItem = ListUtils.addItem(listDiv);
-    console.log(10, newItem);
-  }
-
-  /**
-   *
-   * @returns NodeList containing all to-do items
-   */
-  static allItems() {
-    return document.querySelectorAll('.item');
-  }
-
-  /**
-   *
-   * Saves the current list of items
-   */
-  static saveList() {
-    let todo = {data: []};
-    let items = ListUtils.allItems();
-    items
-        .forEach((item) => {
-          todo.data.push({
-            "text": item.firstChild.value,
-            "completed": item.classList.contains('completed')
-          });
-        });
-    localStorage.setItem("todo", Utils.consolo.json(todo, true));
-//        Utils.consolo.json( ListUtils.loadList() );
-  }
-
-  /**
-   * Loads the saved list of to-do items
-   *
-   * @returns JSON Object with the saved items
-   */
-  static loadList() {
-    let todo = JSON.parse(localStorage.getItem('todo'));
-    return todo;
-  }
-
-  /**
-   * Checks if a list of todo items is empty
-   *
-   * @param todo Todo item list
-   * @returns true if the list is not empty; false if it is.
-   */
-  static hasSavedData(todo) {
-    let result = !Utils.isEmpty(todo);
-//        Utils.consolo.json( todo );
-    return result;
   }
 
   /**
@@ -179,23 +136,106 @@ export class ListUtils {
 
   /**
    * Creates an item and adds it to the DOM
-   *
-   * @param container - The DOM element where the list is stored
-   * @returns The created item
    */
-  static addItem(container) {
+  static addItem() {
     let item = ListUtils.createItem();
-    console.log(1, item);
     let itemObj = new Item(item);
-    console.log(2, itemObj.textarea);
-    container.append(item);
-    console.log(3, itemObj.textarea.title);
+    ListUtils.listDiv.append(item);
     itemObj.textarea.removeAttribute('title');
-
     return item;
   }
 
   /**
+   * Adds multiple arrays at once to the DOM
+   * It's useful on the page load
+   */
+  static addItems(arrItems) {
+    if (Array.isArray(arrItems)) {
+      arrItems.forEach(item => {
+        ListUtils.listDiv.appendChild(item);
+      });
+    }
+  }
+
+  static appendLoadedItems(data) {
+    let itemsToAppend = [];
+    data
+        .forEach(
+            loadedItem => {
+              let newItem = ListUtils.createItem();
+              let newItemObj = new Item(newItem);
+
+              newItemObj.textarea.value = loadedItem.text;
+              if (loadedItem.completed) {
+                newItem.setCompleted();
+              }
+              itemsToAppend.push(newItem);
+            });
+    ListUtils.addItems(itemsToAppend);
+  }
+
+  // /**
+  //  * Generates and save an item based on the default configurations
+  //  */
+  // static saveDefaultTodo() {
+  //   let listDiv = document.querySelector('#list-div');
+  //   let newItem = ListUtils.addItem(listDiv);
+  // }
+
+
+  static isListDivContext( name ){
+    return ListUtils.listDivContextNames.includes( name );
+  }
+
+
+
+  /**
+   *
+   * @returns NodeList containing all to-do items
+   */
+  static allItems() {
+    return document.querySelectorAll('.item');
+  }
+
+  /**
+   *
+   * Saves the current list of items
+   */
+  static saveList() {
+    let todo = {data: []};
+    let items = ListUtils.allItems();
+    items
+        .forEach((item) => {
+          todo.data.push({
+            "text": item.firstChild.value,
+            "completed": item.classList.contains('completed')
+          });
+        });
+    localStorage.setItem("todo", Utils.consolo.json(todo, true));
+//        Utils.consolo.json( ListUtils.loadList() );
+  }
+
+  /**
+   * Loads the saved list of to-do items
+   *
+   * @returns JSON Object with the saved items
+   */
+  static loadList() {
+    let todo = JSON.parse(localStorage.getItem('todo'));
+    return todo;
+  }
+
+  /**
+   * Checks if a list of todo items is empty
+   *
+   * @param todo Todo item list
+   * @returns true if the list is not empty; false if it is.
+   */
+  static hasSavedData(todo) {
+    let result = !Utils.isEmpty(todo);
+    return result;
+  }
+   /**
    * Removes an item from the list
    *
    * @param item Item to be removed
@@ -203,21 +243,6 @@ export class ListUtils {
    */
   static removeItem(item) {
     item.remove();
-  }
-
-  /**
-   * Adds multiple arrays at once to the DOM
-   * It's useful on the page load
-   *
-   * @param arrItems
-   * @param container DOM element where the items will be added to
-   */
-  static addItems(arrItems, container) {
-    if (Array.isArray(arrItems)) {
-      arrItems.forEach(item => {
-        container.appendChild(item);
-      });
-    }
   }
 
   /**

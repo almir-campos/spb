@@ -3,70 +3,74 @@
     Author     : acampos
 */
 .item {
-  display: inline-block;
-  width: 150px;
-  height: 82px;
-  background-color: whitesmoke;
-  cursor: pointer;
-  margin: 5px;
-  box-shadow: 5px 5px 5px grey;
+  display          : inline-block;
+  width            : 150px;
+  height           : 82px;
+  background-color : whitesmoke;
+  cursor           : pointer;
+  margin           : 5px;
+  box-shadow       : 5px 5px 5px grey;
 }
 
-.clicked{
-    box-shadow: 5px 5px 5px orange;
+.clicked {
+  box-shadow : 5px 5px 5px orange;
 }
 
 .item .text {
-    width: 113px;
-    height: 76px;
-    position: relative;
-    top: 0px;
-    display: inline-block;
-    border: none;
-    resize: none;
-    background-color: white;
+  width            : 113px;
+  height           : 76px;
+  position         : relative;
+  top              : 0px;
+  display          : inline-block;
+  border           : none;
+  resize           : none;
+  background-color : white;
 }
 
-.is-editing{
-    background-color: lightyellow !important;
+.item .text[disabled]{
+  cursor: pointer;
 }
 
-.item .options{
-  width: 30px;
-  height: 82px;
-  background-color: rgba( 255, 165, 0, 0.2 );
-  float: right;
-  text-align: center;
+.is-editing {
+  background-color : lightyellow !important;
+}
+
+.item .options {
+  width            : 30px;
+  height           : 82px;
+  background-color : rgba(255, 165, 0, 0.2);
+  float            : right;
+  text-align       : center;
 }
 
 .item .options .option {
-  height: 41px;
-  display: block;
+  height  : 41px;
+  display : block;
 }
 
-.item .options .option .option-content{
-  margin: 0;
-  position: relative;
-  display: block;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.item .options .option .option-content {
+  margin    : 0;
+  position  : relative;
+  display   : block;
+  top       : 50%;
+  left      : 50%;
+  transform : translate(-50%, -50%);
 }
 
-.item .options .done{
-  color: lightseagreen;
+.item .options .done {
+  color : lightseagreen;
 }
-.item .options .done .reopen{
-  font-size: 28px;
+
+.item .options .done .reopen {
+  font-size : 28px;
 }
-.item .options .remove{
-  color: coral;
+
+.item .options .remove {
+  color : coral;
 }
 
 .item .options .option:hover {
   /*border: 1px solid gray;*/
-  box-shadow: inset 0px 0px 15px rgba(255,165,0,0.9);
-  text-shadow: 1px 1px 1px #000;
+  box-shadow  : inset 0px 0px 15px rgba(255, 165, 0, 0.9);
+  text-shadow : 1px 1px 1px #000;
 }
-
-
