@@ -30,12 +30,6 @@ export class Utils {
       }
     },
 
-    /**
-     *d
-     * @param {type} json
-     * @param {type} beautify
-     * @returns {String}
-     */
     json: function (json, beautify) {
       let strJson = beautify ?
           JSON.stringify(json, null, 2) :
@@ -71,7 +65,7 @@ export class Utils {
         (theType === 'node-list' && obj.length === 0) ||
         (theType === 'collection' && obj.length === 0) ||
         (theType === 'number' && (obj === Number(0 / 0))) ||
-        (theType === 'cliked' && )
+        (theType === 'cliked' &&)
         (theType !== 'element');
 
     return result;
@@ -137,5 +131,34 @@ export class Utils {
   static swap(value, s1, s2) {
     return value === s1 ? s2 :
         value === s2 ? s1 : null;
+  }
+
+  /**
+   * Utility function - returns a random string with length 'l'
+   */
+  static randomString(l) {
+    let str = '';
+    let rand;
+    for (let i = 0; i < l; i++) {
+      rand = Math.random();
+      if (rand < 0.33) {
+        str += String.fromCharCode(Utils.randomInt(48, 57));
+      } else if (rand < 0.66) {
+        str += String.fromCharCode(Utils.randomInt(65, 90));
+      } else {
+        str += String.fromCharCode(Utils.randomInt(97, 122));
+      }
+    }
+    return str;
+  }
+
+  /**
+   *
+   * @param {Number} min
+   * @param {Number} max
+   * @returns {Number}
+   */
+  static randomInt(min, max) {
+    return min + Math.floor(Math.random() * (max - min + 1));
   }
 }

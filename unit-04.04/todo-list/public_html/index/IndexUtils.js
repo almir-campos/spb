@@ -25,21 +25,9 @@ export class IndexUtils {
         .addEventListener(
             'click',
             function (e) {
-              /**
-               * These two statements won't make any difference
-               * in this context.
-               *
-               */
 
               e.preventDefault();
               e.stopPropagation();
-
-              let clickedType = Utils.getType(e.target);
-
-              if ( ListUtils.isListDivContext( e.target.name ))
-              {
-                ListUtils.treatClicked();
-              }
 
               /**
                * Creates a new instance of the ClickedObject to make use
@@ -47,8 +35,17 @@ export class IndexUtils {
                */
               let clicked = new Clicked(e.target);
 
+              // /**
+              //  * If the clicked element is on the list-div context,
+              //  * let the ListUtils treat it.
+              //  */
+              // if ( ListUtils.isListDivContext( clicked.getName() ))
+              // {
+              //   ListUtils.onClick( clicked );
+              //   return;
+              // }
 
-              ListUtils.removeClickedHighlight(clicked);
+              // ListUtils.removeClickedHighlight(clicked);
 //                    ListUtils.updateLastEnabled(clicked);
 
               /**
@@ -56,9 +53,22 @@ export class IndexUtils {
                */
               if (clicked.getName() === 'add-div') {
                 Utils.consolo.debug(true, '--\nClicked on add-div');
-                ListUtils.addItem(listDiv);
+                ListUtils.addItem();
                 return;
               }
+
+              ListUtils.clickEvent( clicked );
+
+              //
+              // THIS FUNCTION SHOULD END RIGHT HERE
+              //
+
+
+
+
+
+
+
 
               /**
                *

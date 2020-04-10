@@ -16,7 +16,7 @@ class ItemEntity {
   constructor(obj) {
     if (Utils.isEmpty(obj)) {
       Utils.consolo.debug(true, 'Item constructor received an empty object and created an empty item.');
-      this.item = ListUtils.createItem();
+      this.item = ListUtils.getNewItem();
     }
     else {
       this.item = item;

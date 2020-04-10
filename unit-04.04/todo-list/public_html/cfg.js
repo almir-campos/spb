@@ -3,7 +3,8 @@
 let config = {
   defaults: {
     done   : "false",
-    content: ""
+    content: "",
+    idLength: 8
   },
   symbols : {
     done  : "✔",
