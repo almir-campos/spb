@@ -2,7 +2,6 @@
 
 import {config}  from '../cfg.js';
 import {Item}    from '../item/ItemEntity.js';
-import {Clicked} from '../index/ClickedEntity.js';
 import {Utils}   from '../utils/utils.js';
 
 /**
@@ -11,93 +10,10 @@ import {Utils}   from '../utils/utils.js';
  */
 export class ListUtils {
 
-  static lastEnabledId;
+  static lastActiveId;
 
   static listDiv = document.querySelector('#list-div');
   static listDivContextNames = ['list-div'].concat(Item.itemContextNames);
-
-  static do = {
-    init: function () {
-      this.addMutationObserver();
-      this.loadsOrCreatesList();
-    },
-    loadsOrCreatesList: function () {
-      let todo = ListUtils.get.savedTodoList();
-      if (ListUtils.has.savedData(todo)) {
-        ListUtils.do.appendLoadedItems(todo.data);
-      }
-      else {
-        ListUtils.addItem();
-      }
-    },
-    addItem: function () {
-      let item = ListUtils.get.newItem();
-      let itemObj = new Item(item);
-      ListUtils.listDiv.append(item);
-      itemObj.textarea.removeAttribute('title');
-      return item;
-    },
-    addItems: function (arrItems) {
-      if (Array.isArray(arrItems)) {
-        arrItems.forEach(item => {
-          ListUtils.listDiv.appendChild(item);
-        });
-      }
-    },
-    appendLoadedItems: function (data) {
-      let itemsToAppend = [];
-      data
-          .forEach(
-              loadedItem => {
-                let newItem = ListUtils.get.newItem();
-                let newItemObj = new Item(newItem);
-
-                newItemObj.textarea.value = loadedItem.text;
-                if (loadedItem.completed) {
-                  newItem.setCompleted();
-                }
-                itemsToAppend.push(newItem);
-              });
-      ListUtils.addItems(itemsToAppend);
-    },
-    removeItem: function (item) {
-      item.remove();
-    },
-    addMutationObserver: function () {
-      let saveOnMutation = function (mutationRecords) {
-        ListUtils.saveList();
-        console.log('listUtils/do/addMutationObserver/afterSaveList/localStorage\n', localStorage, '\n', mutationRecords);
-      };
-
-      let observer = new MutationObserver(saveOnMutation);
-      observer
-          .observe(
-              ListUtils.listDiv,
-              {
-                childList: true
-//                    subtree: true,
-//                    attribute: true,
-//                    characterData: true,
-//                    attributeOldValue: true,
-//                    characterDataOldValue: true
-              });
-    },
-    saveList: function () {
-      let todo = {data: []};
-      let items = ListUtils.allItems();
-      items
-          .forEach((item) => {
-            todo.data.push({
-              "text": item.firstChild.value,
-              "completed": item.classList.contains('completed')
-            });
-          });
-      localStorage.setItem("todo", Utils.consolo.json(todo, true));
-    },
-    toggleHighlight: function () {
-    }
-  };
-
   static get = {
     newItem: function () {
       /**
@@ -168,39 +84,135 @@ export class ListUtils {
       return todo;
     }
   };
-
   static has = {
     savedData: function (todo) {
       let result = !Utils.isEmpty(todo);
       return result;
     }
   };
+  static do = {
+    init: function () {
+      this.addMutationObserver();
+      this.loadsOrCreatesList();
+    },
+    loadsOrCreatesList: function () {
+      let todo = ListUtils.get.savedTodoList();
+      if (ListUtils.has.savedData(todo)) {
+        ListUtils.do.appendLoadedItems(todo.data);
+      }
+      else {
+        ListUtils.do.addItem();
+      }
+    },
+    addItem: function () {
+      let item = ListUtils.get.newItem();
+      let itemObj = new Item(item);
+      ListUtils.listDiv.append(item);
+      this.updateHighlight(itemObj);
+      // itemObj.textarea.removeAttribute('title');
+      return item;
+    },
+    addItems: function (arrItems) {
+      if (Array.isArray(arrItems)) {
+        arrItems.forEach(item => {
+          ListUtils.listDiv.appendChild(item);
+        });
+      }
+    },
+    appendLoadedItems: function (data) {
+      let itemsToAppend = [];
+      data
+        .forEach(
+          loadedItem => {
+            let newItem = ListUtils.get.newItem();
+            let newItemObj = new Item(newItem);
 
+            newItemObj.textarea.value = loadedItem.text;
+            if (loadedItem.completed) {
+              newItem.setCompleted();
+            }
+            itemsToAppend.push(newItem);
+          });
+      ListUtils.do.addItems(itemsToAppend);
+    },
+    removeItem: function (item) {
+      item.remove();
+    },
+    addMutationObserver: function () {
+      let saveOnMutation = function (mutationRecords) {
+        ListUtils.do.saveList();
+        console.log('listUtils/do/addMutationObserver/afterSaveList/localStorage\n', localStorage, '\n', mutationRecords);
+      };
+
+      let observer = new MutationObserver(saveOnMutation);
+      observer
+        .observe(
+          ListUtils.listDiv,
+          {
+            childList: true
+//                    subtree: true,
+//                    attribute: true,
+//                    characterData: true,
+//                    attributeOldValue: true,
+//                    characterDataOldValue: true
+          });
+    },
+    saveList: function () {
+      let todo = {data: []};
+      let items = ListUtils.get.allItems();
+      items
+        .forEach((item) => {
+          todo.data.push({
+            "text": item.firstChild.value,
+            "completed": item.classList.contains('completed')
+          });
+        });
+      localStorage.setItem("todo", Utils.consolo.json(todo, true));
+    },
+    updateHighlight: function (itemObj) {
+
+    },
+    resetLastActive: function () {
+    }
+  };
   static is = {
     listDivContext: function (name) {
       return ListUtils.listDivContextNames.includes(name);
     }
   };
 
+  static clickedObject(clicked) {
+    this.clicked = clicked;
+    if (!ListUtils.is.listDivContext()) {
+      console.log('ListUtils/clickedObject => isListDivContext');
+      ListUtils.do.resetLastActive();
+    } else if (clicked.isItem()) {
+      console.log('ListUtils/clickedObject => is an Item');
+    } else {
+      console.log('ListUtils/clickedObject => is not an Item')
+    }
+  }
+}
 
-  // static init() {
-  //   // ListUtils.addEventListener();
-  //   ListUtils.addMutationObserver();
-  //   ListUtils.loadsOrCreatesList();
-  // }
 
-  // static addEventListener() {
-  //   ListUtils.listDiv
-  //       .addEventListener(
-  //           'change',
-  //           function (e) {
-  //             let changed = e.target;
-  //             if (changed.classList.contains('text')) {
-  //               changed.toggleAttribute('disabled');
-  //               changed.classList.toggle('is-editing', true);
-  //             }
-  //           });
-  // }
+// static init() {
+//   // ListUtils.addEventListener();
+//   ListUtils.addMutationObserver();
+//   ListUtils.loadsOrCreatesList();
+// }
+
+// static addEventListener() {
+//   ListUtils.listDiv
+//       .addEventListener(
+//           'change',
+//           function (e) {
+//             let changed = e.target;
+//             if (changed.classList.contains('text')) {
+//               changed.toggleAttribute('disabled');
+//               changed.classList.toggle('is-editing', true);
+//             }
+//           });
+// }
 
 //   static addMutationObserver() {
 //     let saveOnMutation = function (mutationRecords) {
@@ -223,19 +235,19 @@ export class ListUtils {
 //             });
 //   }
 
-  /**
-   * Loads the saved list or creates a new list
-   */
-  // static loadsOrCreatesList() {
-  //   let todo = ListUtils.loadList();
-  //
-  //   if (ListUtils.hasSavedData(todo)) {
-  //     ListUtils.appendLoadedItems(todo.data);
-  //   }
-  //   else {
-  //     ListUtils.addItem();
-  //   }
-  // }
+/**
+ * Loads the saved list or creates a new list
+ */
+// static loadsOrCreatesList() {
+//   let todo = ListUtils.loadList();
+//
+//   if (ListUtils.hasSavedData(todo)) {
+//     ListUtils.appendLoadedItems(todo.data);
+//   }
+//   else {
+//     ListUtils.addItem();
+//   }
+// }
 
 //   /**
 //    * Creates an item based on the current defaults
@@ -303,74 +315,78 @@ export class ListUtils {
 //     return item;
 //   }
 
-  // /**
-  //  * Creates an item and adds it to the DOM
-  //  */
-  // static addItem() {
-  //   let item = ListUtils.getNewItem();
-  //   let itemObj = new Item(item);
-  //   ListUtils.listDiv.append(item);
-  //   itemObj.textarea.removeAttribute('title');
-  //   return item;
-  // }
+// /**
+//  * Creates an item and adds it to the DOM
+//  */
+// static addItem() {
+//   let item = ListUtils.getNewItem();
+//   let itemObj = new Item(item);
+//   ListUtils.listDiv.append(item);
+//   itemObj.textarea.removeAttribute('title');
+//   return item;
+// }
 
-  // /**
-  //  * Adds multiple arrays at once to the DOM
-  //  * It's useful on the page load
-  //  */
-  // static addItems(arrItems) {
-  //   if (Array.isArray(arrItems)) {
-  //     arrItems.forEach(item => {
-  //       ListUtils.listDiv.appendChild(item);
-  //     });
-  //   }
-  // }
+// /**
+//  * Adds multiple arrays at once to the DOM
+//  * It's useful on the page load
+//  */
+// static addItems(arrItems) {
+//   if (Array.isArray(arrItems)) {
+//     arrItems.forEach(item => {
+//       ListUtils.listDiv.appendChild(item);
+//     });
+//   }
+// }
 
-  // static appendLoadedItems(data) {
-  //   let itemsToAppend = [];
-  //   data
-  //       .forEach(
-  //           loadedItem => {
-  //             let newItem = ListUtils.getNewItem();
-  //             let newItemObj = new Item(newItem);
-  //
-  //             newItemObj.textarea.value = loadedItem.text;
-  //             if (loadedItem.completed) {
-  //               newItem.setCompleted();
-  //             }
-  //             itemsToAppend.push(newItem);
-  //           });
-  //   ListUtils.addItems(itemsToAppend);
-  // }
+// static appendLoadedItems(data) {
+//   let itemsToAppend = [];
+//   data
+//       .forEach(
+//           loadedItem => {
+//             let newItem = ListUtils.getNewItem();
+//             let newItemObj = new Item(newItem);
+//
+//             newItemObj.textarea.value = loadedItem.text;
+//             if (loadedItem.completed) {
+//               newItem.setCompleted();
+//             }
+//             itemsToAppend.push(newItem);
+//           });
+//   ListUtils.addItems(itemsToAppend);
+// }
 
-  // /**
-  //  * Generates and save an item based on the default configurations
-  //  */
-  // static saveDefaultTodo() {
-  //   let listDiv = document.querySelector('#list-div');
-  //   let newItem = ListUtils.addItem(listDiv);
-  // }
+// /**
+//  * Generates and save an item based on the default configurations
+//  */
+// static saveDefaultTodo() {
+//   let listDiv = document.querySelector('#list-div');
+//   let newItem = ListUtils.addItem(listDiv);
+// }
 
 
-  // static isListDivContext(name) {
-  //   return ListUtils.listDivContextNames.includes(name);
-  // }
+// static isListDivContext(name) {
+//   return ListUtils.listDivContextNames.includes(name);
+// }
+//
+// static
+// onClick(clicked)
+// {
+//
+// }
+//
+// static
+// outerClickEvent()
+// {
+//
+// }
 
-  static onClick(clicked) {
-
-  }
-
-  static outerClickEvent() {
-
-  }
-
-  // /**
-  //  *
-  //  * @returns NodeList containing all to-do items
-  //  */
-  // static allItems() {
-  //   return document.querySelectorAll('.item');
-  // }
+// /**
+//  *
+//  * @returns NodeList containing all to-do items
+//  */
+// static allItems() {
+//   return document.querySelectorAll('.item');
+// }
 
 //   /**
 //    *
@@ -390,119 +406,125 @@ export class ListUtils {
 // //        Utils.consolo.json( ListUtils.loadList() );
 //   }
 
-  // /**
-  //  * Loads the saved list of to-do items
-  //  *
-  //  * @returns JSON Object with the saved items
-  //  */
-  // static loadedList() {
-  //   let todo = JSON.parse(localStorage.getItem('todo'));
-  //   return todo;
-  // }
-
-  // /**
-  //  * Checks if a list of todo items is empty
-  //  *
-  //  * @param todo Todo item list
-  //  * @returns true if the list is not empty; false if it is.
-  //  */
-  // static hasSavedData(todo) {
-  //   let result = !Utils.isEmpty(todo);
-  //   return result;
-  // }
-
-  // /**
-  //  * Removes an item from the list
-  //  *
-  //  * @param item Item to be removed
-  //  * @returns {undefined}
-  //  */
-  // static removeItem(item) {
-  //   item.remove();
-  // }
-
-  /**
-   * When an element is clicked this function disables the
-   * edit mode for the item that was being edited previously.
-   *
-   * @param {type} clicked
-   * @returns {undefined|Boolean}
-   */
-  static updateLastEnabled(clicked) {
-
-    /*
-     * Check if the user is clicking on the element that currently is
-     * being edited.
-     */
-//        if ( !Utils.isEmpty( clicked )
-//             && !Utils.isEmpty( clicked.id )
-//             && clicked.id === 'last_enabled' )
-//          if (ListUtils.isItem(clicked))
-//            {
-//              let itemObj = new Item(clicked);
-//              if (itemObj.getClassList()
-//                .contains('is-editing'))
-//                {
-//                  return;
-//                }
-//            }
-    /**
-     * Removes the EditMode status from the item that was being
-     * edited before.
-     */
-    let lastEnabled = document.querySelector('#last_enabled');
-    if (lastEnabled) {
-      lastEnabled.removeAttribute('id');
-      lastEnabled.setAttribute('disabled', true);
-      lastEnabled.classList.remove('is-editing');
-    }
-    return !Utils.isEmpty(lastEnabled);
-  }
-
-  static turnCurreintIsEditingItemOff() {
-    let isEditing = document.querySelector('.is-editing');
-    if (Utils.isEmpty(isEditing)) {
-      return;
-    }
-    new Item(isEditing).turnIsEditingOff();
-  }
-
-  /**
-   * Removes the highlight (shadow) from the currently active item.
-   * It's useful especially when an other item was activated (clicked on)
-   *
-   * @param {type} clicked
-   * @returns {undefined}
-   */
-  static removeClickedHighlight(clicked) {
-    if (!(clicked instanceof Clicked)) {
-      return;
-    }
-
-    let lastClickedItem = document.querySelector('.clicked');
-    if (clicked.item && clicked.getObject() === lastClickedItem) {
-      return;
-    }
-    let obj = new Clicked(lastClickedItem);
-    if (obj.isItem()) {
-      obj.item()
-          .removeHighlight();
-    }
-//          if (Utils.isEmpty(clicked))
-//            {
-//              return;
-//            }
-//
-//          clicked.classList.remove('clicked');
-  }
-
-//   /**
-//    *
-//    * @param {type} elem
-//    * @returns {Boolean}
-//    */
-// //      static isItem(elem)
-// //        {
-// //          return !Utils.isEmpty(elem.closest('.item'));
-// //        }
+// /**
+//  * Loads the saved list of to-do items
+//  *
+//  * @returns JSON Object with the saved items
+//  */
+// static loadedList() {
+//   let todo = JSON.parse(localStorage.getItem('todo'));
+//   return todo;
 // }
+
+// /**
+//  * Checks if a list of todo items is empty
+//  *
+//  * @param todo Todo item list
+//  * @returns true if the list is not empty; false if it is.
+//  */
+// static hasSavedData(todo) {
+//   let result = !Utils.isEmpty(todo);
+//   return result;
+// }
+
+// /**
+//  * Removes an item from the list
+//  *
+//  * @param item Item to be removed
+//  * @returns {undefined}
+//  */
+// static removeItem(item) {
+//   item.remove();
+// }
+
+/**
+ * When an element is clicked this function disables the
+ * edit mode for the item that was being edited previously.
+ *
+ * @param {type} clicked
+ * @returns {undefined|Boolean}
+ */
+// static
+// updateLastEnabled(clicked)
+// {
+//
+//   /*
+//    * Check if the user is clicking on the element that currently is
+//    * being edited.
+//    */
+// //        if ( !Utils.isEmpty( clicked )
+// //             && !Utils.isEmpty( clicked.id )
+// //             && clicked.id === 'last_enabled' )
+// //          if (ListUtils.isItem(clicked))
+// //            {
+// //              let itemObj = new Item(clicked);
+// //              if (itemObj.getClassList()
+// //                .contains('is-editing'))
+// //                {
+// //                  return;
+// //                }
+// //            }
+//   /**
+//    * Removes the EditMode status from the item that was being
+//    * edited before.
+//    */
+//   let lastEnabled = document.querySelector('#last_enabled');
+//   if (lastEnabled) {
+//     lastEnabled.removeAttribute('id');
+//     lastEnabled.setAttribute('disabled', true);
+//     lastEnabled.classList.remove('is-editing');
+//   }
+//   return !Utils.isEmpty(lastEnabled);
+// }
+//
+// static
+// turnCurreintIsEditingItemOff()
+// {
+//   let isEditing = document.querySelector('.is-editing');
+//   if (Utils.isEmpty(isEditing)) {
+//     return;
+//   }
+//   new Item(isEditing).turnIsEditingOff();
+// }
+//
+// /**
+//  * Removes the highlight (shadow) from the currently active item.
+//  * It's useful especially when an other item was activated (clicked on)
+//  *
+//  * @param {type} clicked
+//  * @returns {undefined}
+//  */
+// static
+// removeClickedHighlight(clicked)
+// {
+//   if (!(clicked instanceof Clicked)) {
+//     return;
+//   }
+//
+//   let lastClickedItem = document.querySelector('.clicked');
+//   if (clicked.item && clicked.getObject() === lastClickedItem) {
+//     return;
+//   }
+//   let obj = new Clicked(lastClickedItem);
+//   if (obj.isItem()) {
+//     obj.item()
+//       .removeHighlight();
+//   }
+// //          if (Utils.isEmpty(clicked))
+// //            {
+// //              return;
+// //            }
+// //
+// //          clicked.classList.remove('clicked');
+// }
+//
+// //   /**
+// //    *
+// //    * @param {type} elem
+// //    * @returns {Boolean}
+// //    */
+// // //      static isItem(elem)
+// // //        {
+// // //          return !Utils.isEmpty(elem.closest('.item'));
+// // //        }
+// // }

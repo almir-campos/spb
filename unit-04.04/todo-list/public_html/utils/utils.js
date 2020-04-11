@@ -1,7 +1,5 @@
 'use strict';
 
-// import {Clicked} from '../index/ClickedEntity.js';
-
 /**
  *
  * @type type
@@ -18,8 +16,7 @@ export class Utils {
           if (Utils.isEmpty(todoLog)) {
             todoLog = '';
           }
-
-          todoLog = todoLog.concat(args.join())
+          todoLog = todoLog.concat( new Date().toDateString() ).concat( args.join())
               .concat('\n');
           localStorage.setItem('todo-log', todoLog);
         };
@@ -65,7 +62,6 @@ export class Utils {
         (theType === 'node-list' && obj.length === 0) ||
         (theType === 'collection' && obj.length === 0) ||
         (theType === 'number' && (obj === Number(0 / 0))) ||
-        (theType === 'cliked' &&)
         (theType !== 'element');
 
     return result;
@@ -102,8 +98,6 @@ export class Utils {
       typeof obj === 'boolean' ? 'boolean' :
       typeof obj === 'symbol' ? 'symbol' :
       obj instanceof Error && typeof obj.message !== 'undefined' ? 'error' :
-      obj instanceof Clicked ? 'clicked' :
-      obj instanceof Item ? 'item':
       obj instanceof Date ? 'date' :
       obj && typeof obj === 'object' && obj.constructor === Array ? 'array' :
       Array.isArray( obj ) ? 'array' :

@@ -1,22 +1,25 @@
 'use strict';
 
-import {Item} from '../item/ItemEntity.js';
+import {Item}  from '../item/ItemEntity.js';
 import {Utils} from '../utils/utils.js';
 
 class ClickedEntity {
 
-  item = {
-    isItemContext: function () {
-      return Item.itemContextNames.includes(super.getName());
-    },
-    itemObj: function () {
-      return this.isItemContext() ? new Item(super.clicked) : null;
-    },
-
-  };
-
   constructor(clicked) {
+    self = this;
     this.clicked = clicked;
+    this.item = {
+      isItemContext: function () {
+        return Item.itemContextNames.includes(self.getName());
+      },
+      itemObj: function () {
+        return self.isItemContext() ? new Item(self.clicked) : null;
+      },
+      isItem: function () {
+        return self.getName() === 'item';
+      }
+    };
+
   }
 
   getObject() {

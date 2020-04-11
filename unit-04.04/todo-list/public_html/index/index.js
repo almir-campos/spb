@@ -9,6 +9,8 @@ import {IndexUtils} from '../index/IndexUtils.js';
  */
 window.addEventListener('DOMContentLoaded', function () {
   IndexUtils.init();
+  localStorage.clear();
+  // IndexUtils.tests();
 });
 
 

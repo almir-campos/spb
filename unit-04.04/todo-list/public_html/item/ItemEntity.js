@@ -11,15 +11,18 @@ import {Utils} from '../utils/utils.js';
  */
 class ItemEntity {
   static itemContextNames = ['item', 'textarea', 'options', 'done-bt', 'done-bt-html', 'remove-bt-html', 'remove-bt-html'];
-  ;
 
   constructor(obj) {
     if (Utils.isEmpty(obj)) {
-      Utils.consolo.debug(true, 'Item constructor received an empty object and created an empty item.');
-      this.item = ListUtils.getNewItem();
+      Utils.consolo.debug(true, 'Item constructor received an empty object.');
+      throw 'Item constructor received an empty object.';
+    } else if ( obj.getAttribute('name') !== 'item' ){
+      Utils.consolo.debug(true, 'Item constructor received a non-Item' +
+        ' object.');
+      throw 'Item constructor received a non-Item object.';
     }
     else {
-      this.item = item;
+      this.item = obj;
     }
     this.classes = this.item.classList;
     this.children = this.item.childNodes;
