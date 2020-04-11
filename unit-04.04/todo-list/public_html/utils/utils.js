@@ -16,8 +16,8 @@ export class Utils {
           if (Utils.isEmpty(todoLog)) {
             todoLog = '';
           }
-          todoLog = todoLog.concat( new Date().toDateString() ).concat( args.join())
-              .concat('\n');
+          todoLog = todoLog.concat(new Date().toDateString()).concat(args.join())
+            .concat('\n');
           localStorage.setItem('todo-log', todoLog);
         };
         saveLog();
@@ -29,8 +29,8 @@ export class Utils {
 
     json: function (json, beautify) {
       let strJson = beautify ?
-          JSON.stringify(json, null, 2) :
-          JSON.stringify(json);
+        JSON.stringify(json, null, 2) :
+        JSON.stringify(json);
       return strJson;
     }
   };
@@ -39,30 +39,30 @@ export class Utils {
    * Detects if an object is null, or undefined, or has no length.
    */
   static isEmpty(obj) {
-////        let objc = getObject
-//        let itIs = new Clicked(getObject).name() !== 'item' || !getObject || !getObject.length;
-//
-//        // let itIs = ( getObject === null )
-//        //            || ( typeof getObject === 'undefined' )
-//        //            || ( typeof getObject.length !== 'undefined' && getObject.length === 0 )
-//        console.log('-----');
-//          console.log('getObject', getObject);
-//          console.log('getObject.length', !getObject ? "n/a" : getObject.length);
-//          console.log('itIs', itIs );
-//          return itIs;
-//      
-//      //            || ( typeof getObject.size === 'undefined' || getObject.size === 0 );
+////        let objc = getClickedElem
+//        let itIs = new Clicked(getClickedElem).name() !== 'item' ||
+// !getClickedElem || !getClickedElem.length;  // let itIs = ( getClickedElem
+// === null ) //            || ( typeof getClickedElem === 'undefined' ) //
+//        || ( typeof getClickedElem.length !== 'undefined' &&
+// getClickedElem.length === 0 ) console.log('-----');
+// console.log('getClickedElem', getClickedElem);
+// console.log('getClickedElem.length', !getClickedElem ? "n/a" :
+// getClickedElem.length); console.log('itIs', itIs ); return itIs;  //
+//    || ( typeof getClickedElem.size === 'undefined' || getClickedElem.size
+// === 0 );
 
     let theType = Utils.getType(obj);
 
     let result =
-        (theType === 'null' || theType === 'undefined') ||
+      (theType === 'null' || theType === 'undefined') ||
+      (theType !== 'element') &&
+      (
         (theType === 'string' && obj.length === 0) ||
         (theType === 'array' && obj.length === 0) ||
         (theType === 'node-list' && obj.length === 0) ||
         (theType === 'collection' && obj.length === 0) ||
-        (theType === 'number' && (obj === Number(0 / 0))) ||
-        (theType !== 'element');
+        (theType === 'number' && (obj === Number(0 / 0)))
+      );
 
     return result;
   }
@@ -74,7 +74,8 @@ export class Utils {
    * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof
    * https://stackoverflow.com/a/36857902
    *
-   * This function can be optmized by using object.constructor and other techniques
+   * This function can be optmized by using object.constructor and other
+   * techniques
    *
    */
   //
@@ -83,7 +84,7 @@ export class Utils {
   static getType(obj) {
     let isJson = function (obj) {
       try {
-        JSON.parse(obj.toString);
+        JSON.parse(obj.toString());
       } catch (e) {
         return false;
       }
@@ -91,6 +92,8 @@ export class Utils {
     // @formatter:off
     let theType =
       obj === null ? 'null' :
+      obj === 'null' ? 'null' :
+      obj === 'undefined' ? 'undefined' :
       typeof obj === 'undefined' ? 'undefined' :
       typeof obj === 'function' ? 'function' :
       typeof obj === 'string' || obj instanceof String ? 'string' :
@@ -114,8 +117,9 @@ export class Utils {
   }
 
   /**
-   * Swaps the objects s1 by s2, or vice-versa, depending on the the input value.
-   * If the input value isn't equals to s1 or s2 the function returns null.
+   * Swaps the objects s1 by s2, or vice-versa, depending on the the input
+   * value. If the input value isn't equals to s1 or s2 the function returns
+   * null.
    *
    * @param {Object} value
    * @param {Object} s1
@@ -124,7 +128,7 @@ export class Utils {
    */
   static swap(value, s1, s2) {
     return value === s1 ? s2 :
-        value === s2 ? s1 : null;
+      value === s2 ? s1 : null;
   }
 
   /**

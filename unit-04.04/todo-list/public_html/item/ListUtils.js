@@ -1,8 +1,8 @@
 'use strict';
 
-import {config}  from '../cfg.js';
-import {Item}    from '../item/ItemEntity.js';
-import {Utils}   from '../utils/utils.js';
+import {config} from '../cfg.js';
+import {Item}   from '../item/ItemEntity.js';
+import {Utils}  from '../utils/utils.js';
 
 /**
  * Provides useful functions that require manipulation or changes
@@ -10,10 +10,19 @@ import {Utils}   from '../utils/utils.js';
  */
 export class ListUtils {
 
-  static lastActiveId;
-
   static listDiv = document.querySelector('#list-div');
   static listDivContextNames = ['list-div'].concat(Item.itemContextNames);
+
+  /**
+   *
+   */
+  static lastActiveId = function (newActiveId) {
+    if (!newActiveId) {
+      return ListUtils.listDiv.getAttribute('active-id').value;
+    }
+    ListUtils.listDiv.setAttribute('active-id', newActiveId);
+  };
+
   static get = {
     newItem: function () {
       /**
@@ -32,7 +41,7 @@ export class ListUtils {
       text.setAttribute('name', 'textarea');
       text.toggleAttribute('disabled');
       text.value = config.defaults.content;
-//          text.setAttribute('title', 'Click to turn edit on/off');
+      text.setAttribute('title', 'Click to turn edit on/off');
 
       /**
        * Creates the lateral container that will contain the action options
@@ -47,7 +56,7 @@ export class ListUtils {
       let done = document.createElement('div');
       done.setAttribute('name', 'done-bt');
       done.classList.add('option', 'done');
-//          done.setAttribute('title', 'Click to complete/reopen this item');
+      done.setAttribute('title', 'Click to complete/reopen this item');
       let doneOptionContent = document.createElement('span');
       doneOptionContent.classList.add('option-content', 'disable-selection');
       doneOptionContent.setAttribute('name', 'done-bt-html');
@@ -59,7 +68,7 @@ export class ListUtils {
       let remove = document.createElement('div');
       remove.setAttribute('name', 'remove-bt');
       remove.classList.add('option', 'remove');
-//          remove.setAttribute('title', 'Click to remove this item');
+      remove.setAttribute('title', 'Click to remove this item');
       let removeOptionContent = document.createElement('span');
       removeOptionContent.classList.add('option-content', 'disable-selection');
       removeOptionContent.setAttribute('name', 'remove-bt-html');
@@ -82,6 +91,13 @@ export class ListUtils {
     savedTodoList: function () {
       let todo = JSON.parse(localStorage.getItem('todo'));
       return todo;
+    },
+    lastActiveItem: function () {
+      if (!ListUtils.lastActiveId()) {
+        console.log('no active item');
+        return undefined;
+      }
+      return new Item(document.getElementById(ListUtils.lastActiveId()));
     }
   };
   static has = {
@@ -109,7 +125,6 @@ export class ListUtils {
       let itemObj = new Item(item);
       ListUtils.listDiv.append(item);
       this.updateHighlight(itemObj);
-      // itemObj.textarea.removeAttribute('title');
       return item;
     },
     addItems: function (arrItems) {
@@ -139,22 +154,28 @@ export class ListUtils {
       item.remove();
     },
     addMutationObserver: function () {
-      let saveOnMutation = function (mutationRecords) {
-        ListUtils.do.saveList();
-        console.log('listUtils/do/addMutationObserver/afterSaveList/localStorage\n', localStorage, '\n', mutationRecords);
+      const callback = (muts) => {
+        // ListUtils.do.saveList();
+        // console.log('listUtils/do/addMutationObserver/afterSaveList/localStorage\n',
+        // localStorage, '\n', mutationRecords);
+        muts.forEach((m) => {
+          console.log("MUTATION =>", m);
+        });
+
       };
 
-      let observer = new MutationObserver(saveOnMutation);
+      let observer = new MutationObserver(callback);
       observer
         .observe(
           ListUtils.listDiv,
           {
-            childList: true
-//                    subtree: true,
-//                    attribute: true,
-//                    characterData: true,
-//                    attributeOldValue: true,
-//                    characterDataOldValue: true
+            attributes: true,
+            childList: true,
+            subtree: true,
+            attributeFilter: ['active-id'],
+            characterData: true,
+            attributeOldValue: true,
+            characterDataOldValue: true
           });
     },
     saveList: function () {
@@ -172,7 +193,16 @@ export class ListUtils {
     updateHighlight: function (itemObj) {
 
     },
-    resetLastActive: function () {
+    resetLastActive: function (newActiveId) {
+      console.log('resetLastActive/ListUtils.lastActiveId()', ListUtils.lastActiveId());
+      if (Utils.isEmpty(ListUtils.lastActiveId())) {
+        ListUtils.lastActiveId(newActiveId);
+        return;
+      }
+      let lastActiveItem = ListUtils.get.lastActiveItem();
+      lastActiveItem.turnActivatedOff();
+      console.log('active item: ', lastActiveItem);
+      return lastActiveItem.id;
     }
   };
   static is = {
@@ -183,13 +213,33 @@ export class ListUtils {
 
   static clickedObject(clicked) {
     this.clicked = clicked;
-    if (!ListUtils.is.listDivContext()) {
-      console.log('ListUtils/clickedObject => isListDivContext');
-      ListUtils.do.resetLastActive();
-    } else if (clicked.isItem()) {
-      console.log('ListUtils/clickedObject => is an Item');
+    // if (!ListUtils.is.listDivContext(clicked.getName())) {
+    //   console.log('ListUtils/clickedObject => is not ListDivContext');
+    // } else
+
+    /**
+     *
+     */
+    if (clicked.item.isItemContext()) {
+      console.log('ListUtils/clickedObject => is in the Item context');
+      let clickedItem = new Item(clicked.getItem());
+      console.log('ListUtils/clickedObject/clickedItem.id', clickedItem.id);
+      console.log('ListUtils/clickedObject/ListUtils.lastActiveId()', ListUtils.lastActiveId());
+      /**
+       *
+       */
+      if (clickedItem.id === ListUtils.lastActiveId()) {
+        clickedItem.turnIsEditingOff();
+      } else {
+        ListUtils.do.resetLastActive(clickedItem.id);
+        clickedItem.onClick(clicked.getName());
+      }
+      /**
+       *
+       */
     } else {
-      console.log('ListUtils/clickedObject => is not an Item')
+      console.log('ListUtils/clickedObject => is not an Item');
+      ListUtils.do.resetLastActive();
     }
   }
 }
@@ -502,7 +552,7 @@ export class ListUtils {
 //   }
 //
 //   let lastClickedItem = document.querySelector('.clicked');
-//   if (clicked.item && clicked.getObject() === lastClickedItem) {
+//   if (clicked.item && clicked.getClickedElem() === lastClickedItem) {
 //     return;
 //   }
 //   let obj = new Clicked(lastClickedItem);

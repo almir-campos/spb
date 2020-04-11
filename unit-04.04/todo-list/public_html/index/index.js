@@ -1,6 +1,5 @@
 'use strict';
 import {IndexUtils} from '../index/IndexUtils.js';
-// import { ListUtils }  from '../item/ListUtils.js';
 
 /**
  * The application's main listener. This script is the only one
@@ -8,8 +7,8 @@ import {IndexUtils} from '../index/IndexUtils.js';
  * from this file.
  */
 window.addEventListener('DOMContentLoaded', function () {
-  IndexUtils.init();
   localStorage.clear();
+  IndexUtils.init();
   // IndexUtils.tests();
 });
 

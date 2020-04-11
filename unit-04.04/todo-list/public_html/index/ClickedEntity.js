@@ -8,6 +8,7 @@ class ClickedEntity {
   constructor(clicked) {
     self = this;
     this.clicked = clicked;
+    console.log('ClickedEntity/clicked', clicked);
     this.item = {
       isItemContext: function () {
         return Item.itemContextNames.includes(self.getName());
@@ -16,13 +17,13 @@ class ClickedEntity {
         return self.isItemContext() ? new Item(self.clicked) : null;
       },
       isItem: function () {
-        return self.getName() === 'item';
+        return (self.getName === 'item') || (self.clicked.closest('.item').getAttribute('name') === 'item');
       }
     };
 
   }
 
-  getObject() {
+  getClickedElem() {
     if (Utils.isEmpty(this.clicked)) {
       return {};
     } else {
@@ -31,19 +32,22 @@ class ClickedEntity {
   }
 
   getName() {
-    return this.getObject().getAttribute('name');
+    return this.getClickedElem().getAttribute('name');
   }
 
-  // getItem() {
-  //   if (this.isItem()) {
-  //     return new Item(this.getObject());
-  //   }
-  //   return undefined;
-  // }
+  getItem() {
+    if (this.item.isItemContext()) {
+      if (this.getName === 'item') {
+        return this.clicked;
+      }
+      return this.clicked.closest('.item');
+    }
+  }
+
 
   // isItem() {
-  //   console.log(this.getObject());
-  //   if (Utils.isEmpty(this.getObject())) {
+  //   console.log(this.getClickedElem());
+  //   if (Utils.isEmpty(this.getClickedElem())) {
   //     console.log(1);
   //     return false;
   //   }
@@ -51,7 +55,7 @@ class ClickedEntity {
   //   let item = this.getName()
   //   if ()
   //
-  //     let elem = this.getObject().closest('.item');
+  //     let elem = this.getClickedElem().closest('.item');
   //   if (!elem) {
   //     return false;
   //   }

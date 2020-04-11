@@ -17,12 +17,70 @@ export class IndexUtils {
     ListUtils.do.init();
   }
 
-  static tests(){
-    let item = ListUtils.get.newItem();
-    let clicked = new Clicked( item );
-    console.log( 1, 'clicked', clicked );
-    console.log( 2, 'clicked/isItemContext', clicked.item.isItemContext() );
+  static tests() {
+    // let item = ListUtils.get.newItem();
+    // let clicked = new Clicked( item );
+    // console.log( 1, 'clicked', clicked );
+    // console.log( 2, 'clicked/isItemContext', clicked.item.isItemContext() );
+    // let a;
+    // const obs = function (varName, callback) {
+    //   const values = {
+    //     oldValue: undefined,
+    //     newValue: window['a']
+    //   };
+    //   return {
+    //     set: function (value) {
+    //       if (value !== values.newValue) {
+    //         values.oldValue = values.newValue;
+    //         values.newValue = value;
+    //         callback( varName, values );
+    //       }
+    //     },
+    //     get: function () {
+    //       return values.newValue;
+    //     }
+    //   }
+    // };
+    //
+    // let observer = function (varName, values ) {
+    //   console.log(varName, 'hasChanged from', values.oldValue, 'to', values.newValue);
+    // };
+    //
+    // let last = obs('last', observer );
+    // console.log( last.get() );
+    // last.set('abc');
+    // last.set('def');
+    // //
+    // let next = obs('last', observer );
+    // console.log( next.get() )
+    // next.set(1);
+    // next.set(2);
+
+    const obs = new MutationObserver( function (mut){
+      // console.log( 'mutation', mut );
+      let total = 0;
+      let i = 0;
+      mut.forEach( (m) => {
+        console.log(++i, m.type, m.oldValue, m.target.attributes['active-id']);
+        total += Number(m.target.attributes['active-id'].value);
+      });
+      console.log('total', total);
+      // console.log( 'mutation type', mut[0].type );
+      // console.log( 'mutation target', mut[0].target );
+      // console.log( 'mutation oldValue', mut[0].oldValue );
+      // console.log( 'mutation newValue', mut[0].target.getAttribute('active-id'));
+    });
+
+    let elem = document.querySelector('#list-div');
+    obs.observe( elem , {attributes: true, attributeOldValue: true, attributeFilter: ['active-id'] });
+    elem.setAttribute('active-id', '1');
+    elem.setAttribute('active-id', 2);
+    // setTimeout( function () {elem.setAttribute('active-id', '2');}, 500);
+
+
+
   }
+
 
   /**
    *
@@ -106,15 +164,11 @@ export class IndexUtils {
 //           }
 //
 //
-// //                    let editingElem = document.querySelector('.is-editing');
-// //                    if ( !Utils.isEmpty( editingElem ))
-// //                    {
-// //                    let editingItemObj = new Item( editingElem );
-// //                    editingItemObj.
-// //                  }
-//
-//
-//           clicked.onClick(clicked);
+// //                    let editingElem =
+// document.querySelector('.is-editing'); //                    if (
+// !Utils.isEmpty( editingElem )) //                    { //
+// let editingItemObj = new Item( editingElem ); //
+// editingItemObj. //                  }   clicked.onClick(clicked);
         }
       );
   }

@@ -1,8 +1,7 @@
 'use strict';
 
 import {config} from '../cfg.js';
-import {Utils} from '../utils/utils.js';
-// import {ListUtils} from '../item/ListUtils.js';
+import {Utils}  from '../utils/utils.js';
 
 /**
  * Provides useful functions to manipulate or update an item.
@@ -12,18 +11,19 @@ import {Utils} from '../utils/utils.js';
 class ItemEntity {
   static itemContextNames = ['item', 'textarea', 'options', 'done-bt', 'done-bt-html', 'remove-bt-html', 'remove-bt-html'];
 
-  constructor(obj) {
-    if (Utils.isEmpty(obj)) {
+  constructor(clicked) {
+    if (Utils.isEmpty(clicked)) {
       Utils.consolo.debug(true, 'Item constructor received an empty object.');
       throw 'Item constructor received an empty object.';
-    } else if ( obj.getAttribute('name') !== 'item' ){
+    } else if (clicked.getAttribute('name') !== 'item') {
       Utils.consolo.debug(true, 'Item constructor received a non-Item' +
         ' object.');
       throw 'Item constructor received a non-Item object.';
     }
     else {
-      this.item = obj;
+      this.item = clicked;
     }
+    this.id = this.item.id;
     this.classes = this.item.classList;
     this.children = this.item.childNodes;
     this.textarea = this.children[0];
@@ -42,29 +42,6 @@ class ItemEntity {
     return this.item;
   }
 
-  extractItemFromObject(obj) {
-    if ( Utils.getType(obj) === 'clicked')
-    {
-
-    }
-  }
-
-  /**
-   *
-   * @returns The classList object
-   */
-  getClassList() {
-    return this.classes;
-  }
-
-  /**
-   *
-   * @returns All children of this item as a NodeList
-   */
-  getChildren() {
-    return this.children;
-  }
-
   /**
    *
    * @returns The current text (content) of this item
@@ -80,19 +57,12 @@ class ItemEntity {
    */
   isEditing() {
     let ta = this.textarea;
-    let isEditing = ta.classList.contains('is-editing');
-//          let result = !Utils.isEmpty(isEditing);
-    return isEditing;
+    let editing = ta.classList.contains('is-editing');
+    return editing;
   }
 
-  /**
-   *
-   * @returns true is this item is marked as completed
-   * and false other wise.
-   */
-  isCompleted() {
-    return this.getClassList()
-        .contains('completed');
+  isActive() {
+    return this.classes.contains('clicked');
   }
 
   /**
@@ -108,28 +78,13 @@ class ItemEntity {
   }
 
   /**
-   *
-   * @param content the content to fil the text area
-   * @returns This class
-   */
-  setContent(content) {
-    this.textarea.value = content;
-    return this;
-  }
-
-  /**
    * Toggles a class in this item
    * @param  klass The class to be toggled
    * @returns This class
    */
   toggleClass(klass) {
-    this.getClassList()
-        .toggle(klass);
-    return this;
-  }
-
-  removeHighlight() {
-    this.classes.remove('clicked');
+    this.getClasses()
+      .toggle(klass);
   }
 
   /**
@@ -143,52 +98,63 @@ class ItemEntity {
     this.textarea.classList.toggle('completed', true);
     this.textarea.classList.remove('is-editing');
     this.doneBtIcon.innerHTML = Utils
-        .swap(
-            this.doneBtIcon.innerHTML, config.symbols.done, config.symbols.reopen);
-    this.doneBtIcon.classList.toggle('reopen', toogle);
-    return this;
-  }
-
-  turnIsEditingOn() {
-    this.classes.add('is-editing');
-    this.textarea.removeAttribute('disabled');
+      .swap(
+        this.doneBtIcon.innerHTML, config.symbols.done, config.symbols.reopen);
+    this.doneBtIcon.classList.toggle('reopen');
   }
 
   turnIsEditingOff() {
-    this.classes.remove('is-editing');
+    this.textarea.classList.remove('is-editing');
     this.textarea.setAttribute('disabled', true);
+  }
+
+  turnActivatedOff() {
+    this.classes.remove('clicked');
+    this.turnIsEditingOff();
   }
 
   /**
    * When the item is clicked, this function decides what to do
    * based on the child that was clicked.
-   *
-   * @param {type} clicked
-   * @returns {String}
    */
-  onClick(clicked) {
-    let clickedParent = clicked.parentElement;
+  onClick(clickedElem) {
 
-    if (clicked.classList.contains('text')) {
-      Utils.consolo.debug(true, '--\nClicked on textarea.\nContent:\n' + this.getText());
-      console.log('this.getItem()', this.getItem());
+    if (!this.isActive()) {
+      this.classes.add('clicked');
+    }
+
+    if (clickedElem === 'textarea') {
+      Utils.consolo.debug(false, '--\nClicked on textarea. Content:' + this.getText());
       this.textareaOnClick();
+      return;
     }
 
-    if (clickedParent.classList.contains('done')
-        || clickedParent.classList.contains('reopen')
-        || clicked.classList.contains('done')) {
-      Utils.consolo.debug(true, '--\nClicked on doneBt.\nContent:\n' + this.getText());
+    if (['done-bt', 'done-bt-html'].includes(clickedElem)) {
+      Utils.consolo.debug(false, '--\nClicked on doneBt. Content:' + this.getText());
       this.doneBtOnClick();
+      return;
     }
-
-    if (clickedParent.classList.contains('remove')
-        || clicked.classList.contains('remove')) {
-      Utils.consolo.debug(true, '--\nClicked on removeBt.\nContent:\n' + this.getText());
+    if (['remove-bt', 'remove-bt-html'].includes(clickedElem)) {
+      Utils.consolo.debug(false, '--\nClicked on removeBt. Content:' + this.getText());
       this.removeBtOnClick();
     }
 
-    this.classes.add('clicked');
+    // // if (clicked.classList.contains('text')) {
+    // //   console.log('this.getItem()', this.getItem());
+    // //   this.textareaOnClick();
+    // // }
+    //
+    // if (clickedParent.classList.contains('done')
+    //     || clickedParent.classList.contains('reopen')
+    //     || clicked.classList.contains('done')) {
+    //   this.doneBtOnClick();
+    // }
+    //
+    // if (clickedParent.classList.contains('remove')
+    //     || clicked.classList.contains('remove')) {
+    //   Utils.consolo.debug(true, '--\nClicked on removeBt.\nContent:\n' +
+    // this.getText()); this.removeBtOnClick(); }
+
   }
 
   /**
@@ -196,28 +162,14 @@ class ItemEntity {
    */
   textareaOnClick() {
 
-    /*
-     * Toggle the current state
-     */
     this.textarea.toggleAttribute('disabled');
-
-    /*
-     * Removes the class 'is-editing' from the textarea
-     */
-    this.textarea.classList.toggle('is-editing', true);
+    this.textarea.classList.toggle('is-editing');
 
     /*
      * If the state changes to 'enabled'
      */
     if (this.isEditing()) {
-      /*
-       * Update the previous enabled textarea
-       */
-      /*
-       * Focus on the current textarea
-       */
       this.textarea.focus();
-      this.textarea.setAttribute('id', 'last_enabled');
     }
   }
 
@@ -233,8 +185,75 @@ class ItemEntity {
    */
   removeBtOnClick() {
     this.getItem()
-        .remove();
+      .remove();
   }
+
+
+
+
+
+
+
+
+
+
+
+
+  extractItemFromObject(obj) {
+    if (Utils.getType(obj) === 'clicked') {
+
+    }
+  }
+
+  /**
+   *
+   * @returns The classList object
+   */
+  getClasses() {
+    return this.classes;
+  }
+
+  /**
+   *
+   * @returns All children of this item as a NodeList
+   */
+  getChildren() {
+    return this.children;
+  }
+
+  /**
+   *
+   * @returns true is this item is marked as completed
+   * and false other wise.
+   */
+  isCompleted() {
+    return this.getClassList()
+      .contains('completed');
+  }
+
+  /**
+   *
+   * @param content the content to fil the text area
+   * @returns This class
+   */
+  setContent(content) {
+    this.textarea.value = content;
+    return this;
+  }
+
+  removeHighlight() {
+    this.classes.remove('clicked');
+  }
+
+  turnIsEditingOn() {
+    this.textarea.classList.add('is-editing');
+    this.textarea.removeAttribute('disabled');
+  }
+
+  turnActivatedOn() {
+    this.classes.add('clicked');
+  }
+
 }
 
 export {ItemEntity as Item}
