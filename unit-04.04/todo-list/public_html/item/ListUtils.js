@@ -237,13 +237,16 @@ export class ListUtils {
      */
     if (clicked.item.isItemContext()) {
       // console.log('ListUtils/clickedObject => is in the Item context');
-      let clickedItem = new Item(clicked.getItem());
+      let clickedItem = new Item(clicked.getItemElement());
       // console.log('ListUtils/clickedObject/clickedItem.id', clickedItem.id);
       // console.log('ListUtils/clickedObject/ListUtils.get.lastActiveId()',
       // ListUtils.get.lastActiveId());
       /**
        *
        */
+      if (['remove-bt','remove-bt-html'].includes(clicked.getName())){
+        this.do.removeItem(clicked.getItemElement());
+      }
       if (clickedItem.id === ListUtils.get.lastActiveId()) {
         // clickedItem.editing('off');
         // const clickedName = clicked.getName();
@@ -490,7 +493,7 @@ export class ListUtils {
 //  * @returns JSON Object with the saved items
 //  */
 // static loadedList() {
-//   let todo = JSON.parse(localStorage.getItem('todo'));
+//   let todo = JSON.parse(localStorage.getItemElement('todo'));
 //   return todo;
 // }
 

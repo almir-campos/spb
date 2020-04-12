@@ -164,7 +164,7 @@ class ItemEntity {
     }
 
     // // if (clicked.classList.contains('text')) {
-    // //   console.log('this.getItem()', this.getItem());
+    // //   console.log('this.getItemElement()', this.getItemElement());
     // //   this.textareaOnClick();
     // // }
     //

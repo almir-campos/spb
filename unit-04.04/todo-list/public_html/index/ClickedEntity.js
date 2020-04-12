@@ -35,9 +35,9 @@ class ClickedEntity {
     return this.getClickedElem().getAttribute('name');
   }
 
-  getItem() {
+  getItemElement() {
     if (this.item.isItemContext()) {
-      if (this.getName === 'item') {
+      if (this.getName() === 'item') {
         return this.clicked;
       }
       return this.clicked.closest('.item');
