@@ -12,7 +12,10 @@ export class ListUtils {
 
   static listDiv = document.querySelector('#list-div');
   static listDivContextNames = ['list-div'].concat(Item.itemContextNames);
-
+  static observer;
+  static init() {
+    ListUtils.observer = ListUtils.do.init();
+  }
   // static lastActiveId = function (newActiveId) {
   //   if (!newActiveId) {
   //
@@ -36,6 +39,7 @@ export class ListUtils {
       let text = document.createElement('textarea');
       text.classList.add('text');
       text.setAttribute('name', 'textarea');
+      text.setAttribute('changed', 'false');
       text.toggleAttribute('disabled');
       text.value = config.defaults.content;
       text.setAttribute('title', 'Click to turn edit on/off');
@@ -119,8 +123,9 @@ export class ListUtils {
   };
   static do = {
     init: function () {
-      this.addMutationObserver();
+      const observer = this.addMutationObserver();
       this.loadsOrCreatesList();
+      return observer;
     },
     loadsOrCreatesList: function () {
       let todo = ListUtils.get.savedTodoList();
@@ -165,30 +170,48 @@ export class ListUtils {
     removeItem: function (item) {
       item.remove();
     },
+    callback: (muts) => {
+      ListUtils.do.saveList();
+      console.log('savedTodoList', ListUtils.get.savedTodoList());
+      // console.log('listUtils/do/addMutationObserver/afterSaveList/localStorage\n',
+      // localStorage, '\n', mutationRecords);
+      muts.forEach((m) => {
+        console.log("MUTATION =>", m);
+        if (m.target.name === 'textarea') {
+          console.log('from', m.oldValue, 'to', m.target.attributes['changed'].value);
+        }
+      });
+    },
     addMutationObserver: function () {
-      const callback = (muts) => {
-        // ListUtils.do.saveList();
-        // console.log('listUtils/do/addMutationObserver/afterSaveList/localStorage\n',
-        // localStorage, '\n', mutationRecords);
-        muts.forEach((m) => {
-          console.log("MUTATION =>", m);
-        });
+      return this.obs().startObserver(this.callback);
+    },
 
+    obs: function () {
+      let observer;
+      let fn = {
+        startObserver: function (callback) {
+          console.log('observer started');
+          observer = new MutationObserver(callback);
+          observer
+            .observe(
+              ListUtils.listDiv,
+              {
+                attributes: true,
+                childList: true,
+                subtree: true,
+                attributeFilter: ['active-id', 'changed'],
+                characterData: true,
+                attributeOldValue: true,
+                characterDataOldValue: true
+              });
+          return observer;
+        },
+        getObserver: function () {
+          return observer;
+        }
       };
 
-      let observer = new MutationObserver(callback);
-      observer
-        .observe(
-          ListUtils.listDiv,
-          {
-            attributes: true,
-            childList: true,
-            subtree: true,
-            attributeFilter: ['active-id'],
-            characterData: true,
-            attributeOldValue: true,
-            characterDataOldValue: true
-          });
+      return fn;
     },
     saveList: function () {
       let todo = {data: []};
@@ -244,7 +267,7 @@ export class ListUtils {
       /**
        *
        */
-      if (['remove-bt','remove-bt-html'].includes(clicked.getName())){
+      if (['remove-bt', 'remove-bt-html'].includes(clicked.getName())) {
         this.do.removeItem(clicked.getItemElement());
       }
       if (clickedItem.id === ListUtils.get.lastActiveId()) {
@@ -261,7 +284,15 @@ export class ListUtils {
         ListUtils.do.resetLastActive();
         ListUtils.set.lastActiveId(clickedItem.id);
       }
-      clickedItem.onClick(clicked.getName());
+      let response = clickedItem.onClick(clicked.getName());
+      console.log('response', response);
+      if ( response === 'true') {
+        ListUtils.do.saveList();
+      }
+      // const observer = ListUtils.do.obs().getObserver();
+      console.log('observer', ListUtils.observer );
+      const mutations = ListUtils.observer.takeRecords();
+      console.log( 'mutations la no fim', mutations);
       /**
        *
        */

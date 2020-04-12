@@ -32,6 +32,9 @@ class ItemEntity {
     this.doneBtIcon = this.doneBt.childNodes[0];
     this.removeBt = this.options.childNodes[1];
     this.removeBtIcon = this.removeBt.childNodes[0];
+    this._self = this;
+
+
   }
 
   /**
@@ -87,7 +90,7 @@ class ItemEntity {
       .toggle(klass);
   }
 
-  focus(){
+  focus() {
     this.textarea.focus();
   }
 
@@ -107,13 +110,30 @@ class ItemEntity {
     this.doneBtIcon.classList.toggle('reopen');
   }
 
-  editing( state ) {
+  isTextChanged() {
+    if (Utils.isEmpty(this.initialText) & Utils.isEmpty(this.getText())) {
+      console.log('ItemEntity/textareaOnClick/NOT changed (both empties)');
+      return false;
+    } else if (this.initialText !== this.getText()) {
+      console.log('ItemEntity/textareaOnClick/changed');
+      console.log('from "', this.initialText, '" to "', this.getText(), '"');
+      this.initialText = this.getText();
+      return true;
+    } else {
+      console.log('ItemEntity/textareaOnClick/NOT changed (same value)');
+      return false;
+    }
+    // console.log('Changed:', this.initialText !== this.getText(),
+    // this.initialText.length, this.getText().length);
+  }
+
+  editing(state) {
     if (!state) {
       let ta = this.textarea;
       let itIs = ta.classList.contains('is-editing');
       return itIs;
     }
-    else if ( state === 'on' ) {
+    else if (state === 'on') {
       this.textarea.classList.add('is-editing');
       this.textarea.removeAttribute('disabled');
     } else {
@@ -150,7 +170,7 @@ class ItemEntity {
     if (clickedElem === 'textarea') {
       Utils.consolo.debug(false, '--\nClicked on textarea. Content:' + this.getText());
       this.textareaOnClick();
-      return;
+      return this.isChanged();
     }
 
     if (['done-bt', 'done-bt-html'].includes(clickedElem)) {
@@ -181,6 +201,24 @@ class ItemEntity {
 
   }
 
+  isChanged() {
+    return this.textarea.getAttribute('changed');
+  }
+  handleTextareaListener = function(e){
+      console.log('change event', e);
+      console.log('changed to', e.target.value);
+      e.target.setAttribute('changed', 'true');
+    };
+
+  // addMutationObserver = function( text) {
+  //   const callback = (muts) => {
+  //     muts.forEach( m => {
+  //       console.log( m.target.closest('.item').id, ' changed to ', m.target.value);
+  //     });
+  //     const observer = new MutationObserver( callback );
+  //     observer.observe()
+  //   }
+  // };
   /**
    * Action for a click on the textarea\
    */
@@ -194,6 +232,12 @@ class ItemEntity {
      */
     if (this.editing()) {
       this.textarea.focus();
+      this.textarea.addEventListener('change', this.handleTextareaListener, true);
+      // this.initialText = this.getText();
+    } else {
+      this.textarea.removeEventListener('change', this.handleTextareaListener, true);
+      this.textarea.setAttribute('change', 'false');
+      // this.isTextChanged();
     }
   }
 
@@ -211,16 +255,6 @@ class ItemEntity {
     this.getItem()
       .remove();
   }
-
-
-
-
-
-
-
-
-
-
 
 
   extractItemFromObject(obj) {

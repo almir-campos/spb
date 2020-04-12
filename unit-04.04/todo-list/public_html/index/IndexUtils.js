@@ -14,7 +14,7 @@ export class IndexUtils {
 
   static init() {
     IndexUtils.addMainDivEventListener();
-    ListUtils.do.init();
+    ListUtils.init();
   }
 
   static tests() {
