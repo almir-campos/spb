@@ -96,10 +96,10 @@ export class ListUtils {
         return undefined;
       }
       lastId = '#' + lastId;
-      console.log( 'lastId', lastId );
+      console.log('lastId', lastId);
       // const elem = document.querySelector( `${lastId}` );
-      const elem = document.querySelector( lastId );
-      return new Item( elem );
+      const elem = document.querySelector(lastId);
+      return new Item(elem);
     },
     lastActiveId: function () {
       const id = ListUtils.listDiv.getAttribute('active-id');
@@ -216,7 +216,7 @@ export class ListUtils {
       lastActiveItem.turnActivatedOff();
       console.log('active item: ', lastActiveItem);
     },
-    keepItemFocus: function(){
+    keepItemFocus: function () {
       const lastActive = ListUtils.get.lastActiveItem();
       if (!Utils.isEmpty(lastActive) && lastActive.editing()) {
         lastActive.focus();
@@ -236,20 +236,29 @@ export class ListUtils {
      *
      */
     if (clicked.item.isItemContext()) {
-      console.log('ListUtils/clickedObject => is in the Item context');
+      // console.log('ListUtils/clickedObject => is in the Item context');
       let clickedItem = new Item(clicked.getItem());
-      console.log('ListUtils/clickedObject/clickedItem.id', clickedItem.id);
-      console.log('ListUtils/clickedObject/ListUtils.get.lastActiveId()', ListUtils.get.lastActiveId());
+      // console.log('ListUtils/clickedObject/clickedItem.id', clickedItem.id);
+      // console.log('ListUtils/clickedObject/ListUtils.get.lastActiveId()',
+      // ListUtils.get.lastActiveId());
       /**
        *
        */
       if (clickedItem.id === ListUtils.get.lastActiveId()) {
-        clickedItem.editing('off');
+        // clickedItem.editing('off');
+        // const clickedName = clicked.getName();
+        // if ( clickedName === 'textarea' ){
+        //
+        // } else if ( clickedName === 'done') {
+        //
+        // } else if ( clickedName === 'remove') {
+        //
+        // }
       } else {
         ListUtils.do.resetLastActive();
         ListUtils.set.lastActiveId(clickedItem.id);
-        clickedItem.onClick(clicked.getName());
       }
+      clickedItem.onClick(clicked.getName());
       /**
        *
        */

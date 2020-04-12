@@ -99,7 +99,7 @@ class ItemEntity {
    */
   toggleCompleted() {
     this.toggleClass('completed');
-    this.textarea.classList.toggle('completed', true);
+    this.textarea.classList.toggle('completed');
     this.textarea.classList.remove('is-editing');
     this.doneBtIcon.innerHTML = Utils
       .swap(
