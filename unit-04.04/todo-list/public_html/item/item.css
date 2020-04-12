@@ -6,7 +6,7 @@
   display          : inline-block;
   width            : 150px;
   height           : 82px;
-  background-color : whitesmoke;
+  background-color : #fff;
   cursor           : pointer;
   margin           : 5px;
   box-shadow       : 5px 5px 5px grey;
@@ -24,7 +24,7 @@
   display          : inline-block;
   border           : none;
   resize           : none;
-  background-color : white;
+  background-color : #fff;
 }
 
 .item .text[disabled]{
@@ -32,7 +32,7 @@
 }
 
 .is-editing {
-  background-color : lightyellow !important;
+  background-color : yellow !important;
 }
 
 .item .options {

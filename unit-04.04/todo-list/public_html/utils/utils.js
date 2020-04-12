@@ -135,9 +135,12 @@ export class Utils {
    * Utility function - returns a random string with length 'l'
    */
   static randomString(l) {
-    let str = '';
+    // Always starts with a capital alpha character for
+    // compatibility reasons - eg, element id.
+    //
+    let str = String.fromCharCode(Utils.randomInt(65, 90));
     let rand;
-    for (let i = 0; i < l; i++) {
+    for (let i = 0; i < l-1; i++) {
       rand = Math.random();
       if (rand < 0.33) {
         str += String.fromCharCode(Utils.randomInt(48, 57));

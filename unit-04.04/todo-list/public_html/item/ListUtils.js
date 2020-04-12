@@ -97,7 +97,8 @@ export class ListUtils {
       }
       lastId = '#' + lastId;
       console.log( 'lastId', lastId );
-      const elem = document.querySelector( `${lastId}` );
+      // const elem = document.querySelector( `${lastId}` );
+      const elem = document.querySelector( lastId );
       return new Item( elem );
     },
     lastActiveId: function () {
