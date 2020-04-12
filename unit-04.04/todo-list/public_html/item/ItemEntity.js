@@ -50,16 +50,16 @@ class ItemEntity {
     return this.textarea.value;
   }
 
-  /**
-   *
-   * @returns true if the this textarea is being edited
-   * and false otherwise.
-   */
-  isEditing() {
-    let ta = this.textarea;
-    let editing = ta.classList.contains('is-editing');
-    return editing;
-  }
+  // /**
+  //  *
+  //  * @returns true if the this textarea is being edited
+  //  * and false otherwise.
+  //  */
+  // isEditing() {
+  //   let ta = this.textarea;
+  //   let editing = ta.classList.contains('is-editing');
+  //   return editing;
+  // }
 
   isActive() {
     return this.classes.contains('clicked');
@@ -87,6 +87,10 @@ class ItemEntity {
       .toggle(klass);
   }
 
+  focus(){
+    this.textarea.focus();
+  }
+
   /**
    * Toggles the current item and some specific children from or to the
    * completed state
@@ -103,14 +107,34 @@ class ItemEntity {
     this.doneBtIcon.classList.toggle('reopen');
   }
 
-  turnIsEditingOff() {
-    this.textarea.classList.remove('is-editing');
-    this.textarea.setAttribute('disabled', true);
+  editing( state ) {
+    if (!state) {
+      let ta = this.textarea;
+      let itIs = ta.classList.contains('is-editing');
+      return itIs;
+    }
+    else if ( state === 'on' ) {
+      this.textarea.classList.add('is-editing');
+      this.textarea.removeAttribute('disabled');
+    } else {
+      this.textarea.classList.remove('is-editing');
+      this.textarea.setAttribute('disabled', true);
+    }
   }
 
+  // turnIsEditingOn() {
+  //   this.textarea.classList.add('is-editing');
+  //   this.textarea.removeAttribute('disabled');
+  // }
+  //
+  // turnIsEditingOff() {
+  //   this.textarea.classList.remove('is-editing');
+  //   this.textarea.setAttribute('disabled', true);
+  // }
+  //
   turnActivatedOff() {
     this.classes.remove('clicked');
-    this.turnIsEditingOff();
+    this.editing('off');
   }
 
   /**
@@ -168,7 +192,7 @@ class ItemEntity {
     /*
      * If the state changes to 'enabled'
      */
-    if (this.isEditing()) {
+    if (this.editing()) {
       this.textarea.focus();
     }
   }

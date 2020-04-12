@@ -13,15 +13,12 @@ export class ListUtils {
   static listDiv = document.querySelector('#list-div');
   static listDivContextNames = ['list-div'].concat(Item.itemContextNames);
 
-  /**
-   *
-   */
-  static lastActiveId = function (newActiveId) {
-    if (!newActiveId) {
-      return ListUtils.listDiv.getAttribute('active-id').value;
-    }
-    ListUtils.listDiv.setAttribute('active-id', newActiveId);
-  };
+  // static lastActiveId = function (newActiveId) {
+  //   if (!newActiveId) {
+  //
+  //   }
+  //   ListUtils.listDiv.setAttribute('active-id', newActiveId);
+  // };
 
   static get = {
     newItem: function () {
@@ -93,11 +90,24 @@ export class ListUtils {
       return todo;
     },
     lastActiveItem: function () {
-      if (!ListUtils.lastActiveId()) {
+      let lastId = ListUtils.get.lastActiveId();
+      if (!lastId) {
         console.log('no active item');
         return undefined;
       }
-      return new Item(document.getElementById(ListUtils.lastActiveId()));
+      lastId = '#' + lastId;
+      console.log( 'lastId', lastId );
+      const elem = document.querySelector( `${lastId}` );
+      return new Item( elem );
+    },
+    lastActiveId: function () {
+      const id = ListUtils.listDiv.getAttribute('active-id');
+      return id;
+    }
+  };
+  static set = {
+    lastActiveId: function (newActiveId) {
+      ListUtils.listDiv.setAttribute('active-id', newActiveId);
     }
   };
   static has = {
@@ -124,7 +134,8 @@ export class ListUtils {
       let item = ListUtils.get.newItem();
       let itemObj = new Item(item);
       ListUtils.listDiv.append(item);
-      this.updateHighlight(itemObj);
+      // this.updateHighlight(itemObj);
+      this.keepItemFocus();
       return item;
     },
     addItems: function (arrItems) {
@@ -193,18 +204,25 @@ export class ListUtils {
     updateHighlight: function (itemObj) {
 
     },
-    resetLastActive: function (newActiveId) {
-      console.log('resetLastActive/ListUtils.lastActiveId()', ListUtils.lastActiveId());
-      if (Utils.isEmpty(ListUtils.lastActiveId())) {
-        ListUtils.lastActiveId(newActiveId);
+    resetLastActive: function () {
+      console.log('resetLastActive/ListUtils.get.lastActiveId()',
+        ListUtils.get.lastActiveId());
+      if (Utils.isEmpty(ListUtils.get.lastActiveId())) {
+        // ListUtils.set.lastActiveId(newActiveId);
         return;
       }
       let lastActiveItem = ListUtils.get.lastActiveItem();
       lastActiveItem.turnActivatedOff();
       console.log('active item: ', lastActiveItem);
-      return lastActiveItem.id;
+    },
+    keepItemFocus: function(){
+      const lastActive = ListUtils.get.lastActiveItem();
+      if (!Utils.isEmpty(lastActive) && lastActive.editing()) {
+        lastActive.focus();
+      }
     }
   };
+
   static is = {
     listDivContext: function (name) {
       return ListUtils.listDivContextNames.includes(name);
@@ -213,10 +231,6 @@ export class ListUtils {
 
   static clickedObject(clicked) {
     this.clicked = clicked;
-    // if (!ListUtils.is.listDivContext(clicked.getName())) {
-    //   console.log('ListUtils/clickedObject => is not ListDivContext');
-    // } else
-
     /**
      *
      */
@@ -224,14 +238,15 @@ export class ListUtils {
       console.log('ListUtils/clickedObject => is in the Item context');
       let clickedItem = new Item(clicked.getItem());
       console.log('ListUtils/clickedObject/clickedItem.id', clickedItem.id);
-      console.log('ListUtils/clickedObject/ListUtils.lastActiveId()', ListUtils.lastActiveId());
+      console.log('ListUtils/clickedObject/ListUtils.get.lastActiveId()', ListUtils.get.lastActiveId());
       /**
        *
        */
-      if (clickedItem.id === ListUtils.lastActiveId()) {
-        clickedItem.turnIsEditingOff();
+      if (clickedItem.id === ListUtils.get.lastActiveId()) {
+        clickedItem.editing('off');
       } else {
-        ListUtils.do.resetLastActive(clickedItem.id);
+        ListUtils.do.resetLastActive();
+        ListUtils.set.lastActiveId(clickedItem.id);
         clickedItem.onClick(clicked.getName());
       }
       /**
@@ -239,7 +254,10 @@ export class ListUtils {
        */
     } else {
       console.log('ListUtils/clickedObject => is not an Item');
-      ListUtils.do.resetLastActive();
+      // Maybe I should do nothing. It's simpler.
+      // ListUtils.do.resetLastActive();
+      // Just keep the focus on the current textarea being edited, if any.
+      ListUtils.do.keepItemFocus();
     }
   }
 }
