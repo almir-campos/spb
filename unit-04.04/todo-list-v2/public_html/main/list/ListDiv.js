@@ -75,8 +75,13 @@ class ListDiv {
   //
   static do = {
     processEvent: function (e) {
-      console.log(TopDiv.whoami, 'processEvent', 'path: ', e.path, 'target', e.target.id, 'phase', e.eventPhase);
-      ItemDiv.do.processEvent( e );
+      console.log(TopDiv.whoami, 'processEvent', 'target', e.target.id, 'phase', e.eventPhase);
+      if ( e.target.id === 'add-div') {
+        this.addItem();
+      } else if ( e.target.id.indexOf('remove-div') !== -1 ) {
+        console.log
+      }
+      // ItemDiv.do.processEvent( e );
     },
     addItem: function () {
       let item = ListDiv.get.newItem();
@@ -89,21 +94,6 @@ class ListDiv {
   };
 
   static init() {
-    // ListDiv.elem.addEventListener('click', e => {
-    //   // Utils.consolo.debug(false, '↓↓↓↓↓↓↓↓↓');
-    //   // Utils.consolo.debug(false, '↓↓↓↓↓↓↓↓↓', 'currentTarget',
-    //   // e.currentTarget, ['Capture', 'Target', 'Bubble'][e.eventPhase-1]);
-    //   // Utils.consolo.debug(false, '↓↓↓↓↓↓↓↓↓', 'ListDiv/Captured' + '
-    // from', // e.target.sender, e, e.path); e.target.sender = 'ListDiv'; },
-    // true); ListDiv.elem.addEventListener('click', e => { //
-    // Utils.consolo.debug(false, '---------'); // Utils.consolo.debug(false,
-    // '---------', 'currentTarget', // e.currentTarget, ['Capture', 'Target',
-    // 'Bubble'][e.eventPhase-1]); // Utils.consolo.debug(false, '---------',
-    // 'ListDiv/Target/Treating Click // Event' + ' received', e, e.path);
-    // Utils.consolo.debug(false, // '---------'); });
-    // ListDiv.elem.addEventListener('click', e => { //
-    // Utils.consolo.debug(false, '↑↑↑↑↑↑↑↑↑', 'currentTarget', //
-    // e.currentTarget, ['Capture', 'Target', 'Bubble'][e.eventPhase-1]); // Utils.consolo.debug(false, '↑↑↑↑↑↑↑↑↑', 'ListDiv/Bubbled to me' + ' // from', e.target.sender, e, e.path); Utils.consolo.debug(false, // '↑↑↑↑↑↑↑↑↑', 'Bubbling it up (mesmo???)'); Utils.consolo.debug(false, // '↑↑↑↑↑↑↑↑↑'); e.target.sender = "ListDiv"; }, false);
   }
 }
 
