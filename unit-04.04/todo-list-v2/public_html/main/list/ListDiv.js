@@ -1,33 +1,14 @@
 'use strict';
 
 import {Utils}  from '../../misc/utils.js';
-import {KONZ}   from '../../Constants.js';
 import {config} from "../../cfg.js";
+import {TopDiv} from "../top/TopDiv.js";
+import {ItemDiv} from "../list/item/ItemDiv.js";
 
 class ListDiv {
   static elem = document.querySelector('#list-div');
-  //
-  static do = {
-    processMsg: function (e) {
-      switch (e.target.msg.value) {
-        case KONZ.msg.origin.addDiv.action.addItem: {
-          Utils.consolo.debug(false, 'ListDiv/processing msg', e.target.msg);
-          ListDiv.do.addItem();
-          break;
-        }
-      }
-    },
-    addItem: function () {
-      let item = ListDiv.get.newItem();
-      // let itemObj = new Item(item);
-      ListDiv.elem.append(item);
-      // this.updateHighlight(itemObj);
-      // this.keepItemFocus();
-      return item;
-    }
-  };
   static get = {
-    newItem:  function () {
+    newItem: function () {
 
       /**
        * Creates the item's main container
@@ -91,33 +72,38 @@ class ListDiv {
       return item;
     },
   };
+  //
+  static do = {
+    processEvent: function (e) {
+      console.log(TopDiv.whoami, 'processEvent', 'path: ', e.path, 'target', e.target.id, 'phase', e.eventPhase);
+      ItemDiv.do.processEvent( e );
+    },
+    addItem: function () {
+      let item = ListDiv.get.newItem();
+      // let itemObj = new Item(item);
+      ListDiv.elem.append(item);
+      // this.updateHighlight(itemObj);
+      // this.keepItemFocus();
+      return item;
+    }
+  };
 
   static init() {
-    ListDiv.elem.addEventListener('click', e => {
-      // Utils.consolo.debug(false, '↓↓↓↓↓↓↓↓↓');
-      // Utils.consolo.debug(false, '↓↓↓↓↓↓↓↓↓', 'currentTarget',
-      // e.currentTarget, ['Capture', 'Target', 'Bubble'][e.eventPhase-1]);
-      // Utils.consolo.debug(false, '↓↓↓↓↓↓↓↓↓', 'ListDiv/Captured' + ' from',
-      // e.target.sender, e, e.path);
-      e.target.sender = 'ListDiv';
-    }, true);
-    ListDiv.elem.addEventListener('click', e => {
-      // Utils.consolo.debug(false, '---------');
-      // Utils.consolo.debug(false, '---------', 'currentTarget',
-      // e.currentTarget, ['Capture', 'Target', 'Bubble'][e.eventPhase-1]);
-      // Utils.consolo.debug(false, '---------', 'ListDiv/Target/Treating Click
-      // Event' + ' received', e, e.path); Utils.consolo.debug(false,
-      // '---------');
-    });
-    ListDiv.elem.addEventListener('click', e => {
-      // Utils.consolo.debug(false, '↑↑↑↑↑↑↑↑↑', 'currentTarget',
-      // e.currentTarget, ['Capture', 'Target', 'Bubble'][e.eventPhase-1]);
-      // Utils.consolo.debug(false, '↑↑↑↑↑↑↑↑↑', 'ListDiv/Bubbled to me' + '
-      // from', e.target.sender, e, e.path); Utils.consolo.debug(false,
-      // '↑↑↑↑↑↑↑↑↑', 'Bubbling it up (mesmo???)'); Utils.consolo.debug(false,
-      // '↑↑↑↑↑↑↑↑↑');
-      e.target.sender = "ListDiv";
-    }, false);
+    // ListDiv.elem.addEventListener('click', e => {
+    //   // Utils.consolo.debug(false, '↓↓↓↓↓↓↓↓↓');
+    //   // Utils.consolo.debug(false, '↓↓↓↓↓↓↓↓↓', 'currentTarget',
+    //   // e.currentTarget, ['Capture', 'Target', 'Bubble'][e.eventPhase-1]);
+    //   // Utils.consolo.debug(false, '↓↓↓↓↓↓↓↓↓', 'ListDiv/Captured' + '
+    // from', // e.target.sender, e, e.path); e.target.sender = 'ListDiv'; },
+    // true); ListDiv.elem.addEventListener('click', e => { //
+    // Utils.consolo.debug(false, '---------'); // Utils.consolo.debug(false,
+    // '---------', 'currentTarget', // e.currentTarget, ['Capture', 'Target',
+    // 'Bubble'][e.eventPhase-1]); // Utils.consolo.debug(false, '---------',
+    // 'ListDiv/Target/Treating Click // Event' + ' received', e, e.path);
+    // Utils.consolo.debug(false, // '---------'); });
+    // ListDiv.elem.addEventListener('click', e => { //
+    // Utils.consolo.debug(false, '↑↑↑↑↑↑↑↑↑', 'currentTarget', //
+    // e.currentTarget, ['Capture', 'Target', 'Bubble'][e.eventPhase-1]); // Utils.consolo.debug(false, '↑↑↑↑↑↑↑↑↑', 'ListDiv/Bubbled to me' + ' // from', e.target.sender, e, e.path); Utils.consolo.debug(false, // '↑↑↑↑↑↑↑↑↑', 'Bubbling it up (mesmo???)'); Utils.consolo.debug(false, // '↑↑↑↑↑↑↑↑↑'); e.target.sender = "ListDiv"; }, false);
   }
 }
 
