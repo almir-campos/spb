@@ -13,8 +13,9 @@ class ListDiv {
       /**
        * Creates the item's main container
        */
+      let itemId = Utils.randomString(config.defaults.idLength);
       let item = document.createElement('div');
-      item.setAttribute('id', Utils.randomString(config.defaults.idLength));
+      // item.setAttribute('id', itemId );
       item.setAttribute('name', 'item');
       item.classList.add('item');
 
@@ -23,10 +24,12 @@ class ListDiv {
        */
       let text = document.createElement('textarea');
       text.classList.add('text');
+      // text.setAttribute('item-id', itemId );
       text.setAttribute('name', 'textarea');
       text.setAttribute('changed', 'false');
       text.toggleAttribute('disabled');
-      text.value = config.defaults.content;
+      // text.value = config.defaults.content;
+      text.value = itemId;
       text.setAttribute('title', 'Click to turn edit on/off');
 
       /**
@@ -40,24 +43,28 @@ class ListDiv {
        * Creates the "button" to mark the current item as completed (done)
        */
       let done = document.createElement('div');
+      // done.setAttribute('item-id', itemId );
       done.setAttribute('name', 'done-bt');
-      done.classList.add('option', 'done');
       done.setAttribute('title', 'Click to complete/reopen this item');
+      done.classList.add('option', 'done');
       let doneOptionContent = document.createElement('span');
-      doneOptionContent.classList.add('option-content', 'disable-selection');
+      doneOptionContent.setAttribute('item-id', itemId );
       doneOptionContent.setAttribute('name', 'done-bt-html');
+      doneOptionContent.classList.add('option-content', 'disable-selection');
       doneOptionContent.innerHTML = config.symbols.done;
 
       /**
        * Creates the "button" to remove the current item from the list
        */
       let remove = document.createElement('div');
+      // remove.setAttribute('item-id', itemId );
       remove.setAttribute('name', 'remove-bt');
-      remove.classList.add('option', 'remove');
       remove.setAttribute('title', 'Click to remove this item');
+      remove.classList.add('option', 'remove');
       let removeOptionContent = document.createElement('span');
-      removeOptionContent.classList.add('option-content', 'disable-selection');
+      removeOptionContent.setAttribute('item-id', itemId );
       removeOptionContent.setAttribute('name', 'remove-bt-html');
+      removeOptionContent.classList.add('option-content', 'disable-selection');
       removeOptionContent.innerHTML = config.symbols.remove;
 
       /**
@@ -78,8 +85,9 @@ class ListDiv {
       console.log(TopDiv.whoami, 'processEvent', 'target', e.target.id, 'phase', e.eventPhase);
       if ( e.target.id === 'add-div') {
         this.addItem();
-      } else if ( e.target.id.indexOf('remove-div') !== -1 ) {
-        console.log
+      } else if ( e.target.getAttribute('name').indexOf('remove') !== -1 ) {
+        // console.log( 'remove-bt clicked');
+        this.removeItem(e);
       }
       // ItemDiv.do.processEvent( e );
     },
@@ -90,6 +98,9 @@ class ListDiv {
       // this.updateHighlight(itemObj);
       // this.keepItemFocus();
       return item;
+    },
+    removeItem: function( e ) {
+      e.target.closest('.item').remove();
     }
   };
 
