@@ -6,12 +6,12 @@ class ItemDiv {
   // static elem = document.querySelector('#list-div');
   static whoami = 'ItemDiv';
 
-  do = {
-    // processEvent: function (e) {
-    //   console.log(ItemDiv.whoami, 'processEvent', 'target', e.target.id,
-    // 'phase', e.eventPhase); } test: function(){ console.log(
-    // 'ItemDiv/do/test()' ); }
-  };
+    takeAction(clicked) {
+      if ( clicked.getAttribute('name').indexOf('done') !== -1) {
+        this.set().completed();
+      }
+
+    }
 
   constructor(clicked) {
     // if ( this.item.classList.includes('item'))
@@ -25,6 +25,7 @@ class ItemDiv {
     this.doneBtIcon = this.doneBt.childNodes[0];
     this.removeBt = this.options.childNodes[1];
     this.removeBtIcon = this.removeBt.childNodes[0];
+    this.takeAction(clicked);
   }
 
   static init() {

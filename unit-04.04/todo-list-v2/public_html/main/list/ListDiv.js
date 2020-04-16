@@ -27,9 +27,9 @@ class ListDiv {
       // text.setAttribute('item-id', itemId );
       text.setAttribute('name', 'textarea');
       text.setAttribute('changed', 'false');
+      text.setAttribute('placeholder', itemId);
       text.toggleAttribute('disabled');
       // text.value = config.defaults.content;
-      text.value = itemId;
       text.setAttribute('title', 'Click to turn edit on/off');
 
       /**
@@ -87,10 +87,11 @@ class ListDiv {
         this.addItem();
       } else if (e.target.getAttribute('name').indexOf('remove') !== -1) {
         this.removeItem(e);
-      } else if (e.target.getAttribute('name').indexOf('done') !== -1) {
-          const item = new Item(e.target);
+      } else //if (e.target.getAttribute('name').indexOf('done') !== -1) {
+      {
+        const item = new Item(e.target);
         // if (item.classList.includes('done')) {
-          item.set().completed();
+        // item.set().completed();
         // } else {
         //   item.set().completed(true);
         // }
