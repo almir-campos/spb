@@ -17,7 +17,6 @@ class MainDiv {
      * Target
      */
     MainDiv.elem.addEventListener('click', e => {
-      // MainDiv.broadcastEvent(e);
       TopDiv.do().processEvent(e);
       ListDiv.do().processEvent(e);
     });

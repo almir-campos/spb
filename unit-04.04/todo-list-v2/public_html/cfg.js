@@ -14,13 +14,28 @@ let config = {
   elementNames: {
     mainDiv     : 'main-div',
     topDiv      : 'top-div',
+    addDiv      : 'add-div',
     listDiv     : 'list-div',
     textarea    : 'textarea',
     options     : 'options',
-    doneBt      : 'doneBt',
-    doneBtHtml  : 'doneBtHtml',
+    doneBt      : 'done-bt',
+    doneBtHtml  : 'done-bt-html',
     removeBt    : 'remove-bt',
     removeBtHtml: 'remove-bt-html'
+  },
+  get itemChildNames(){
+    return [
+    this.elementNames.textarea, this.elementNames.options,
+    this.elementNames.doneBt, this.elementNames.doneBtHtml,
+    this.elementNames.removeBt, this.elementNames.removeBtHtml
+  ]
+  },
+  get hotAreas() {
+    return [
+      this.elementNames.addDiv, this.elementNames.textarea,
+      this.elementNames.doneBt, this.elementNames.doneBtHtml,
+      this.elementNames.removeBt, this.elementNames.removeBtHtml
+    ]
   }
 };
 

@@ -27,10 +27,10 @@ class ListDiv {
         /**
          * Creates the text area (when the to-do text is showed or edited)
          */
-        let text = document.createElement('textarea');
+        let text = document.createElement(config.elementNames.textarea);
         text.classList.add('text');
         // text.setAttribute('item-id', itemId );
-        text.setAttribute('name', 'textarea');
+        text.setAttribute('name', config.elementNames.textarea);
         text.setAttribute('changed', 'false');
         text.setAttribute('placeholder', itemId);
         text.toggleAttribute('disabled');
@@ -114,6 +114,9 @@ class ListDiv {
       },
       removeAction() {
         return ListDiv.evt.target.getAttribute('name').indexOf('remove') !== -1;
+      },
+      hotArea(elem) {
+        return config.hotAreas.includes(elem.getAttribute('name'));
       }
     }
   }
@@ -124,14 +127,19 @@ class ListDiv {
     return {
       processEvent(e) {
         ListDiv.evt = e;
+        if (!self.is().hotArea(e.target)) {
+          self.do().keepFocus();
+          return;
+        }
+
         if (self.is().addItemAction()) {
           this.addItem();
           this.keepFocus();
         } else if (self.is().removeAction()) {
           const item = new Item(e.target);
-          if ( !item.is().editing() ){
+          if (!item.is().editing()) {
             const last = self.get().lastEditingItem();
-            if ( !Utils.isEmpty(last) ) {
+            if (!Utils.isEmpty(last)) {
               self.do().keepFocus();
             }
           }

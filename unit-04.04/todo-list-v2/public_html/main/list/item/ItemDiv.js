@@ -1,7 +1,6 @@
 'use strict';
 
 import {config} from "/todo-list-v2/public_html/cfg.js";
-import {KONZ}   from "../../../Constants.js";
 
 class ItemDiv {
   // static elem = document.querySelector('#list-div');
@@ -21,7 +20,6 @@ class ItemDiv {
     this.doneBt = this.options.childNodes[0];
     this.doneBtIcon = this.doneBt.childNodes[0];
     this.removeBt = this.options.childNodes[1];
-    this.removeBtIcon = this.removeBt.childNodes[0];
     this.takeAction(elem);
   }
 
@@ -31,8 +29,7 @@ class ItemDiv {
   takeAction(elem) {
     if (elem.getAttribute('name').indexOf('done') !== -1) {
       this.set().completed();
-    } else if (elem.getAttribute('name') === 'textarea') {
-      console.log('TEXTAREA');
+    } else if (elem.getAttribute('name') === config.elementNames.textarea) {
       this.set().editing();
     }
   }
@@ -41,33 +38,40 @@ class ItemDiv {
     const self = this;
     return {
       completed() {
-        if (self.is().completed()) {
-          self.classes.remove('completed');
-          self.textarea.classList.remove('completed');
-          // self.textarea.classList.remove('is-editing');
-          self.doneBtIcon.innerHTML = config.symbols.done;
-          self.doneBtIcon.classList.remove('reopen');
-        } else {
+        const turnCompletedOn = function () {
           self.classes.add('completed');
           self.textarea.classList.add('completed');
           self.textarea.classList.remove('is-editing');
           self.doneBtIcon.innerHTML = config.symbols.reopen;
           self.doneBtIcon.classList.add('reopen');
+        };
+        const turnCompletedOff = function () {
+          self.classes.remove('completed');
+          self.textarea.classList.remove('completed');
+          // self.textarea.classList.remove('is-editing');
+          self.doneBtIcon.innerHTML = config.symbols.done;
+          self.doneBtIcon.classList.remove('reopen');
+        };
+        if (self.is().completed()) {
+          turnCompletedOff()
+        } else {
+          turnCompletedOn();
         }
-      }, editing() {
-        const on = function () {
+      },
+      editing() {
+        const turnEditingOn = function () {
           self.textarea.classList.add('is-editing');
           self.textarea.removeAttribute('disabled');
           self.textarea.focus();
         };
-        const off = function () {
+        const turnEditingOff = function () {
           self.textarea.classList.remove('is-editing');
           self.textarea.setAttribute('disabled', true);
         };
         if (self.is().editing()) {
-          off();
+          turnEditingOff();
         } else {
-          on();
+          turnEditingOn();
         }
       }
     }
@@ -87,10 +91,12 @@ class ItemDiv {
     return {
       editing() {
         return self.textarea.classList.contains('is-editing');
-      }, completed() {
+      },
+      completed() {
         return self.classes.contains('completed');
-      }, itemChild(elem) {
-        return KONZ.itemChildNames.includes(elem.getAttribute('name'))
+      },
+      itemChild(elem) {
+        return config.itemChildNames.includes(elem.getAttribute('name'))
       }
     }
   }
