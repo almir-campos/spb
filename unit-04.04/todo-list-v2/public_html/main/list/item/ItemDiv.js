@@ -1,21 +1,18 @@
 'use strict';
 
 import {config} from "/todo-list-v2/public_html/cfg.js";
+import {KONZ}   from "../../../Constants.js";
 
 class ItemDiv {
   // static elem = document.querySelector('#list-div');
   static whoami = 'ItemDiv';
 
-    takeAction(clicked) {
-      if ( clicked.getAttribute('name').indexOf('done') !== -1) {
-        this.set().completed();
-      }
-
+  constructor(elem) {
+    if (this.is().itemChild(elem)) {
+      this.item = elem.closest('.item');
+    } else {
+      this.item = elem;
     }
-
-  constructor(clicked) {
-    // if ( this.item.classList.includes('item'))
-    this.item = clicked.closest('.item');
     this.id = this.item.id;
     this.classes = this.item.classList;
     this.children = this.item.childNodes;
@@ -25,34 +22,87 @@ class ItemDiv {
     this.doneBtIcon = this.doneBt.childNodes[0];
     this.removeBt = this.options.childNodes[1];
     this.removeBtIcon = this.removeBt.childNodes[0];
-    this.takeAction(clicked);
+    this.takeAction(elem);
   }
 
   static init() {
   }
 
+  takeAction(elem) {
+    if (elem.getAttribute('name').indexOf('done') !== -1) {
+      this.set().completed();
+    } else if (elem.getAttribute('name') === 'textarea') {
+      console.log('TEXTAREA');
+      this.set().editing();
+    }
+  }
+
   set() {
     const self = this;
     return {
-      completed: function () {
-
-        const done = !self.classes.contains('completed');
-        if (done) {
-          self.classes.add('completed');
-          self.textarea.classList.add('completed');
-          self.textarea.classList.remove('is-editing');
-          self.doneBtIcon.innerHTML = config.symbols.reopen;
-          self.doneBtIcon.classList.add('reopen');
-        } else {
+      completed() {
+        if (self.is().completed()) {
           self.classes.remove('completed');
           self.textarea.classList.remove('completed');
           // self.textarea.classList.remove('is-editing');
           self.doneBtIcon.innerHTML = config.symbols.done;
           self.doneBtIcon.classList.remove('reopen');
+        } else {
+          self.classes.add('completed');
+          self.textarea.classList.add('completed');
+          self.textarea.classList.remove('is-editing');
+          self.doneBtIcon.innerHTML = config.symbols.reopen;
+          self.doneBtIcon.classList.add('reopen');
+        }
+      }, editing() {
+        const on = function () {
+          self.textarea.classList.add('is-editing');
+          self.textarea.removeAttribute('disabled');
+          self.textarea.focus();
+        };
+        const off = function () {
+          self.textarea.classList.remove('is-editing');
+          self.textarea.setAttribute('disabled', true);
+        };
+        if (self.is().editing()) {
+          off();
+        } else {
+          on();
         }
       }
     }
-  };
+  }
+
+  do() {
+    const self = this;
+    return {
+      focus() {
+        self.textarea.focus();
+      }
+    }
+  }
+
+  is() {
+    const self = this;
+    return {
+      editing() {
+        return self.textarea.classList.contains('is-editing');
+      }, completed() {
+        return self.classes.contains('completed');
+      }, itemChild(elem) {
+        return KONZ.itemChildNames.includes(elem.getAttribute('name'))
+      }
+    }
+  }
+
+  get() {
+    const self = this;
+    return {
+      id() {
+        return self.id;
+      }
+    }
+  }
 }
 
 export {ItemDiv as Item}

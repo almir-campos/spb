@@ -6,68 +6,54 @@
  */
 export class Utils {
 
-  static getItem = function( e ){
-    return e.target.classList.includes('item') ? e.target : e.target.closest('.item');
-  };
-
   /**
    *
    */
   static consolo = {
-    debug: function (save, ...args) {
+    debug(save, ...args) {
       if (save) {
         let saveLog = function () {
           let todoLog = localStorage.getItem('todo-log');
           if (Utils.isEmpty(todoLog)) {
             todoLog = '';
           }
-          todoLog = todoLog.concat(new Date().toDateString()).concat(args.join())
-            .concat('\n');
+          todoLog =
+            todoLog.concat(new Date().toDateString()).concat(args.join())
+                   .concat('\n');
           localStorage.setItem('todo-log', todoLog);
         };
         saveLog();
-      }
-      else {
+      } else {
         console.debug('%c', "color: red;", args);
       }
     },
 
-    json: function (json, beautify) {
-      let strJson = beautify ?
-        JSON.stringify(json, null, 2) :
-        JSON.stringify(json);
+    json(json, beautify) {
+      let strJson = beautify ? JSON.stringify(json, null, 2) :
+                    JSON.stringify(json);
       return strJson;
     }
+  };
+
+  static getItem(e) {
+    return e.target.classList.includes('item') ? e.target :
+           e.target.closest('.item');
   };
 
   /**
    * Detects if an object is null, or undefined, or has no length.
    */
   static isEmpty(obj) {
-////        let objc = getClickedElem
-//        let itIs = new Clicked(getClickedElem).name() !== 'item' ||
-// !getClickedElem || !getClickedElem.length;  // let itIs = ( getClickedElem
-// === null ) //            || ( typeof getClickedElem === 'undefined' ) //
-//        || ( typeof getClickedElem.length !== 'undefined' &&
-// getClickedElem.length === 0 ) console.log('-----');
-// console.log('getClickedElem', getClickedElem);
-// console.log('getClickedElem.length', !getClickedElem ? "n/a" :
-// getClickedElem.length); console.log('itIs', itIs ); return itIs;  //
-//    || ( typeof getClickedElem.size === 'undefined' || getClickedElem.size
-// === 0 );
 
     let theType = Utils.getType(obj);
 
-    let result =
-      (theType === 'null' || theType === 'undefined') ||
-      (theType !== 'element') &&
-      (
-        (theType === 'string' && obj.length === 0) ||
-        (theType === 'array' && obj.length === 0) ||
-        (theType === 'node-list' && obj.length === 0) ||
-        (theType === 'collection' && obj.length === 0) ||
-        (theType === 'number' && (obj === Number(0 / 0)))
-      );
+    let result = (theType === 'null' || theType === 'undefined') ||
+                 (theType !== 'element') &&
+                 ((theType === 'string' && obj.length === 0) ||
+                 (theType === 'array' && obj.length === 0) ||
+                 (theType === 'node-list' && obj.length === 0) ||
+                 (theType === 'collection' && obj.length === 0) ||
+                 (theType === 'number' && (obj === Number(0 / 0))));
 
     return result;
   }
@@ -132,8 +118,7 @@ export class Utils {
    * @returns {Boolean}
    */
   static swap(value, s1, s2) {
-    return value === s1 ? s2 :
-      value === s2 ? s1 : null;
+    return value === s1 ? s2 : value === s2 ? s1 : null;
   }
 
   /**
@@ -145,7 +130,7 @@ export class Utils {
     //
     let str = String.fromCharCode(Utils.randomInt(65, 90));
     let rand;
-    for (let i = 0; i < l-1; i++) {
+    for (let i = 0; i < l - 1; i++) {
       rand = Math.random();
       if (rand < 0.33) {
         str += String.fromCharCode(Utils.randomInt(48, 57));
