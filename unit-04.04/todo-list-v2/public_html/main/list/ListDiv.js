@@ -1,9 +1,9 @@
 'use strict';
 
-import {Utils}  from '../../misc/utils.js';
-import {config} from "../../cfg.js";
-import {TopDiv} from "../top/TopDiv.js";
-import {ItemDiv} from "../list/item/ItemDiv.js";
+import {Utils}  from '/todo-list-v2/public_html/misc/utils.js';
+import {config} from "/todo-list-v2/public_html/cfg.js";
+import {TopDiv} from "/todo-list-v2/public_html/main/top/TopDiv.js";
+import {Item}   from "/todo-list-v2/public_html/main/list/item/ItemDiv.js";
 
 class ListDiv {
   static elem = document.querySelector('#list-div');
@@ -48,7 +48,7 @@ class ListDiv {
       done.setAttribute('title', 'Click to complete/reopen this item');
       done.classList.add('option', 'done');
       let doneOptionContent = document.createElement('span');
-      doneOptionContent.setAttribute('item-id', itemId );
+      doneOptionContent.setAttribute('item-id', itemId);
       doneOptionContent.setAttribute('name', 'done-bt-html');
       doneOptionContent.classList.add('option-content', 'disable-selection');
       doneOptionContent.innerHTML = config.symbols.done;
@@ -62,7 +62,7 @@ class ListDiv {
       remove.setAttribute('title', 'Click to remove this item');
       remove.classList.add('option', 'remove');
       let removeOptionContent = document.createElement('span');
-      removeOptionContent.setAttribute('item-id', itemId );
+      removeOptionContent.setAttribute('item-id', itemId);
       removeOptionContent.setAttribute('name', 'remove-bt-html');
       removeOptionContent.classList.add('option-content', 'disable-selection');
       removeOptionContent.innerHTML = config.symbols.remove;
@@ -83,13 +83,19 @@ class ListDiv {
   static do = {
     processEvent: function (e) {
       console.log(TopDiv.whoami, 'processEvent', 'target', e.target.id, 'phase', e.eventPhase);
-      if ( e.target.id === 'add-div') {
+      if (e.target.id === 'add-div') {
         this.addItem();
-      } else if ( e.target.getAttribute('name').indexOf('remove') !== -1 ) {
-        // console.log( 'remove-bt clicked');
+      } else if (e.target.getAttribute('name').indexOf('remove') !== -1) {
         this.removeItem(e);
+      } else if (e.target.getAttribute('name').indexOf('done') !== -1) {
+          const item = new Item(e.target);
+        // if (item.classList.includes('done')) {
+          item.set().completed();
+        // } else {
+        //   item.set().completed(true);
+        // }
       }
-      // ItemDiv.do.processEvent( e );
+      // Item.do.test() ;
     },
     addItem: function () {
       let item = ListDiv.get.newItem();
@@ -99,7 +105,7 @@ class ListDiv {
       // this.keepItemFocus();
       return item;
     },
-    removeItem: function( e ) {
+    removeItem: function (e) {
       e.target.closest('.item').remove();
     }
   };

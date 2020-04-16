@@ -6,6 +6,10 @@
  */
 export class Utils {
 
+  static getItem = function( e ){
+    return e.target.classList.includes('item') ? e.target : e.target.closest('.item');
+  };
+
   /**
    *
    */
