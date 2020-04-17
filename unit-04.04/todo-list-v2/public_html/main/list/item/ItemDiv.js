@@ -2,7 +2,7 @@
 
 import {config} from "/todo-list-v2/public_html/cfg.js";
 
-class ItemDiv {
+export class ItemDiv {
   // static elem = document.querySelector('#list-div');
   static whoami = 'ItemDiv';
 
@@ -38,40 +38,44 @@ class ItemDiv {
     const self = this;
     return {
       completed() {
-        const turnCompletedOn = function () {
-          self.classes.add('completed');
-          self.textarea.classList.add('completed');
-          self.textarea.classList.remove('is-editing');
-          self.doneBtIcon.innerHTML = config.symbols.reopen;
-          self.doneBtIcon.classList.add('reopen');
-        };
-        const turnCompletedOff = function () {
-          self.classes.remove('completed');
-          self.textarea.classList.remove('completed');
-          // self.textarea.classList.remove('is-editing');
-          self.doneBtIcon.innerHTML = config.symbols.done;
-          self.doneBtIcon.classList.remove('reopen');
-        };
-        if (self.is().completed()) {
-          turnCompletedOff()
-        } else {
-          turnCompletedOn();
+        return {
+          on() {
+            self.classes.add('completed');
+            self.textarea.classList.add('completed');
+            self.textarea.classList.remove('is-editing');
+            self.doneBtIcon.innerHTML = config.symbols.reopen;
+            self.doneBtIcon.classList.add('reopen');
+          },
+          off() {
+            self.classes.remove('completed');
+            self.textarea.classList.remove('completed');
+            // self.textarea.classList.remove('is-editing');
+            self.doneBtIcon.innerHTML = config.symbols.done;
+            self.doneBtIcon.classList.remove('reopen');
+          }
         }
       },
       editing() {
-        const turnEditingOn = function () {
-          self.textarea.classList.add('is-editing');
-          self.textarea.removeAttribute('disabled');
-          self.textarea.focus();
-        };
-        const turnEditingOff = function () {
-          self.textarea.classList.remove('is-editing');
-          self.textarea.setAttribute('disabled', true);
-        };
-        if (self.is().editing()) {
-          turnEditingOff();
-        } else {
-          turnEditingOn();
+        return {
+          on() {
+            self.textarea.classList.add('is-editing');
+            self.textarea.removeAttribute('disabled');
+            self.textarea.focus();
+          },
+          off() {
+            self.textarea.classList.remove('is-editing');
+            self.textarea.setAttribute('disabled', true);
+          }
+        }
+      },
+      clicked() {
+        return {
+          on() {
+            self.classes.add('clicked');
+          },
+          off() {
+            self.classes.remove('clicked');
+          }
         }
       }
     }
@@ -81,7 +85,17 @@ class ItemDiv {
     const self = this;
     return {
       focus() {
-        self.textarea.focus();
+        if (self.is().editing()) {
+          self.textarea.focus();
+        }
+        self.set().clicked().on();
+      },
+      toggleCompleted() {
+        return self.is().completed() ? self.completed().off() :
+               self.completed().on();
+      },
+      toggleEditing() {
+        return self.is().editing() ? self.set().editing().off() : self.set().editing().on();
       }
     }
   }

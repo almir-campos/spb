@@ -1,11 +1,11 @@
 'use strict';
 
-import {Utils}  from '/todo-list-v2/public_html/misc/utils.js';
-import {config} from "/todo-list-v2/public_html/cfg.js";
-import {TopDiv} from "/todo-list-v2/public_html/main/top/TopDiv.js";
-import {Item}   from "/todo-list-v2/public_html/main/list/item/ItemDiv.js";
+import {Utils}           from '/todo-list-v2/public_html/misc/utils.js';
+import {config}          from "/todo-list-v2/public_html/cfg.js";
+import {TopDiv}          from "/todo-list-v2/public_html/main/top/TopDiv.js";
+import {ItemDiv as Item} from "/todo-list-v2/public_html/main/list/item/ItemDiv.js";
 
-class ListDiv {
+export class ListDiv {
   static elem = document.querySelector('#list-div');
   static lastEditingItemId = undefined;
   static evt = undefined;
@@ -112,11 +112,18 @@ class ListDiv {
       addItemAction() {
         return ListDiv.evt.target.id === 'add-div';
       },
+      editAction() {
+        return ListDiv.evt.target.getAttribute('name') === 'textarea';
+      },
       removeAction() {
         return ListDiv.evt.target.getAttribute('name').indexOf('remove') !== -1;
       },
       hotArea(elem) {
         return config.hotAreas.includes(elem.getAttribute('name'));
+      },
+      sameLastAndCurrent(e){
+        const lastId = self.get().lastEditingItemId();
+        return Utils.isEmpty( lastId ) || lastId === e.target.id;
       }
     }
   }
@@ -132,25 +139,45 @@ class ListDiv {
           return;
         }
 
+        /**
+         * Add item
+         * - Add an Item
+         * - Keep the focus in the current editing item
+         */
         if (self.is().addItemAction()) {
           this.addItem();
           this.keepFocus();
-        } else if (self.is().removeAction()) {
+        } else
+        /**
+         * Remove item
+         * - Remove item
+         * - else, check the last clicked item:
+         *   if there's none, return; else:
+         *      - if it's editing, keeps the focus on it;
+         */
+        if (self.is().removeAction()) {
           const item = new Item(e.target);
           if (!item.is().editing()) {
-            const last = self.get().lastEditingItem();
-            if (!Utils.isEmpty(last)) {
-              self.do().keepFocus();
-            }
+            self.do().keepFocus();
           }
           this.removeItem(e);
-          this.keepFocus();
         } else {
+          /**
+           * Toggle Edit Mode
+           * - If clicked item is editing:
+           *   - Turn editing off
+           */
           const item = new Item(e.target);
-          if (item.is().editing()) {
+
+          console.log(self.is().sameLastAndCurrent(e));
+
+          if (self.is().sameLastAndCurrent())
+           {
+            item.do().toggleEditing();
+          } else {
             this.resetLastEditingItem();
             this.updateLastEditingItemId(item);
-
+            item.set().editing().on();
           }
         }
       },
@@ -187,5 +214,3 @@ class ListDiv {
     ListDiv.do().addItem();
   }
 }
-
-export {ListDiv}

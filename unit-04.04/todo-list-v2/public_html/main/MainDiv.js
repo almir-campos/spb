@@ -3,7 +3,7 @@
 import {TopDiv}  from './top/TopDiv.js';
 import {ListDiv} from './list/ListDiv.js';
 
-class MainDiv {
+export class MainDiv {
   static elem = document.querySelector('#main-div');
   static whoami = 'MainDiv';
 
@@ -42,5 +42,3 @@ class MainDiv {
     Promise.all([MainDiv.topDivInit(), MainDiv.listDivInit()]);
   }
 }
-
-export {MainDiv as MainDiv}

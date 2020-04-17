@@ -2,15 +2,15 @@
 
 import {AddDiv} from './add/AddDiv.js';
 
-class TopDiv {
+export class TopDiv {
   static elem = document.querySelector('#top-div');
   static whoami = 'TopDiv';
 
   static do() {
     return {
       processEvent(e) {
-        console.log(TopDiv.whoami, 'processEvent', 'target', e.target.id,
-                    'phase', e.eventPhase);
+        // console.log(TopDiv.whoami, 'processEvent', 'target', e.target.id,
+        //             'phase', e.eventPhase);
 
       }
     }
@@ -20,5 +20,3 @@ class TopDiv {
     AddDiv.init();
   }
 }
-
-export {TopDiv as TopDiv}
