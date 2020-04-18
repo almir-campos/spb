@@ -12,7 +12,7 @@ export class ItemDiv {
   }
 
   init(elem) {
-    // Utils.consolo.debug(false, 'ItemDiv received this object:', elem);
+    Utils.consolo.debug(false, 'ItemDiv received this object:', elem);
     if (Utils.isEmpty(elem) || TodoUtils.elementIsNotInItemContext(elem)) {
       throw Error('ERROR: "elem" is not in the item context: ');
     }

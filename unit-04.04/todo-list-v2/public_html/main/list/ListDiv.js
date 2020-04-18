@@ -20,12 +20,12 @@ export class ListDiv {
   // static currentEditingItem = undefined;
   /**/
   static lastClickedItemId = undefined;
-  static lastClickedItemElement = undefined;
-  static lastClickedItem = undefined;
+  // static lastClickedItemElement = undefined;
+  // static lastClickedItem = undefined;
   /**/
-  static currentClickedItemId = undefined;
-  static currentClickedItemElement = undefined;
-  static currentClickedItem = undefined;
+  // static currentClickedItemId = undefined;
+  // static currentClickedItemElement = undefined;
+  // static currentClickedItem = undefined;
   /**/
   static evt = undefined;
 
@@ -146,7 +146,7 @@ export class ListDiv {
       currentClickedItemElement() {
         return THIS.currentClickedItemElement;
       },
-      elementById(id){
+      elementById(id) {
         return document.getElementById(id);
       }
     }
@@ -192,6 +192,9 @@ export class ListDiv {
       lastEditingItemId(id) {
         THIS.lastEditingItemId = id;
       },
+      lastClickedItemId(id) {
+        THIS.lastClickedItemId = id;
+      },
       currentClickedHighlight() {
         return {
           on() {
@@ -210,7 +213,7 @@ export class ListDiv {
         return THIS.evt.target.id === 'add-div';
       },
       removeAction() {
-        return THIS.currentClickedItemElement.getAttribute('name')
+        return THIS.evt.target.getAttribute('name')
                    .indexOf('remove') !== -1;
       },
       editModeAction() {
@@ -229,7 +232,6 @@ export class ListDiv {
 
   //
   static do() {
-    // const.self = this;
     return {
       processEvent(e) {
         THIS.evt = e;
@@ -238,7 +240,8 @@ export class ListDiv {
           return THIS;
         }
 
-        THIS.set().globalClickedItemVariables();
+        this.setItemAsClicked(e);
+        // THIS.set().globalClickedItemVariables();
         /**
          * Add item
          * - Add an Item
@@ -261,20 +264,24 @@ export class ListDiv {
           if (item.is().editing().off()) {
             THIS.do().keepFocus();
           } else {
-            THIS.set().lastEditingItemId(undefined)
+            THIS.set().lastEditingItemId(undefined);
+            THIS.set().lastClickedItemId(undefined);
           }
           this.removeItem(e);
           return THIS;
         } else if (THIS.is().editModeAction()) {
           const lastId = THIS.get().lastEditingItemId();
-          const currentItem = new Item( e.target );
+          const currentItem = new Item(e.target);
           const itemId = currentItem.get().id();
-          if (lastId !== itemId ) {
+          if (lastId !== itemId) {
             if (Utils.isNotEmpty(lastId)) {
-              const lastItem = THIS.get().elementById(lastId);
-              new Item(lastItem).do().toggleEditing();
+              const lastElement = THIS.get().elementById(lastId);
+              if ( Utils.isNotEmpty( lastElement )){
+                const last = new Item(lastElement );
+                last.set().clicked().off();
+              }
             }
-            THIS.set().lastEditingItemId( itemId );
+            THIS.set().lastEditingItemId(itemId);
           }
           currentItem.do().toggleEditing();
           // console.clear();
@@ -349,6 +356,25 @@ export class ListDiv {
         new Item(lastItem).do().focus();
         return THIS;
       },
+      setItemAsClicked(e) {
+        if (TodoUtils.eventContainItemContext(e)) {
+          const clickedElement = TodoUtils.getItemElement(e);
+          const clicked = new Item(clickedElement);
+          const lastId = THIS.get().lastClickedItemId();
+          const clickedId = clicked.get().id();
+          if (clickedId !== lastId) {
+            if (Utils.isNotEmpty(lastId)) {
+              const lastElement = THIS.get().elementById(lastId);
+              if ( Utils.isNotEmpty( lastElement )){
+                const last = new Item(lastElement );
+                last.set().editing().off();
+              }
+            }
+            THIS.set().lastClickedItemId(clickedId);
+            clicked.set().clicked().on();
+          }
+        }
+      }, // const.self = this;
       console() {
         // console.clear();
         console.log('----------------------------------------------------');

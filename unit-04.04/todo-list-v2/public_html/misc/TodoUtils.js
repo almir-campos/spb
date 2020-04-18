@@ -1,6 +1,7 @@
 'use strict';
 import {Config} from "../cfg.js";
 import {Utils}  from "./utils.js";
+import {Item}   from "../main/list/item/ItemDiv.js";
 
 export class TodoUtils {
   static getItemElement(e) {
@@ -13,6 +14,18 @@ export class TodoUtils {
 
   static eventContainsItem(e) {
     return Utils.isNotEmpty(e.target.classList) && e.target.classList.contains('item');
+  }
+
+  static isSameItem( e, id ){
+    const elem = TodoUtils.getItemElement(e);
+    const item = new Item( elem );
+    return item.get().id() === id;
+  }
+
+ static isNotSameItem( e, id ){
+    const elem = TodoUtils.getItemElement(e);
+    const item = new Item( elem );
+    return item.get().id() !== id;
   }
 
   static eventDoesNotContainItem(e) {
