@@ -15,6 +15,7 @@ let Config = {
     mainDiv     : 'main-div',
     topDiv      : 'top-div',
     addDiv      : 'add-div',
+    saveDiv     : 'save-div',
     listDiv     : 'list-div',
     textarea    : 'textarea',
     options     : 'options',
@@ -23,18 +24,19 @@ let Config = {
     removeBt    : 'remove-bt',
     removeBtHtml: 'remove-bt-html'
   },
-  get itemChildNames(){
+  get itemChildNames() {
     return [
-    this.elementNames.textarea, this.elementNames.options,
-    this.elementNames.doneBt, this.elementNames.doneBtHtml,
-    this.elementNames.removeBt, this.elementNames.removeBtHtml
-  ]
+      this.elementNames.textarea, this.elementNames.options,
+      this.elementNames.doneBt, this.elementNames.doneBtHtml,
+      this.elementNames.removeBt, this.elementNames.removeBtHtml
+    ]
   },
   get hotAreas() {
     return [
-      this.elementNames.addDiv, this.elementNames.textarea,
-      this.elementNames.doneBt, this.elementNames.doneBtHtml,
-      this.elementNames.removeBt, this.elementNames.removeBtHtml
+      this.elementNames.addDiv, this.elementNames.saveDiv,
+      this.elementNames.textarea, this.elementNames.doneBt,
+      this.elementNames.doneBtHtml, this.elementNames.removeBt,
+      this.elementNames.removeBtHtml
     ]
   }
 };

@@ -102,6 +102,10 @@ export class ListDiv {
         item.appendChild(options);
         return item;
       },
+      allItems(){
+        const items = THIS.listDivElement.querySelectorAll('.item');
+        return items;
+      },
       lastEditingItemId() {
         return THIS.lastEditingItemId;
       }, // lastEditingItemState() {
@@ -155,24 +159,24 @@ export class ListDiv {
   static set() {
     // const.self = this;
     return {
-      globalClickedItemVariables() {
-        console.log('THIS.evt', THIS.evt);
-        if (TodoUtils.eventContainItemContext(THIS.evt)) {
-          THIS.lastClickedItemId = THIS.currentClickedItemId;
-          THIS.lastClickedItemElement = THIS.currentClickedItemElement;
-          THIS.lastClickedItem = THIS.currentClickedItem;
-          /**/
-          if (TodoUtils.eventContainsItem(THIS.evt)) {
-            THIS.currentClickedItemId = THIS.evt.target.id;
-            THIS.currentClickedItemElement = THIS.evt.target;
-            THIS.currentClickedItem = new Item(THIS.evt.target);
-          } else {
-            THIS.currentClickedItemElement = TodoUtils.getItemElement(THIS.evt);
-            THIS.currentClickedItem = new Item(THIS.currentClickedItemElement);
-            THIS.currentClickedItemId = THIS.currentClickedItem.get().id();
-          }
-        }
-      }, // globalEditingItemVariables() {
+      // globalClickedItemVariables() {
+      //   console.log('THIS.evt', THIS.evt);
+      //   if (TodoUtils.eventContainItemContext(THIS.evt)) {
+      //     THIS.lastClickedItemId = THIS.currentClickedItemId;
+      //     THIS.lastClickedItemElement = THIS.currentClickedItemElement;
+      //     THIS.lastClickedItem = THIS.currentClickedItem;
+      //     /**/
+      //     if (TodoUtils.eventContainsItem(THIS.evt)) {
+      //       THIS.currentClickedItemId = THIS.evt.target.id;
+      //       THIS.currentClickedItemElement = THIS.evt.target;
+      //       THIS.currentClickedItem = new Item(THIS.evt.target);
+      //     } else {
+      //       THIS.currentClickedItemElement = TodoUtils.getItemElement(THIS.evt);
+      //       THIS.currentClickedItem = new Item(THIS.currentClickedItemElement);
+      //       THIS.currentClickedItemId = THIS.currentClickedItem.get().id();
+      //     }
+      //   }
+      // }, // globalEditingItemVariables() {
       //   if (Utils.isEmpty(THIS.lastClickedItem) ||
       //       THIS.lastClickedItem.is().editing().on()) {
       //     THIS.lastEditingItem = THIS.lastClickedItem;
@@ -212,6 +216,9 @@ export class ListDiv {
       addItemAction() {
         return THIS.evt.target.id === 'add-div';
       },
+      saveListAction() {
+        return THIS.evt.target.id === 'save-div';
+      },
       doneAction() {
         return THIS.evt.target.getAttribute('name')
                    .indexOf('done') !== -1;
@@ -247,6 +254,8 @@ export class ListDiv {
         this.setItemAsClicked();
         if (THIS.is().addItemAction()) {
           return this.addItemAction();
+        } else if ( THIS.is().saveListAction() ){
+          return this.saveListAction();
         } else if ( THIS.is().doneAction() ){
           return this.doneAction();
         } else if (THIS.is().removeAction()) {
@@ -307,10 +316,23 @@ export class ListDiv {
       //   return THIS;
       // },
       addItemAction() {
-        let item = THIS.get().newItemElement();
+        const item = THIS.get().newItemElement();
         THIS.listDivElement.append(item);
         this.keepFocus();
         return THIS;
+      },
+      saveListAction(){
+        const todo = {data: []};
+        const items = THIS.get().allItems();
+        items
+          .forEach((item) => {
+            console.log( item.id, item.firstChild.value, item.classList.contains('completed'));
+            todo.data.push({
+                             "text": item.firstChild.value,
+                             "completed": item.classList.contains('completed')
+                           });
+          });
+        localStorage.setItem("todo", Utils.consolo.json(todo, true));
       },
       editModeAction() {
         const lastId = THIS.get().lastEditingItemId();
