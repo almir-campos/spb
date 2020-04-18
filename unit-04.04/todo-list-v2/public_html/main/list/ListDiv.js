@@ -212,6 +212,10 @@ export class ListDiv {
       addItemAction() {
         return THIS.evt.target.id === 'add-div';
       },
+      doneAction() {
+        return THIS.evt.target.getAttribute('name')
+                   .indexOf('done') !== -1;
+      },
       removeAction() {
         return THIS.evt.target.getAttribute('name')
                    .indexOf('remove') !== -1;
@@ -243,6 +247,8 @@ export class ListDiv {
         this.setItemAsClicked();
         if (THIS.is().addItemAction()) {
           return this.addItemAction();
+        } else if ( THIS.is().doneAction() ){
+          return this.doneAction();
         } else if (THIS.is().removeAction()) {
           return this.removeAction();
         } else if (THIS.is().editModeAction()) {
@@ -321,6 +327,14 @@ export class ListDiv {
           THIS.set().lastEditingItemId(itemId);
         }
         currentItem.do().toggleEditing();
+        return THIS;
+      },
+      doneAction(){
+        const item = new Item(THIS.evt.target);
+        item.do().toggleCompleted();
+        if (item.is().editing().off()) {
+          THIS.do().keepFocus();
+        }
         return THIS;
       },
       removeAction() {

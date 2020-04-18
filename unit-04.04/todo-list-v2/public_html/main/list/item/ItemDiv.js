@@ -108,7 +108,7 @@ export class ItemDiv {
         return self;
       },
       toggleCompleted() {
-        self.is().completed() ? self.completed().off() : self.completed().on();
+        self.is().completed() ? self.set().completed().off() : self.set().completed().on();
         return self;
       },
       toggleEditing() {
