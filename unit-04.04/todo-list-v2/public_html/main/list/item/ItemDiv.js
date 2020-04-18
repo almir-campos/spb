@@ -1,13 +1,22 @@
 'use strict';
 
-import {config} from "/todo-list-v2/public_html/cfg.js";
+import {Config}    from "../../../cfg.js";
+import {TodoUtils} from "../../../misc/TodoUtils.js";
+import {Utils}     from "../../../misc/Utils.js";
+
 
 export class ItemDiv {
-  // static elem = document.querySelector('#list-div');
-  static whoami = 'ItemDiv';
 
   constructor(elem) {
-    if (this.is().itemChild(elem)) {
+    this.init(elem);
+  }
+
+  init(elem) {
+    // Utils.consolo.debug(false, 'ItemDiv received this object:', elem);
+    if (Utils.isEmpty(elem) || TodoUtils.elementIsNotInItemContext(elem)) {
+      throw Error('ERROR: "elem" is not in the item context: ');
+    }
+    if (TodoUtils.elementIsItemChild(elem)) {
       this.item = elem.closest('.item');
     } else {
       this.item = elem;
@@ -19,20 +28,19 @@ export class ItemDiv {
     this.options = this.children[1];
     this.doneBt = this.options.childNodes[0];
     this.doneBtIcon = this.doneBt.childNodes[0];
-    this.removeBt = this.options.childNodes[1];
-    this.takeAction(elem);
+    // this.removeBt = this.options.childNodes[1];
+    // this.takeAction(elem);
   }
 
-  static init() {
-  }
-
-  takeAction(elem) {
-    if (elem.getAttribute('name').indexOf('done') !== -1) {
-      this.set().completed();
-    } else if (elem.getAttribute('name') === config.elementNames.textarea) {
-      this.set().editing();
-    }
-  }
+  // takeAction(elem) {
+  //   if (elem.getAttribute('name').indexOf('done') !== -1) {
+  //     this.do().toggleCompleted();
+  //     return self;
+  //   } else if (elem.getAttribute('name') === Config.elementNames.textarea) {
+  //     // this.do().toggleEditing();
+  //     return self;
+  //   }
+  // }
 
   set() {
     const self = this;
@@ -43,15 +51,17 @@ export class ItemDiv {
             self.classes.add('completed');
             self.textarea.classList.add('completed');
             self.textarea.classList.remove('is-editing');
-            self.doneBtIcon.innerHTML = config.symbols.reopen;
+            self.doneBtIcon.innerHTML = Config.symbols.reopen;
             self.doneBtIcon.classList.add('reopen');
+            return self;
           },
           off() {
             self.classes.remove('completed');
             self.textarea.classList.remove('completed');
             // self.textarea.classList.remove('is-editing');
-            self.doneBtIcon.innerHTML = config.symbols.done;
+            self.doneBtIcon.innerHTML = Config.symbols.done;
             self.doneBtIcon.classList.remove('reopen');
+            return self;
           }
         }
       },
@@ -61,20 +71,26 @@ export class ItemDiv {
             self.textarea.classList.add('is-editing');
             self.textarea.removeAttribute('disabled');
             self.textarea.focus();
+            return self;
           },
           off() {
             self.textarea.classList.remove('is-editing');
             self.textarea.setAttribute('disabled', true);
+            return self;
           }
         }
       },
       clicked() {
         return {
           on() {
-            self.classes.add('clicked');
+            if ( self.is().clicked().off()) {
+              self.classes.add('clicked');
+            }
+            return self;
           },
           off() {
             self.classes.remove('clicked');
+            return self;
           }
         }
       }
@@ -89,13 +105,16 @@ export class ItemDiv {
           self.textarea.focus();
         }
         self.set().clicked().on();
+        return self;
       },
       toggleCompleted() {
-        return self.is().completed() ? self.completed().off() :
-               self.completed().on();
+        self.is().completed() ? self.completed().off() : self.completed().on();
+        return self;
       },
       toggleEditing() {
-        return self.is().editing() ? self.set().editing().off() : self.set().editing().on();
+        self.is().editing().on() ? self.set().editing().off() :
+        self.set().editing().on();
+        return self;
       }
     }
   }
@@ -104,13 +123,27 @@ export class ItemDiv {
     const self = this;
     return {
       editing() {
-        return self.textarea.classList.contains('is-editing');
+        return {
+          on() {
+            return self.textarea.classList.contains('is-editing');
+          },
+          off() {
+            return !this.on();
+          }
+        }
       },
       completed() {
         return self.classes.contains('completed');
       },
-      itemChild(elem) {
-        return config.itemChildNames.includes(elem.getAttribute('name'))
+      clicked() {
+        return {
+          on() {
+            return self.classes.contains('clicked');
+          },
+          off() {
+            return !this.on();
+          }
+        }
       }
     }
   }
@@ -120,6 +153,9 @@ export class ItemDiv {
     return {
       id() {
         return self.id;
+      },
+      item() {
+        return self.item;
       }
     }
   }

@@ -1,4 +1,4 @@
-import {config} from "./cfg.js";
+import {Config} from "./cfg.js";
 
 export const KONZ = {
 };

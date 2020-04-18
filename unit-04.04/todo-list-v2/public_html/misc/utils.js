@@ -1,9 +1,5 @@
 'use strict';
 
-/**
- *
- * @type type
- */
 export class Utils {
 
   /**
@@ -35,10 +31,7 @@ export class Utils {
     }
   };
 
-  static getItem(e) {
-    return e.target.classList.includes('item') ? e.target :
-           e.target.closest('.item');
-  };
+
 
   /**
    * Detects if an object is null, or undefined, or has no length.
@@ -58,6 +51,9 @@ export class Utils {
     return result;
   }
 
+  static isNotEmpty(obj){
+    return !Utils.isEmpty(obj);
+  }
   /**
    *
    * Sources:

@@ -1,6 +1,6 @@
 'use strict';
 
-let config = {
+let Config = {
   defaults    : {
     done    : "false",
     content : "",
@@ -39,4 +39,4 @@ let config = {
   }
 };
 
-export {config};
+export {Config};
