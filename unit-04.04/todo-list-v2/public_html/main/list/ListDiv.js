@@ -240,50 +240,13 @@ export class ListDiv {
           return THIS;
         }
 
-        this.setItemAsClicked(e);
-        // THIS.set().globalClickedItemVariables();
-        /**
-         * Add item
-         * - Add an Item
-         * - Keep the focus in the current editing item
-         */
+        this.setItemAsClicked();
         if (THIS.is().addItemAction()) {
-          this.addItem();
-          this.keepFocus();
-          return THIS;
-        } else
-        /**
-         * Remove item
-         * - Remove item
-         * - else, check the last clicked item:
-         *   if there's none, return; else:
-         *      - if it's editing, keeps the focus on it;
-         */
-        if (THIS.is().removeAction()) {
-          const item = new Item(e.target);
-          if (item.is().editing().off()) {
-            THIS.do().keepFocus();
-          } else {
-            THIS.set().lastEditingItemId(undefined);
-            THIS.set().lastClickedItemId(undefined);
-          }
-          this.removeItem(e);
-          return THIS;
+          return this.addItemAction();
+        } else if (THIS.is().removeAction()) {
+          return this.removeAction();
         } else if (THIS.is().editModeAction()) {
-          const lastId = THIS.get().lastEditingItemId();
-          const currentItem = new Item(e.target);
-          const itemId = currentItem.get().id();
-          if (lastId !== itemId) {
-            if (Utils.isNotEmpty(lastId)) {
-              const lastElement = THIS.get().elementById(lastId);
-              if ( Utils.isNotEmpty( lastElement )){
-                const last = new Item(lastElement );
-                last.set().clicked().off();
-              }
-            }
-            THIS.set().lastEditingItemId(itemId);
-          }
-          currentItem.do().toggleEditing();
+          return this.editModeAction();
           // console.clear();
           // THIS.do().console();
           // const lastEd = THIS.get().lastEditingItem();
@@ -337,14 +300,42 @@ export class ListDiv {
       //   }
       //   return THIS;
       // },
-      addItem() {
+      addItemAction() {
         let item = THIS.get().newItemElement();
         THIS.listDivElement.append(item);
         this.keepFocus();
         return THIS;
       },
-      removeItem(e) {
-        e.target.closest('.item').remove();
+      editModeAction() {
+        const lastId = THIS.get().lastEditingItemId();
+        const currentItem = new Item(THIS.evt.target);
+        const itemId = currentItem.get().id();
+        if (lastId !== itemId) {
+          if (Utils.isNotEmpty(lastId)) {
+            const lastElement = THIS.get().elementById(lastId);
+            if (Utils.isNotEmpty(lastElement)) {
+              const last = new Item(lastElement);
+              last.set().clicked().off();
+            }
+          }
+          THIS.set().lastEditingItemId(itemId);
+        }
+        currentItem.do().toggleEditing();
+        return THIS;
+      },
+      removeAction() {
+        const item = new Item(THIS.evt.target);
+        if (item.is().editing().off()) {
+          THIS.do().keepFocus();
+        } else {
+          THIS.set().lastEditingItemId(undefined);
+          THIS.set().lastClickedItemId(undefined);
+        }
+        this.removeItem();
+        return THIS;
+      },
+      removeItem() {
+        THIS.evt.target.closest('.item').remove();
         return THIS;
       },
       keepFocus() {
@@ -356,17 +347,17 @@ export class ListDiv {
         new Item(lastItem).do().focus();
         return THIS;
       },
-      setItemAsClicked(e) {
-        if (TodoUtils.eventContainItemContext(e)) {
-          const clickedElement = TodoUtils.getItemElement(e);
+      setItemAsClicked() {
+        if (TodoUtils.eventContainItemContext(THIS.evt)) {
+          const clickedElement = TodoUtils.getItemElement(THIS.evt);
           const clicked = new Item(clickedElement);
           const lastId = THIS.get().lastClickedItemId();
           const clickedId = clicked.get().id();
           if (clickedId !== lastId) {
             if (Utils.isNotEmpty(lastId)) {
               const lastElement = THIS.get().elementById(lastId);
-              if ( Utils.isNotEmpty( lastElement )){
-                const last = new Item(lastElement );
+              if (Utils.isNotEmpty(lastElement)) {
+                const last = new Item(lastElement);
                 last.set().editing().off();
               }
             }
@@ -374,24 +365,11 @@ export class ListDiv {
             clicked.set().clicked().on();
           }
         }
-      }, // const.self = this;
-      console() {
-        // console.clear();
-        console.log('----------------------------------------------------');
-        console.log('last clicked', THIS.get().lastClickedItemElement());
-        console.log('last clicked', THIS.get().lastClickedItemId());
-        console.log('last editing', THIS.get().lastEditingItemElement());
-        console.log('last editing', THIS.get().lastEditingItemId());
-        console.log('current clicked', THIS.get().currentClickedItemElement());
-        console.log('current clicked', THIS.get().currentClickedItemId());
-        console.log('current editing', THIS.get().currentEditingItemElement());
-        console.log('current editing', THIS.get().currentEditingItemId());
-        console.log('----------------------------------------------------');
       }
     }
   };
 
   static init() {
-    THIS.do().addItem();
+    THIS.do().addItemAction();
   }
 }
