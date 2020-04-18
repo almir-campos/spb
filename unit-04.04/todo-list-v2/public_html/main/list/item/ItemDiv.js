@@ -93,6 +93,9 @@ export class ItemDiv {
             return self;
           }
         }
+      },
+      text( txt ){
+        self.textarea.value = txt;
       }
     }
   }

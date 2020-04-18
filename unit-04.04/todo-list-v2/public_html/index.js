@@ -13,7 +13,7 @@ import { MainDiv } from './main/MainDiv.js';
  * - Firefox, privacy.file_unique_origin is set to 'false'
  */
 window.addEventListener('DOMContentLoaded', function () {
-  localStorage.clear();
+  // localStorage.clear();
   MainDiv.init();
 });
 

@@ -102,9 +102,13 @@ export class ListDiv {
         item.appendChild(options);
         return item;
       },
-      allItems(){
+      allItems() {
         const items = THIS.listDivElement.querySelectorAll('.item');
         return items;
+      },
+      storedData() {
+        let storedData = JSON.parse(localStorage.getItem('todo'));
+        return storedData;
       },
       lastEditingItemId() {
         return THIS.lastEditingItemId;
@@ -171,28 +175,17 @@ export class ListDiv {
       //       THIS.currentClickedItemElement = THIS.evt.target;
       //       THIS.currentClickedItem = new Item(THIS.evt.target);
       //     } else {
-      //       THIS.currentClickedItemElement = TodoUtils.getItemElement(THIS.evt);
-      //       THIS.currentClickedItem = new Item(THIS.currentClickedItemElement);
-      //       THIS.currentClickedItemId = THIS.currentClickedItem.get().id();
-      //     }
-      //   }
-      // }, // globalEditingItemVariables() {
-      //   if (Utils.isEmpty(THIS.lastClickedItem) ||
-      //       THIS.lastClickedItem.is().editing().on()) {
-      //     THIS.lastEditingItem = THIS.lastClickedItem;
-      //     THIS.lastEditingItemElement = THIS.lastClickedItemElement;
-      //     THIS.lastEditingItemId = THIS.lastClickedItemId;
-      //   }
-      //   if (THIS.currentClickedItem.is().editing().on()) {
-      //     THIS.currentEditingItem = THIS.currentClickedItem;
-      //     THIS.currentEditingItemElement = THIS.currentClickedItemElement;
-      //     THIS.currentEditingItemId = THIS.currentClickedItemId;
-      //   } else {
-      //     THIS.currentEditingItem = undefined;
-      //     THIS.currentEditingItemElement = undefined;
-      //     THIS.currentEditingItemId = undefined;
-      //   }
-      // },
+      //       THIS.currentClickedItemElement =
+      // TodoUtils.getItemElement(THIS.evt); THIS.currentClickedItem = new
+      // Item(THIS.currentClickedItemElement); THIS.currentClickedItemId =
+      // THIS.currentClickedItem.get().id(); } } }, //
+      // globalEditingItemVariables() { if (Utils.isEmpty(THIS.lastClickedItem)
+      // || THIS.lastClickedItem.is().editing().on()) { THIS.lastEditingItem =
+      // THIS.lastClickedItem; THIS.lastEditingItemElement =
+      // THIS.lastClickedItemElement; THIS.lastEditingItemId =
+      // THIS.lastClickedItemId; } if
+      // (THIS.currentClickedItem.is().editing().on()) {
+      // THIS.currentEditingItem = THIS.currentClickedItem; THIS.currentEditingItemElement = THIS.currentClickedItemElement; THIS.currentEditingItemId = THIS.currentClickedItemId; } else { THIS.currentEditingItem = undefined; THIS.currentEditingItemElement = undefined; THIS.currentEditingItemId = undefined; } },
       lastEditingItemId(id) {
         THIS.lastEditingItemId = id;
       },
@@ -254,9 +247,9 @@ export class ListDiv {
         this.setItemAsClicked();
         if (THIS.is().addItemAction()) {
           return this.addItemAction();
-        } else if ( THIS.is().saveListAction() ){
+        } else if (THIS.is().saveListAction()) {
           return this.saveListAction();
-        } else if ( THIS.is().doneAction() ){
+        } else if (THIS.is().doneAction()) {
           return this.doneAction();
         } else if (THIS.is().removeAction()) {
           return this.removeAction();
@@ -321,14 +314,15 @@ export class ListDiv {
         this.keepFocus();
         return THIS;
       },
-      saveListAction(){
+      saveListAction() {
         const todo = {data: []};
         const items = THIS.get().allItems();
         items
           .forEach((item) => {
-            console.log( item.id, item.firstChild.value, item.classList.contains('completed'));
+            console.log(item.id, item.firstChild.value,
+                        item.classList.contains('completed'));
             todo.data.push({
-                             "text": item.firstChild.value,
+                             "text"     : item.firstChild.value,
                              "completed": item.classList.contains('completed')
                            });
           });
@@ -351,7 +345,7 @@ export class ListDiv {
         currentItem.do().toggleEditing();
         return THIS;
       },
-      doneAction(){
+      doneAction() {
         const item = new Item(THIS.evt.target);
         item.do().toggleCompleted();
         if (item.is().editing().off()) {
@@ -406,6 +400,23 @@ export class ListDiv {
   };
 
   static init() {
-    THIS.do().addItemAction();
+    const storedData = THIS.get().storedData();
+    console.log('storedData', storedData );
+    if ( Utils.isNotEmpty(storedData)){
+      console.log( 'you have data...');
+      let newItem;
+      storedData.data.forEach( item => {
+        newItem = new Item( THIS.get().newItemElement() );
+        newItem.set().text(item.text);
+        if ( Boolean(item.completed) ){
+          newItem.set().completed().on();
+        } else {
+          newItem.set().completed().off();
+        }
+        THIS.listDivElement.append( newItem.get().item() );
+      });
+    } else {
+      THIS.do().addItemAction();
+    }
   }
 }
