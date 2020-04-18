@@ -32,7 +32,6 @@ export class Utils {
   };
 
 
-
   /**
    * Detects if an object is null, or undefined, or has no length.
    */
@@ -51,9 +50,10 @@ export class Utils {
     return result;
   }
 
-  static isNotEmpty(obj){
+  static isNotEmpty(obj) {
     return !Utils.isEmpty(obj);
   }
+
   /**
    *
    * Sources:
@@ -103,16 +103,8 @@ export class Utils {
     return theType;
   }
 
-  /**
-   * Swaps the objects s1 by s2, or vice-versa, depending on the the input
-   * value. If the input value isn't equals to s1 or s2 the function returns
-   * null.
-   *
-   * @param {Object} value
-   * @param {Object} s1
-   * @param {Object} s2
-   * @returns {Boolean}
-   */
+
+  // TODO: Either use or Remove this method
   static swap(value, s1, s2) {
     return value === s1 ? s2 : value === s2 ? s1 : null;
   }

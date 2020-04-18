@@ -54,7 +54,7 @@ body {
 }
 
 .top-bt:hover {
-    box-shadow: inset 0px 0px 15px yellow;
+    box-shadow: inset 0 0 15px yellow;
     text-shadow: 2px 2px 2px #555;
 }
 

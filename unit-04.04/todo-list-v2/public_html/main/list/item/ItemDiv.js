@@ -28,19 +28,7 @@ export class ItemDiv {
     this.options = this.children[1];
     this.doneBt = this.options.childNodes[0];
     this.doneBtIcon = this.doneBt.childNodes[0];
-    // this.removeBt = this.options.childNodes[1];
-    // this.takeAction(elem);
   }
-
-  // takeAction(elem) {
-  //   if (elem.getAttribute('name').indexOf('done') !== -1) {
-  //     this.do().toggleCompleted();
-  //     return self;
-  //   } else if (elem.getAttribute('name') === Config.elementNames.textarea) {
-  //     // this.do().toggleEditing();
-  //     return self;
-  //   }
-  // }
 
   set() {
     const self = this;
@@ -58,7 +46,6 @@ export class ItemDiv {
           off() {
             self.classes.remove('completed');
             self.textarea.classList.remove('completed');
-            // self.textarea.classList.remove('is-editing');
             self.doneBtIcon.innerHTML = Config.symbols.done;
             self.doneBtIcon.classList.remove('reopen');
             return self;

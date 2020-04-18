@@ -7,26 +7,9 @@ import {Utils}           from "../../misc/utils.js";
 import {TodoUtils}       from "../../misc/TodoUtils.js";
 
 export class ListDiv {
-  /**/
   static listDivElement = document.querySelector('#list-div');
-  /**/
   static lastEditingItemId = undefined;
-  // static lastEditingItemState = undefined;
-  // static lastEditingItemElement = undefined;
-  // static lastEditingItem = undefined;
-  /**/
-  // static currentEditingItemId = undefined;
-  // static currentEditingItemElement = undefined;
-  // static currentEditingItem = undefined;
-  /**/
   static lastClickedItemId = undefined;
-  // static lastClickedItemElement = undefined;
-  // static lastClickedItem = undefined;
-  /**/
-  // static currentClickedItemId = undefined;
-  // static currentClickedItemElement = undefined;
-  // static currentClickedItem = undefined;
-  /**/
   static evt = undefined;
 
   static get() {
@@ -50,7 +33,7 @@ export class ListDiv {
         text.classList.add('text');
         // text.setAttribute('item-id', itemId );
         text.setAttribute('name', Config.elementNames.textarea);
-        text.setAttribute('changed', 'false');
+        // text.setAttribute('changed', 'false');
         text.setAttribute('placeholder', itemId);
         text.toggleAttribute('disabled');
         // text.value = Config.defaults.content;
@@ -112,30 +95,7 @@ export class ListDiv {
       },
       lastEditingItemId() {
         return THIS.lastEditingItemId;
-      }, // lastEditingItemState() {
-      //   return THIS.lastEditingItemState;
-      // },
-      // lastEditingItem() {
-      //   return THIS.lastEditingItem;
-      // },
-      // currentEditingItemId() {
-      //   return THIS.currentEditingItemId;
-      // },
-      // currentEditingItemElement() {
-      //   return THIS.currentEditingItemElement;
-      // },
-      // currentEditingItem() {
-      //   return THIS.currentEditingItem;
-      // },
-      // /**
-      //  * Returns the current clicked Item. Notice that the target can be a
-      //  * child of an item. That's why it's necessary to create a new Item(),
-      //  * which wraps the logic for getting the actual item from a child.
-      //  *
-      //  * If the there's no current clicked item, throws a warning and
-      //  * returns a new Item, instead of an 'undefined' statement. This is to
-      //  * not break the chained methods.
-      //  */
+      },
       lastClickedItem() {
         return THIS.lastClickedItem;
       },
@@ -161,31 +121,7 @@ export class ListDiv {
   };
 
   static set() {
-    // const.self = this;
     return {
-      // globalClickedItemVariables() {
-      //   console.log('THIS.evt', THIS.evt);
-      //   if (TodoUtils.eventContainItemContext(THIS.evt)) {
-      //     THIS.lastClickedItemId = THIS.currentClickedItemId;
-      //     THIS.lastClickedItemElement = THIS.currentClickedItemElement;
-      //     THIS.lastClickedItem = THIS.currentClickedItem;
-      //     /**/
-      //     if (TodoUtils.eventContainsItem(THIS.evt)) {
-      //       THIS.currentClickedItemId = THIS.evt.target.id;
-      //       THIS.currentClickedItemElement = THIS.evt.target;
-      //       THIS.currentClickedItem = new Item(THIS.evt.target);
-      //     } else {
-      //       THIS.currentClickedItemElement =
-      // TodoUtils.getItemElement(THIS.evt); THIS.currentClickedItem = new
-      // Item(THIS.currentClickedItemElement); THIS.currentClickedItemId =
-      // THIS.currentClickedItem.get().id(); } } }, //
-      // globalEditingItemVariables() { if (Utils.isEmpty(THIS.lastClickedItem)
-      // || THIS.lastClickedItem.is().editing().on()) { THIS.lastEditingItem =
-      // THIS.lastClickedItem; THIS.lastEditingItemElement =
-      // THIS.lastClickedItemElement; THIS.lastEditingItemId =
-      // THIS.lastClickedItemId; } if
-      // (THIS.currentClickedItem.is().editing().on()) {
-      // THIS.currentEditingItem = THIS.currentClickedItem; THIS.currentEditingItemElement = THIS.currentClickedItemElement; THIS.currentEditingItemId = THIS.currentClickedItemId; } else { THIS.currentEditingItem = undefined; THIS.currentEditingItemElement = undefined; THIS.currentEditingItemId = undefined; } },
       lastEditingItemId(id) {
         THIS.lastEditingItemId = id;
       },
@@ -204,7 +140,6 @@ export class ListDiv {
   }
 
   static is() {
-    // const.self = this;
     return {
       addItemAction() {
         return THIS.evt.target.id === 'add-div';
@@ -255,59 +190,8 @@ export class ListDiv {
           return this.removeAction();
         } else if (THIS.is().editModeAction()) {
           return this.editModeAction();
-          // console.clear();
-          // THIS.do().console();
-          // const lastEd = THIS.get().lastEditingItem();
-          // if (Utils.isNotEmpty(lastEd)) {
-          //   lastEd.toggleEditing();
-          // }
-          // const currentCl = THIS.get().currentClickedItem();
-          // currentCl.do().toggleEditing();
-          // if ( THIS.currentClickedItem.is().editing().on()) {
-          //   THIS.last
-          // }
-          //   // THIS.set().globalEditingItemVariables();
-          // if (currentCl.is().editing().on()) {
-          //   THIS.currentEditingItem = THIS.currentClickedItem;
-          // }
-          // this.updateEditingStyle();
-          // THIS.do().resetLastEditingItem();
-          // if ( Utils.isNotEmpty(THIS.get().currentEditingItem())) {
-          // THIS.get().currentEditingItem().toggleEditing();
-          // }
-          // this.updateEditingStyle();
-          // THIS.do().console();
         }
-      }, // updateLastEditingItemId(item) {
-      //   if (Utils.isNotEmpty(item)) {
-      //     THIS.set().lastEditingItemId(item.get().id());
-      //   }
-      //   return THIS;
-      // },
-      // updateClickedStyle() {
-      //   if (Utils.isNotEmpty(THIS.lastClickedItem)) {
-      //     THIS.lastClickedItem.set().clicked().off();
-      //   }
-      //   if (Utils.isNotEmpty(THIS.currentClickedItem)) {
-      //     THIS.currentClickedItem.set().clicked().on();
-      //   }
-      //   THIS.set().globalClickedItemVariables();
-      // },
-      // updateEditingStyle() {
-      //   if (Utils.isNotEmpty(THIS.lastEditingItem)) {
-      //     THIS.lastEditingItem.set().editing().off();
-      //   }
-      //   if (Utils.isNotEmpty(THIS.currentEditingItem)) {
-      //     THIS.currentEditingItem.set().editing().on();
-      //   }
-      //   THIS.set().globalEditingItemVariables();
-      // }, // resetLastEditingItem() {
-      //   const last = THIS.get().lastEditingItem();
-      //   if (Utils.isNotEmpty(last)) {
-      //     last.set().editing().off();
-      //   }
-      //   return THIS;
-      // },
+      },
       addItemAction() {
         const item = THIS.get().newItemElement();
         THIS.listDivElement.append(item);
@@ -329,6 +213,7 @@ export class ListDiv {
         localStorage.setItem("todo", Utils.consolo.json(todo, true));
       },
       editModeAction() {
+        // TODO: This block of code is repeated. Optimize it.
         const lastId = THIS.get().lastEditingItemId();
         const currentItem = new Item(THIS.evt.target);
         const itemId = currentItem.get().id();
@@ -378,7 +263,8 @@ export class ListDiv {
         return THIS;
       },
       setItemAsClicked() {
-        if (TodoUtils.eventContainItemContext(THIS.evt)) {
+        if (TodoUtils.eventContainsItemContext(THIS.evt)) {
+          // TODO: This block of code is repeated. Optimize it.
           const clickedElement = TodoUtils.getItemElement(THIS.evt);
           const clicked = new Item(clickedElement);
           const lastId = THIS.get().lastClickedItemId();
@@ -401,19 +287,19 @@ export class ListDiv {
 
   static init() {
     const storedData = THIS.get().storedData();
-    console.log('storedData', storedData );
-    if ( Utils.isNotEmpty(storedData)){
-      console.log( 'you have data...');
+    console.log('storedData', storedData);
+    if (Utils.isNotEmpty(storedData)) {
+      console.log('you have data...');
       let newItem;
-      storedData.data.forEach( item => {
-        newItem = new Item( THIS.get().newItemElement() );
+      storedData.data.forEach(item => {
+        newItem = new Item(THIS.get().newItemElement());
         newItem.set().text(item.text);
-        if ( Boolean(item.completed) ){
+        if (Boolean(item.completed)) {
           newItem.set().completed().on();
         } else {
           newItem.set().completed().off();
         }
-        THIS.listDivElement.append( newItem.get().item() );
+        THIS.listDivElement.append(newItem.get().item());
       });
     } else {
       THIS.do().addItemAction();

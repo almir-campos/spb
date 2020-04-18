@@ -5,26 +5,31 @@ import {Item}   from "../main/list/item/ItemDiv.js";
 
 export class TodoUtils {
   static getItemElement(e) {
-    return TodoUtils.eventContainsItem(e) ? e.target : e.target.closest('.item');
+    return TodoUtils.eventContainsItem(e) ? e.target :
+           e.target.closest('.item');
   };
 
-  static getItemElementId( e ){
+  // TODO: Either use or Remove this method
+  static getItemElementId(e) {
     return TodoUtils.getItemElement(e).id;
   }
 
   static eventContainsItem(e) {
-    return Utils.isNotEmpty(e.target.classList) && e.target.classList.contains('item');
+    return Utils.isNotEmpty(e.target.classList) &&
+           e.target.classList.contains('item');
   }
 
-  static isSameItem( e, id ){
+  // TODO: Either use or Remove this method
+  static isSameItem(e, id) {
     const elem = TodoUtils.getItemElement(e);
-    const item = new Item( elem );
+    const item = new Item(elem);
     return item.get().id() === id;
   }
 
- static isNotSameItem( e, id ){
+  // TODO: Either use or Remove this method
+  static isNotSameItem(e, id) {
     const elem = TodoUtils.getItemElement(e);
-    const item = new Item( elem );
+    const item = new Item(elem);
     return item.get().id() !== id;
   }
 
@@ -37,14 +42,15 @@ export class TodoUtils {
   }
 
   static eventDoesNotContainItemChild(e) {
-    return !TodoUtils.eventContainsItemChild();
+    return !TodoUtils.eventContainsItemChild(e);
   }
 
-  static eventContainItemContext(e) {
+  static eventContainsItemContext(e) {
     return TodoUtils.eventContainsItem(e) ||
            TodoUtils.eventContainsItemChild(e);
   }
 
+  // TODO: Either use or Remove this method
   static eventDoesNotContainItemContext(e) {
     return TodoUtils.eventDoesNotContainItem(e) &&
            !TodoUtils.eventDoesNotContainItemChild(e);
