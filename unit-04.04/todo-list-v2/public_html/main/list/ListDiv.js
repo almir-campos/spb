@@ -203,8 +203,8 @@ export class ListDiv {
         const items = THIS.get().allItems();
         items
           .forEach((item) => {
-            console.log(item.id, item.firstChild.value,
-                        item.classList.contains('completed'));
+            // console.log(item.id, item.firstChild.value,
+            //             item.classList.contains('completed'));
             todo.data.push({
                              "text"     : item.firstChild.value,
                              "completed": item.classList.contains('completed')
@@ -287,9 +287,9 @@ export class ListDiv {
 
   static init() {
     const storedData = THIS.get().storedData();
-    console.log('storedData', storedData);
+    // console.log('storedData', storedData);
     if (Utils.isNotEmpty(storedData)) {
-      console.log('you have data...');
+      // console.log('you have data...');
       let newItem;
       storedData.data.forEach(item => {
         newItem = new Item(THIS.get().newItemElement());
