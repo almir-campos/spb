@@ -11,6 +11,10 @@ export class MainDiv {
      */
     List.init();
     MainDiv.elem.addEventListener('click', e => {
+      if ( e.target.id === 'next-div'){
+        alert("New amazing features are coming soon!");
+        return;
+      }
       List.do().processEvent(e);
     });
   }
