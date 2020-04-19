@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Springboard - Unit 5 - Assessment 1</title>
   <link rel="stylesheet" href="main.css">
-  <script src="main.js"></script>
+  <script src="main.js" type="module"></script>
 </head>
 <body>
 <div id="main-div">
@@ -13,24 +13,24 @@
       Springboard - Unit 5 - Meme Generator - v1.0
       <br/>by Almir Campos, Cohort March-02-2020
     </div>
-    <div id="form-div">
+    <form id="form-div">
       <div class="input-block">
         <label for="meme-top" class="form-label">Top text:</label>
-        <input id="meme-top" class="form-input" value=""/>
-        <div id="meme-top-err" class="input-err"></div>
+        <input id="meme-top" name="meme_top" class="form-input" value="aaa"/>
+        <div id="meme-top-err" data-name="meme-top-err" class="input-err"></div>
       </div>
       <div class="input-block">
         <label for="meme-url" class="form-label">Image URL:</label>
-        <input id="meme-url" class="form-input" value=""/>
-        <div id="meme-url-err" class="input-err"></div>
+        <input id="meme-url" name="meme_url" class="form-input" value="bbb"/>
+        <div id="meme-url-err" data-name="meme-url-err" class="input-err"></div>
       </div>
       <div class="input-block">
         <label for="meme-btm" class="form-label">Bottom text:</label>
-        <input id="meme-btm" class="form-input" value=""/>
-        <div id="meme-btm-err" class="input-err"></div>
+        <input id="meme-btm" name="meme_btm" class="form-input" value="ccc"/>
+        <div id="meme-btm-err" name="meme_btm_err" class="input-err"></div>
       </div>
       <input id="submit-bt" type="submit" value="Submit"/>
-    </div>
+    </form>
   </div>
   <div id="memes-div">memes-div</div>
 </div>
