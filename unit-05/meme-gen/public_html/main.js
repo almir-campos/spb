@@ -14,12 +14,13 @@ konz.form.form.addEventListener('submit', (e) => {
 konz.form.inputs.forEach((i) => {
   let errKey;
   i.addEventListener('click', (e) => {
-      errKey = Utils.htmlIdToJs('meme-', e.target.id)+'Err';
-      konz.form[errKey].innerText = '';
+    errKey                      =
+      Utils.htmlIdToJs('meme-', e.target.id) + 'Err';
+    konz.form[errKey].innerText = '';
   });
-i.addEventListener('focusout', (e) => {
-      errKey = Utils.htmlIdToJs('meme-', e.target.id)+'Err';
-      formjs.validateInputs();
+  i.addEventListener('focusout', (e) => {
+    errKey = Utils.htmlIdToJs('meme-', e.target.id) + 'Err';
+    formjs.validateInputs();
   });
 });
 

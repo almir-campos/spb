@@ -2,7 +2,6 @@
 import { konz } from './constants.js';
 export class Form {
   static validateInputs() {
-    console.log('Form/validate');
     const form = konz.form;
     form.topErr.innerText = form.top.value.toUpperCase().containsBadWords() ?
                  "Please, avoid to use bad words" : "";
