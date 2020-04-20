@@ -1,21 +1,14 @@
 'use strict';
-
+import { konz } from './constants.js';
 export class Form {
-  static validate(e){
-    console.log( 'Form/validate');
-    const form = e.target;
-    let errors = {
-      top: '', url: '', btm: ''
-    };
-    if ( form.meme_top.value.toUpperCase().indexOf('BAD WORD') !== -1) {
-      errors.top = "Please, don't use bad words";
-    }
-    if ( form.meme_url.value.toUpperCase().indexOf('BAD WORD') !== -1) {
-      errors.url = "Please, don't use bad words";
-    }
-    if ( form.meme_btm.value.toUpperCase().indexOf('BAD WORD') !== -1) {
-      errors.btm = "Please, don't use bad words";
-    }
-    return errors;
+  static validateInputs() {
+    console.log('Form/validate');
+    const form = konz.form;
+    form.topErr.innerText = form.top.value.toUpperCase().containsBadWords() ?
+                 "Please, avoid to use bad words" : "";
+    form.urlErr.innerText = form.url.value.toUpperCase().containsBadWords() ?
+                 "Please, avoid to use bad words" : "";
+    form.btmErr.innerText = form.btm.value.toUpperCase().containsBadWords() ?
+                 "Please, avoid to use bad words" : "";
   }
 }

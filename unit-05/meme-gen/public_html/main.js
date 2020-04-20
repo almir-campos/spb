@@ -1,19 +1,25 @@
 'use strict';
 
-console.clear();
-import { Form as formjs } from './form.js';
+import {Form as formjs} from './form.js';
+import {konz}           from "./constants.js";
+import {Utils}          from "./utils.js";
 
-const formDiv = document.querySelector('#form-div');
-// let topErr = document.querySelector('#meme-top-err').dataset.name;
-let topErr = document.querySelector('#meme-top-err');
-let urlErr = document.querySelector('#meme-url-err');
-let btmErr = document.querySelector('#meme-btm-err');
-formDiv.addEventListener('submit', (e) => {
-  console.log('dataset', topErr );
-  const valid = formjs.validate(e);
-  console.log('valid', valid);
-  topErr.innerText=valid.top;
-  urlErr.innerText=valid.url;
-  btmErr.innerText=valid.btm;
+konz.init();
+
+konz.form.form.addEventListener('submit', (e) => {
   e.preventDefault();
+  formjs.validateInputs();
 });
+
+konz.form.inputs.forEach((i) => {
+  let errKey;
+  i.addEventListener('click', (e) => {
+      errKey = Utils.htmlIdToJs('meme-', e.target.id)+'Err';
+      konz.form[errKey].innerText = '';
+  });
+i.addEventListener('focusout', (e) => {
+      errKey = Utils.htmlIdToJs('meme-', e.target.id)+'Err';
+      formjs.validateInputs();
+  });
+});
+

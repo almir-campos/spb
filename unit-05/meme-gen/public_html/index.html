@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <title>Springboard - Unit 5 - Assessment 1</title>
   <link rel="stylesheet" href="main.css">
+  <script src="protos.js" type="module"></script>
   <script src="main.js" type="module"></script>
+  <script src="constants.js" type="module"></script>
 </head>
 <body>
 <div id="main-div">
@@ -13,7 +15,7 @@
       Springboard - Unit 5 - Meme Generator - v1.0
       <br/>by Almir Campos, Cohort March-02-2020
     </div>
-    <form id="form-div">
+    <form id="meme-form">
       <div class="input-block">
         <label for="meme-top" class="form-label">Top text:</label>
         <input id="meme-top" name="meme_top" class="form-input" value="aaa"/>
@@ -26,8 +28,8 @@
       </div>
       <div class="input-block">
         <label for="meme-btm" class="form-label">Bottom text:</label>
-        <input id="meme-btm" name="meme_btm" class="form-input" value="ccc"/>
-        <div id="meme-btm-err" name="meme_btm_err" class="input-err"></div>
+        <input id="meme-btm" name="meme_btm" class="form-input" value="bad Word"/>
+        <div id="meme-btm-err" data-name="meme_btm_err" class="input-err"></div>
       </div>
       <input id="submit-bt" type="submit" value="Submit"/>
     </form>
