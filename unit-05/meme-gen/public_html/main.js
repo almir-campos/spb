@@ -6,21 +6,39 @@ import {Utils}          from "./utils.js";
 
 konz.init();
 
-konz.form.form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  formjs.validateInputs();
-});
+class Main {
 
-konz.form.inputs.forEach((i) => {
-  let errKey;
-  i.addEventListener('click', (e) => {
-    errKey                      =
-      Utils.htmlIdToJs('meme-', e.target.id) + 'Err';
-    konz.form[errKey].innerText = '';
-  });
-  i.addEventListener('focusout', (e) => {
-    errKey = Utils.htmlIdToJs('meme-', e.target.id) + 'Err';
-    formjs.validateInputs();
-  });
-});
+  static init() {
+    Main.addSubmitListener();
+    Main.addInputListeners();
+  }
+
+  static addSubmitListener() {
+    konz.form.form
+        .addEventListener('submit', (e) => {
+          e.preventDefault();
+          formjs.submit();
+        });
+  }
+
+  static addInputListeners() {
+    konz.form.inputs.forEach((inpt) => {
+      let errKey;
+      inpt.addEventListener('click', (e) => {
+        errKey                      =
+          Utils.htmlIdToJs('meme-', e.target.id) + 'Err';
+        konz.form[errKey].innerText = '';
+      });
+      inpt.addEventListener('focusout', (e) => {
+        errKey = Utils.htmlIdToJs('meme-', e.target.id) + 'Err';
+        formjs.validateInputs();
+      });
+    });
+  }
+}
+
+Main.init();
+
+export {Main}
+
 

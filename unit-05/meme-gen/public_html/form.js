@@ -1,13 +1,32 @@
 'use strict';
-import { konz } from './constants.js';
+import {konz} from './constants.js';
+
 export class Form {
+  static submit() {
+    let valid = Form.validateInputs();
+    console.log('valid', valid);
+    if (valid) {
+      console.log('Valid', 'Submitting...');
+    }
+  }
+
   static validateInputs() {
     const form = konz.form;
-    form.topErr.innerText = form.top.value.toUpperCase().containsBadWords() ?
-                 "Please, avoid to use bad words" : "";
-    form.urlErr.innerText = form.url.value.toUpperCase().containsBadWords() ?
-                 "Please, avoid to use bad words" : "";
-    form.btmErr.innerText = form.btm.value.toUpperCase().containsBadWords() ?
-                 "Please, avoid to use bad words" : "";
+    let valid  = true;
+
+    function containsBadWords(elem) {
+      return form[elem].value.toUpperCase().containsBadWords();
+    }
+
+    let err;
+    ['top', 'url', 'btm'].forEach(value => {
+      if (containsBadWords(value)) {
+        err                 = value + 'Err';
+        form[err].innerText = konz.errMsg.badWords;
+        valid               = false;
+      }
+    });
+
+    return valid;
   }
 }

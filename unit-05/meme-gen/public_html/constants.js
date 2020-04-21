@@ -25,8 +25,11 @@ export class konz {
       errs  : [
         topErr, urlErr, btmErr
       ]
+    // console.log('konz.form', JSON.stringify(konz.form));
     };
-    console.log('konz.form', JSON.stringify(konz.form));
+    konz.errMsg = {
+      badWords: 'Please, avoid using bad words.'
+    }
   }
 }
 
